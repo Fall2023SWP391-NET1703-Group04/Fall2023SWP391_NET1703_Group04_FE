@@ -1,0 +1,52 @@
+header {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.6s;
+  padding: 2.5rem 6.25rem;
+}
+
+header .sticky {
+  padding: 5px 100px;
+  background: #000;
+}
+
+header .logo {
+  position: relative;
+  font-weight: 700;
+  color: black;
+  text-decoration: none;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: 0.6s;
+}
+
+header ul {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header ul li {
+  position: relative;
+  list-style: none;
+}
+
+header ul li a {
+  position: relative;
+  margin: 0 15px;
+  text-decoration: none;
+  color: #000;
+  letter-spacing: 0.125rem;
+  font-weight: 31.25rem;
+  transition: 0.6s;
+}
+
+.banner {
+}

@@ -9,12 +9,14 @@ import {
   useLocation,
 } from "react-router-dom";
 import HomePage from "./Components/Homepage/Homepage";
+import Register from "./Components/Register/Register";
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
           <Route index element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/home" element={<HomePage />} />
         </Routes>
       </BrowserRouter>
