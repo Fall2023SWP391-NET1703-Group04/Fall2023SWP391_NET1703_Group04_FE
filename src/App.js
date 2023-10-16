@@ -11,6 +11,7 @@ import {
 import HomePage from "./Components/Homepage/Homepage";
 import Register from "./Components/Register/Register";
 import Food from "./Components/Food/Food";
+import Diet from "./Components/Diet/Diet"
 function App() {
   return (
     <div className="App">
@@ -20,6 +21,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/food" element={<Food />} />
+          <Route path="/diet" element={<Diet />} />
         </Routes>
       </BrowserRouter>
     </div>

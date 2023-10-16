@@ -24,7 +24,10 @@ const Header = () => {
             <Link to="/feedback">Feedback</Link>
           </li>
           <li>
-            <Link to="/food">food</Link>
+            <Link to="/food">Food</Link>
+          </li>
+          <li>
+            <Link to="/diet">Diet</Link>
           </li>
         </ul>
         <div>

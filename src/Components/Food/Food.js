@@ -6,7 +6,8 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
-import { Menu } from "primereact/menu";
+import { Dropdown } from 'primereact/dropdown';
+import { Menu } from 'primereact/menu';
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import dayjs from "dayjs";
@@ -39,7 +40,7 @@ function Food() {
     };
 
     const actionTemplate = (rowData) => (
-        <>
+        < >
             <Button
                 icon="pi pi-pencil"
                 className="p-button-rounded p-button-success p-mr-2"
@@ -102,12 +103,12 @@ function Food() {
 
     const handleAddFood = () => {
         axios
-            .post("http://localhost:8080/zoo-server/api/v1/food", newFood)
+            .post("http://localhost:8080/zoo-server/api/v1/food/createNewFood", newFood, { headers: authHeader() })
             .then((response) => {
                 axios
-                    .get("http://localhost:8080/zoo-server/api/v1/foods")
+                    .get("http://localhost:8080/zoo-server/api/v1/food/getAllFoods", { headers: authHeader() })
                     .then((response) => {
-                        const foodsWithDateObjects = response.data.map((food) => ({
+                        const foodsWithDateObjects = response.data.data.map((food) => ({
                             ...food,
                             dateStart: new Date(food.dateStart),
                             dateEnd: new Date(food.dateEnd),
@@ -128,12 +129,12 @@ function Food() {
     // Delete
     const handleDeleteFood = (foodId) => {
         axios
-            .delete(`http://localhost:8080/zoo-server/api/v1/deleteFood/${foodId}`)
+            .delete(`http://localhost:8080/zoo-server/api/v1/food/deleteFood/${foodId}`, { headers: authHeader() })
             .then((response) => {
                 axios
-                    .get("http://localhost:8080/zoo-server/api/v1/foods")
+                    .get("http://localhost:8080/zoo-server/api/v1/food/getAllFoods", { headers: authHeader() })
                     .then((response) => {
-                        const foodsWithDateObjects = response.data.map((food) => ({
+                        const foodsWithDateObjects = response.data.data.map((food) => ({
                             ...food,
                             dateStart: new Date(food.dateStart),
                             dateEnd: new Date(food.dateEnd),
@@ -193,12 +194,12 @@ function Food() {
 
     const handleUpdateFood = () => {
         axios
-            .put(`http://localhost:8080/zoo-server/api/v1/food/${updateFood.foodId}`, updateFood)
+            .put(`http://localhost:8080/zoo-server/api/v1/food/updateFood/${updateFood.foodId}`, updateFood, { headers: authHeader() })
             .then((response) => {
                 axios
-                    .get("http://localhost:8080/zoo-server/api/v1/foods")
+                    .get("http://localhost:8080/zoo-server/api/v1/food/getAllFoods", { headers: authHeader() })
                     .then((response) => {
-                        const foodsWithDateObjects = response.data.map((food) => ({
+                        const foodsWithDateObjects = response.data.data.map((food) => ({
                             ...food,
                             dateStart: new Date(food.dateStart),
                             dateEnd: new Date(food.dateEnd),
