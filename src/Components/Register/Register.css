@@ -6,14 +6,15 @@
 
 .box {
   position: relative;
-  width: 23.75rem;
-  height: 26.25rem;
+  width: 25rem;
+  height: 35rem;
   background-color: #1c1c1c;
   border-radius: 8px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   overflow: hidden;
+  padding: 50px;
 }
 
 .box::before {
@@ -22,7 +23,7 @@
   top: -50%;
   left: -50%;
   width: 23.75rem;
-  height: 420px;
+  height: 500px;
   background-color: #45f3ff;
   transform-origin: bottom right;
   z-index: 1;
@@ -35,7 +36,7 @@
   top: -50%;
   left: -50%;
   width: 23.75rem;
-  height: 420px;
+  height: 31.25rem;
   background-color: #45f3ff;
   transform-origin: bottom right;
   z-index: 1;
@@ -54,8 +55,8 @@
   position: absolute;
   top: -50%;
   left: -50%;
-  width: 23.75rem;
-  height: 420px;
+  width: 31.25rem;
+  height: 500px;
   background-color: #ff2770;
   transform-origin: bottom right;
   z-index: 1;
@@ -69,7 +70,7 @@
   top: -50%;
   left: -50%;
   width: 23.75rem;
-  height: 420px;
+  height: 31.25rem;
   background-color: #ff2770;
   transform-origin: bottom right;
   z-index: 1;
@@ -90,18 +91,11 @@
   position: absolute;
   inset: 4px;
   background: #222;
-  padding: 50px 40px;
+  padding: 3rem;
   border-radius: 8px;
   z-index: 2;
   display: flex;
   flex-direction: column;
-}
-
-.box form h2 {
-  color: #fff;
-  font-weight: 500;
-  text-align: center;
-  letter-spacing: 0.1rem;
 }
 
 .box form .inputBox {
@@ -113,7 +107,7 @@
 .box form .inputBox input {
   position: relative;
   width: 100%;
-  padding: 20px 10px 10px;
+  padding: 1rem 2rem 0.5rem;
   background: transparent;
   outline: none;
   box-shadow: none;

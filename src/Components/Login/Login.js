@@ -52,17 +52,17 @@ const Login = () => {
       .post("http://localhost:8080/zoo-server/api/v1/auth/signIn", dataLogin)
       .then((response) => {
         console.log("POST request response:", response);
-        // localStorage.setItem("roleName", response.data.roleDTO.roleName);
-
         setTimeout(() => {
-          // const userID = response.userId;
-          // const rolName = response.role;
-          // localStorage.setItem('userID', userID);
-          // localStorage.setItem('roleName', rolName);
-          // console.log('check userID và role', userID, rolName);
           console.log(response);
           localStorage.setItem("user", JSON.stringify(response));
-          navigate("/home");
+          switch (response.data.role) {
+            case "ROLE_ADMIN":
+              navigate("/admins");
+              break;
+            case "ROLE_CUSTOMER":
+              navigate("/home");
+              break;
+          }
         }, 1000);
       })
       .catch((error) => {

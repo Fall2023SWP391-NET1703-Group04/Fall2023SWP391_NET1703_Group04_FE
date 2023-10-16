@@ -28,7 +28,12 @@ const Header = () => {
           </li>
         </ul>
         <div>
-          <Button label="Login" />
+          <Link to="/">
+            <Button label="Sign in" rounded />
+          </Link>
+          <Link to="/" style={{ marginLeft: "1rem" }}>
+            <Button label="Sign out" severity="secondary" rounded />
+          </Link>
         </div>
       </header>
     </>
