@@ -8,16 +8,16 @@ const SideBar = () => {
         <MenuItem> DashBoard</MenuItem>
         <SubMenu label="Task">
           <MenuItem component={<Link to="manage-users" />}>
-            {" "}
-            Manage User{" "}
+            Manage User
           </MenuItem>
           <MenuItem component={<Link to="manage-products" />}>
-            {" "}
-            Manage Product{" "}
+            Manage Product
           </MenuItem>
           <MenuItem component={<Link to="manage-animals" />}>
-            {" "}
             Manage Animal
+          </MenuItem>
+          <MenuItem component={<Link to="manage-foods" />}>
+            Manage Food
           </MenuItem>
         </SubMenu>
       </Menu>
