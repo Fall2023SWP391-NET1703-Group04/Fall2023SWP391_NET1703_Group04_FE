@@ -19,7 +19,21 @@ const Register = () => {
         <div className="box">
           <span className="borderLine"></span>
           <form>
-            <h2>Sign up</h2>
+            <div className="inputBox">
+              <input type="text" required="required" />
+              <span>FirstName</span>
+              <i></i>
+            </div>
+            <div className="inputBox">
+              <input type="text" required="required" />
+              <span>LastName</span>
+              <i></i>
+            </div>
+            <div className="inputBox">
+              <input type="text" required="required" />
+              <span>Phone Number</span>
+              <i></i>
+            </div>
             <div className="inputBox">
               <input type="email" required="required" />
               <span>Email</span>
