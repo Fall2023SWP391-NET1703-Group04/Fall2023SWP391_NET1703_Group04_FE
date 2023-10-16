@@ -10,13 +10,11 @@ import {
 } from "react-router-dom";
 import HomePage from "./Components/Homepage/Homepage";
 import Register from "./Components/Register/Register";
-
 import Admin from "./Components/Admin/Admin";
 import ManageUser from "./Components/Manage/User/ManageUser";
 import ManageProduct from "./Components/Manage/ManageProduct";
 import ManageAnimal from "./Components/Manage/ManageAnimal";
-
-import Food from "./Components/Food/Food";
+import ManageFood from "./Components/Manage/Food/ManageFood";
 
 function App() {
   return (
@@ -31,10 +29,8 @@ function App() {
             <Route path="manage-users" element={<ManageUser />} />
             <Route path="manage-products" element={<ManageProduct />} />
             <Route path="manage-animals" element={<ManageAnimal />} />
+            <Route path="manage-foods" element={<ManageFood />} />
           </Route>
-
-          <Route path="/food" element={<Food />} />
-
         </Routes>
       </BrowserRouter>
     </div>
