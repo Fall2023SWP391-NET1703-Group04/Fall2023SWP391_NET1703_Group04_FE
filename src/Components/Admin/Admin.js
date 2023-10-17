@@ -10,7 +10,6 @@ const Admin = () => {
         <SideBar />
         <Outlet />
       </div>
-      <Button label="Logout" />
     </>
   );
 };
