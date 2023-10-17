@@ -10,8 +10,6 @@ import { Dialog } from "primereact/dialog";
 import { Divider } from "primereact/divider";
 import { classNames } from "primereact/utils";
 import { Link, useNavigate } from "react-router-dom";
-import "primereact/resources/themes/lara-light-indigo/theme.css"; //theme
-import "primereact/resources/primereact.min.css"; //core css
 import { Toast } from "primereact/toast";
 import "primeicons/primeicons.css";
 import "./Login.css";
@@ -28,7 +26,6 @@ const Login = () => {
     email: email,
     password: password,
   };
-  console.log(dataLogin);
 
   const validate = (dataLogin) => {
     let errors = {};
