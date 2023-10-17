@@ -5,9 +5,9 @@ import { Button } from "primereact/button";
 const SideBar = () => {
   const navigate = useNavigate();
   return (
-    <Sidebar>
-      <Menu>
-        <MenuItem>DashBoard</MenuItem>
+    <Sidebar >
+      <Menu style={{ position: "fixed", width: "250px" }}>
+        <MenuItem> DashBoard</MenuItem>
         <SubMenu label="Task">
           <MenuItem component={<Link to="manage-users" />}>
             Manage User
@@ -20,6 +20,9 @@ const SideBar = () => {
           </MenuItem>
           <MenuItem component={<Link to="manage-foods" />}>
             Manage Food
+          </MenuItem>
+          <MenuItem component={<Link to="manage-diets" />}>
+            Manage Diet
           </MenuItem>
         </SubMenu>
         <MenuItem>

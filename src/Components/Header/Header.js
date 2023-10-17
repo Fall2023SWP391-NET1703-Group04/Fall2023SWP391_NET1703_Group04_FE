@@ -6,7 +6,7 @@ import { Button } from "primereact/button";
 const Header = () => {
   return (
     <>
-      <header>
+      <header >
         <Link to="#" className="logo">
           Logo
         </Link>
