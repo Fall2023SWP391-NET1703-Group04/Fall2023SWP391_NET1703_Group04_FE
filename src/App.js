@@ -13,10 +13,11 @@ import Register from "./Components/Register/Register";
 import Admin from "./Components/Admin/Admin";
 import ManageUser from "./Components/Manage/User/ManageUser";
 import ManageProduct from "./Components/Manage/ManageProduct";
-import ManageAnimal from "./Components/Manage/ManageAnimal";
+import ManageAnimal from "./Components/Manage/Animal/ManageAnimal";
 import ManageFood from "./Components/Manage/Food/ManageFood";
 import ManageDiet from "./Components/Manage/Diet/ManageDiet";
 import { PrimeReactProvider } from "primereact/api";
+import AnimalDetail from "./Components/Manage/Animal/AnimalDetail";
 function App() {
   const value = {
     zIndex: {
@@ -43,6 +44,7 @@ function App() {
               <Route path="manage-animals" element={<ManageAnimal />} />
               <Route path="manage-foods" element={<ManageFood />} />
               <Route path="manage-diets" element={<ManageDiet />} />
+              <Route path="animal-details/:animalId" element={<AnimalDetail />} />
             </Route>
           </Routes>
         </BrowserRouter>

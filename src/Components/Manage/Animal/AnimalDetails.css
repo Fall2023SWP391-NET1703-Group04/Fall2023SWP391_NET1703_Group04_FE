@@ -1,0 +1,43 @@
+/* Apply styles to the dialog container */
+.p-dialog {
+    width: 500px;
+    /* Set the width of the dialog */
+}
+
+/* Style for the dialog header */
+.p-dialog-title {
+    background-color: #007BFF;
+    color: white;
+    padding: 1rem;
+}
+
+/* Style for the dialog content */
+.p-dialog-content {
+    padding: 1rem;
+}
+
+/* Style for labels and input fields */
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+/* Style for buttons */
+button {
+    margin-top: 1rem;
+}
+
+/* Style for the FileInput *
+/* Style for the InputSwitch (Toggle) */
+.p-inputswitch {
+    /* Add custom styles for the switch if needed */
+}
+
+/* Style for the Dropdown (PrimeReact's Dropdown component) */
+.p-dropdown {
+    width: 100%;
+    /* Adjust the width as needed */
+}
+
+/* Additional custom styles for specific elements can be added here */
