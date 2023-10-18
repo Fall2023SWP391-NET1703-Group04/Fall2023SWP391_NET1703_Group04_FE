@@ -1,7 +1,9 @@
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import "./SideBar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "primereact/button";
 const SideBar = () => {
+  const navigate = useNavigate();
   return (
     <Sidebar >
       <Menu style={{ position: "fixed", width: "250px" }}>
@@ -23,6 +25,16 @@ const SideBar = () => {
             Manage Diet
           </MenuItem>
         </SubMenu>
+        <MenuItem>
+          <Button
+            onClick={() => {
+              localStorage.removeItem("user");
+              navigate("/");
+            }}
+          >
+            Logout
+          </Button>
+        </MenuItem>
       </Menu>
     </Sidebar>
   );
