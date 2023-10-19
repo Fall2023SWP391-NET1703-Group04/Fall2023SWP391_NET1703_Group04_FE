@@ -30,14 +30,12 @@ export default function AnimalDetail() {
         </div>
     );
     const training = (
-        <div className="flex align-items-center text-primary">
-            <span className="pi pi-user mr-2"></span>
+        <div className="flex align-items-center text-primary" >
             <span className="font-bold text-lg">Training History</span>
         </div>
     );
     const diet = (
         <div className="flex align-items-center text-primary">
-            <span className="pi pi-user mr-2"></span>
             <span className="font-bold text-lg">Diet History</span>
         </div>
     );
@@ -127,10 +125,10 @@ export default function AnimalDetail() {
                 </Fieldset>
             </div>
             <div className="card col-7">
-                <Fieldset legend={training} >
+                <Fieldset legend={training} toggleable>
                     {AnimalTrainingHistory(animalId)}
                 </Fieldset>
-                <Fieldset legend={diet} >
+                <Fieldset legend={diet} toggleable>
                     {AnimalDietHistory(animalId)}
                 </Fieldset>
             </div>
@@ -160,7 +158,7 @@ export default function AnimalDetail() {
                     <div className="field col-12 ">
                         <label htmlFor="animalName">Animal Name</label>
                         <InputText
-                            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                            className="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
                             id="animalName"
                             name="animalName"
                             value={updateAnimal.animalName}
