@@ -12,7 +12,7 @@ import HomePage from "./Components/Homepage/Homepage";
 import Register from "./Components/Register/Register";
 import Admin from "./Components/Admin/Admin";
 import ManageUser from "./Components/Manage/User/ManageUser";
-import ManageProduct from "./Components/Manage/ManageProduct";
+import ManageProduct from "./Components/Manage/Product/ManageProduct";
 import ManageAnimal from "./Components/Manage/Animal/ManageAnimal";
 import ManageFood from "./Components/Manage/Food/ManageFood";
 import ManageDiet from "./Components/Manage/Diet/ManageDiet";

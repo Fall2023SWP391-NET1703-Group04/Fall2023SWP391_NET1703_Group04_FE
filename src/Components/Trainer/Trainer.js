@@ -87,7 +87,7 @@ export default function Trainer() {
   };
 
   const handleSaveClick = () => {
-    console.log(editedUser)
+
     axios
       .put(`http://localhost:8080/zoo-server/api/v1/user/updateProfile/${userId}`, editedUser, { headers: authHeader() })
       .then((response) => {
