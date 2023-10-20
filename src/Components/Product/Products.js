@@ -30,6 +30,7 @@ export default function Products() {
 
 
 
+
     const apiUrl = `http://localhost:8080/zoo-server/api/v1/product/getAllProduct`;
     useEffect(() => {
         axios.get(apiUrl, { headers: authHeader() })
