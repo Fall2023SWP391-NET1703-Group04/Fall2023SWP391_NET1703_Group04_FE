@@ -60,9 +60,9 @@ const Login = () => {
               navigate("/home");
               break;
             case "ROLE_TRAINER":
-
               navigate("/trainer");
               break;
+
           }
         }, 1000);
       })

@@ -21,6 +21,7 @@ import AnimalDetail from "./Components/Manage/Animal/AnimalDetail";
 import Trainer from "./Components/Trainer/Trainer";
 import User from "./Components/Trainer/User";
 import Training from "./Components/Trainer/Training";
+import Products from "./Components/Product/Products";
 function App() {
   const value = {
     zIndex: {
@@ -42,16 +43,21 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/trainer" element={<Trainer />} />
+            {/* <Route path="/products" element={<Products />} /> */}
             <Route path="/training" element={<Training />} />
+
+
+
+
             <Route path="/admins" element={<Admin />}>
-
-
               <Route path="manage-users" element={<ManageUser />} />
               <Route path="manage-products" element={<ManageProduct />} />
               <Route path="manage-animals" element={<ManageAnimal />} />
               <Route path="manage-foods" element={<ManageFood />} />
               <Route path="manage-diets" element={<ManageDiet />} />
               <Route path="animal-details/:animalId" element={<AnimalDetail />} />
+              {/* <Route path="products" element={<Products />} /> */}
+
             </Route>
           </Routes>
         </BrowserRouter>
