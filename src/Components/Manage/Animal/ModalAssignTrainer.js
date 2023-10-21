@@ -112,7 +112,7 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
                             onChange={handleSelectedChange}
                             options={trainerData}
                             name='userId'
-                            optionLabel='email'
+                            optionLabel='fullName'
                             placeholder="Select a Trainer"
                         />
                     </div>
