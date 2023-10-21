@@ -15,7 +15,6 @@ import ManageUser from "./Components/Manage/User/ManageUser";
 import ManageProduct from "./Components/Manage/ManageProduct";
 import ManageAnimal from "./Components/Manage/ManageAnimal";
 import ManageFood from "./Components/Manage/Food/ManageFood";
-
 function App() {
   return (
     <div className="App">
@@ -24,7 +23,6 @@ function App() {
           <Route index element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<HomePage />} />
-
           <Route path="/admins" element={<Admin />}>
             <Route path="manage-users" element={<ManageUser />} />
             <Route path="manage-products" element={<ManageProduct />} />
