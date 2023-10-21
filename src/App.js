@@ -8,6 +8,8 @@ import {
   Switch,
   useLocation,
 } from "react-router-dom";
+import 'primeicons/primeicons.css';
+import 'primereact/resources/primereact.css';
 import HomePage from "./Components/Homepage/Homepage";
 import Register from "./Components/Register/Register";
 import Admin from "./Components/Admin/Admin";
@@ -22,6 +24,7 @@ import Trainer from "./Components/Trainer/Trainer";
 import User from "./Components/Trainer/User";
 import Training from "./Components/Trainer/Training";
 import Products from "./Components/Product/Products";
+import ProductDetail from "./Components/Manage/Product/ProductDetail";
 function App() {
   const value = {
     zIndex: {
@@ -56,6 +59,7 @@ function App() {
               <Route path="manage-foods" element={<ManageFood />} />
               <Route path="manage-diets" element={<ManageDiet />} />
               <Route path="animal-details/:animalId" element={<AnimalDetail />} />
+              <Route path="product-details/:productId" element={<ProductDetail />} />
               {/* <Route path="products" element={<Products />} /> */}
 
             </Route>

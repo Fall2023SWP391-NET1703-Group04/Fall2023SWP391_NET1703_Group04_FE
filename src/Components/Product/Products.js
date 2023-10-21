@@ -45,7 +45,7 @@ export default function Products() {
     }, []);
 
 
-    console.log('chekc data product list', productList);
+
 
     const onSortChange = (event) => {
         const value = event.value;
