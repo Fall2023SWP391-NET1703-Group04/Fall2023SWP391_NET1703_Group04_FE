@@ -39,7 +39,7 @@ function ManageFood() {
   };
 
   const actionTemplate = (rowData) => (
-    <>
+    < >
       <Button
         icon="pi pi-pencil"
         className="p-button-rounded p-button-success p-mr-2"
@@ -56,9 +56,7 @@ function ManageFood() {
   useEffect(() => {
     // Make an Axios GET request to fetch the data
     axios
-      .get("http://localhost:8080/zoo-server/api/v1/food/getAllFoods", {
-        headers: authHeader(),
-      })
+      .get("http://localhost:8080/zoo-server/api/v1/food/getAllFoods", { headers: authHeader() })
       .then((response) => {
         const foodsWithDateObjects = response.data.data.map((food) => ({
           ...food,
@@ -66,7 +64,6 @@ function ManageFood() {
           dateEnd: new Date(food.dateEnd),
         }));
         setFoods(foodsWithDateObjects);
-        showMessage("success", "Update success", "");
       })
       .catch((error) => {
         console.error(error);
@@ -93,7 +90,7 @@ function ManageFood() {
 
   const handleInputChange = (event, name) => {
     // For non-date inputs, use the standard input handling
-    if (name !== "dateStart" && name !== "dateEnd") {
+    if (name !== 'dateStart' && name !== 'dateEnd') {
       const { name, value } = event.target;
       setNewFood({ ...newFood, [name]: value });
     } else {
@@ -104,12 +101,12 @@ function ManageFood() {
 
   const handleAddFood = () => {
     axios
-      .post("http://localhost:8080/zoo-server/api/v1/food", newFood)
+      .post("http://localhost:8080/zoo-server/api/v1/food/createNewFood", newFood, { headers: authHeader() })
       .then((response) => {
         axios
-          .get("http://localhost:8080/zoo-server/api/v1/foods")
+          .get("http://localhost:8080/zoo-server/api/v1/food/getAllFoods", { headers: authHeader() })
           .then((response) => {
-            const foodsWithDateObjects = response.data.map((food) => ({
+            const foodsWithDateObjects = response.data.data.map((food) => ({
               ...food,
               dateStart: new Date(food.dateStart),
               dateEnd: new Date(food.dateEnd),
@@ -130,12 +127,12 @@ function ManageFood() {
   // Delete
   const handleDeleteFood = (foodId) => {
     axios
-      .delete(`http://localhost:8080/zoo-server/api/v1/deleteFood/${foodId}`)
+      .delete(`http://localhost:8080/zoo-server/api/v1/food/deleteFood/${foodId}`, { headers: authHeader() })
       .then((response) => {
         axios
-          .get("http://localhost:8080/zoo-server/api/v1/foods")
+          .get("http://localhost:8080/zoo-server/api/v1/food/getAllFoods", { headers: authHeader() })
           .then((response) => {
-            const foodsWithDateObjects = response.data.map((food) => ({
+            const foodsWithDateObjects = response.data.data.map((food) => ({
               ...food,
               dateStart: new Date(food.dateStart),
               dateEnd: new Date(food.dateEnd),
@@ -181,12 +178,13 @@ function ManageFood() {
     setIsUpdateModalOpen(false);
   };
 
-  const handleUpdateInputChange = (value, name) => {
-    if (name !== "dateStart" && name !== "dateEnd") {
+  const handleUpdateInputChange = (event, name) => {
+    if (name !== 'dateStart' && name !== 'dateEnd') {
+      const { name, value } = event.target;
       setUpdateFood({ ...updateFood, [name]: value });
     } else {
       // Convert the selected date to a valid Date object or null
-      const dateValue = value ? new Date(value) : null;
+      const dateValue = event ? new Date(event) : null;
 
       // Use the formatted date value in the state
       setUpdateFood({ ...updateFood, [name]: dateValue });
@@ -195,15 +193,12 @@ function ManageFood() {
 
   const handleUpdateFood = () => {
     axios
-      .put(
-        `http://localhost:8080/zoo-server/api/v1/food/${updateFood.foodId}`,
-        updateFood
-      )
+      .put(`http://localhost:8080/zoo-server/api/v1/food/updateFood/${updateFood.foodId}`, updateFood, { headers: authHeader() })
       .then((response) => {
         axios
-          .get("http://localhost:8080/zoo-server/api/v1/foods")
+          .get("http://localhost:8080/zoo-server/api/v1/food/getAllFoods", { headers: authHeader() })
           .then((response) => {
-            const foodsWithDateObjects = response.data.map((food) => ({
+            const foodsWithDateObjects = response.data.data.map((food) => ({
               ...food,
               dateStart: new Date(food.dateStart),
               dateEnd: new Date(food.dateEnd),
@@ -221,12 +216,24 @@ function ManageFood() {
       });
   };
 
-  return (
+  const header = (
     <div>
-      <h2>Food List</h2>
-      <Button label="Add" icon="pi pi-plus" onClick={handleOpenModal} />
+      <h1>Food Management</h1>
+      <Button
+        label="Add"
+        icon="pi pi-plus"
+        className="p-button-primary"
+        onClick={handleOpenModal}
+      />
+    </div>
+  );
 
-      <DataTable value={foods} className="p-datatable-striped">
+  return (
+    <div style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
+      {/* <h2>Food List</h2>
+      <Button label="Add" icon="pi pi-plus" onClick={handleOpenModal} /> */}
+
+      <DataTable value={foods} header={header} className="p-datatable-striped">
         <Column field="foodName" header="Food Name" />
         <Column field="dateStart" header="Date Start" body={dateTemplate} />
         <Column field="dateEnd" header="Date End" body={dateTemplate} />
@@ -281,6 +288,7 @@ function ManageFood() {
             <InputText
               id="quantity"
               name="quantity"
+              keyfilter="int"
               value={newFood.quantity}
               onChange={(e) => handleInputChange(e, "quantity")}
             />
@@ -290,11 +298,12 @@ function ManageFood() {
             <InputText
               id="unit"
               name="unit"
+              keyfilter="int"
               value={newFood.unit}
               onChange={(e) => handleInputChange(e, "unit")}
             />
           </div>
-          <Button label="Add Food" icon="pi pi-check" onClick={handleAddFood} />
+          <Button label="Add Food" icon="pi pi-check" type="button" onClick={handleAddFood} />
         </form>
       </Dialog>
 
@@ -346,6 +355,7 @@ function ManageFood() {
             <InputText
               id="quantity"
               name="quantity"
+              keyfilter="int"
               value={updateFood.quantity}
               onChange={(e) => handleUpdateInputChange(e, "quantity")}
             />
@@ -355,6 +365,7 @@ function ManageFood() {
             <InputText
               id="unit"
               name="unit"
+              keyfilter="int"
               value={updateFood.unit}
               onChange={(e) => handleUpdateInputChange(e, "unit")}
             />

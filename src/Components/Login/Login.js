@@ -59,6 +59,10 @@ const Login = () => {
             case "ROLE_CUSTOMER":
               navigate("/home");
               break;
+            case "ROLE_TRAINER":
+              navigate("/trainer");
+              break;
+
           }
         }, 1000);
       })

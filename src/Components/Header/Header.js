@@ -64,6 +64,35 @@ function Header() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
+    <>
+      <header >
+        <Link to="#" className="logo">
+          Logo
+        </Link>
+        <ul>
+          <li>
+            <Link to="/home">Home</Link>
+          </li>
+          <li>
+            <Link to="/animal">Animal</Link>
+          </li>
+          <li>
+            <Link to="/product">Product</Link>
+          </li>
+          <li>
+            <Link to="/feedback">Feedback</Link>
+          </li>
+        </ul>
+        <div>
+          <Link to="/">
+            <Button label="Sign in" rounded />
+          </Link>
+          <Link to="/" style={{ marginLeft: "1rem" }}>
+            <Button label="Sign out" severity="secondary" rounded />
+          </Link>
+        </div>
+      </header>
+    </>
   );
 }
 
