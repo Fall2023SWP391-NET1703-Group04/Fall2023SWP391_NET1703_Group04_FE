@@ -142,7 +142,7 @@ const DashBoard = () => {
 
         //  Chart Food
         const foodData = {
-            labels: ["Food", "Food Is Expired"],
+            labels: ["Food", "Food Is Not Expired"],
             datasets: [
                 {
                     data: [
@@ -172,7 +172,7 @@ const DashBoard = () => {
 
         setChartPieFoodData(foodData);
         setChartPieFoodOptions(foodOptions);
-    }, []);
+    }, [animalCageIsNotUseList.length, animalCageList.length, foodIsNotExpiredList.length, foodList.length]);
     return (<div class="col-8 ml-2">
         <div class="grid mt-3">
             <h5>DashBoard</h5>

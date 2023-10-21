@@ -9,6 +9,7 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Toast } from 'primereact/toast';
+import { Link } from 'react-router-dom';
 
 export default function ManageAnimal() {
     const [animals, setAnimals] = useState([]);
@@ -127,20 +128,20 @@ export default function ManageAnimal() {
         });
     };
     return (
-        <div className='container' style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
+        <div className='container' style={{ width: "100%" }}>
             <Toast ref={toast} />
-            <div className="card">
+            <div className="card mt-5">
                 <DataTable value={animals} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} header={header} tableStyle={{ minWidth: '50rem' }}
                     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                     currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}>
-                    <Column field="animalName" header="Name" style={{ width: '25%' }}></Column>
-                    <Column field="catalogueDTO.catalogueName" header="Country" style={{ width: '25%' }}></Column>
-                    <Column field="image" header="Image" style={{ width: '25%' }} body={imageBody}></Column>
-                    <Column field="country" header="Country" style={{ width: '25%' }}></Column>
-                    <Column field="gender" header="Gender" style={{ width: '25%' }}></Column>
+                    <Column field="animalName" header="Name" style={{ width: '15%' }}></Column>
+                    <Column field="catalogueDTO.catalogueName" header="Catalogue" style={{ width: '15%' }}></Column>
+                    <Column field="image" header="Image" style={{ width: '15%' }} body={imageBody}></Column>
+                    <Column field="country" header="Country" style={{ width: '15%' }}></Column>
+                    <Column field="gender" header="Gender" style={{ width: '15%' }}></Column>
                     <Column
                         header="Actions"
-                        style={{ width: '25%' }}
+                        style={{ width: '15%' }}
                         body={(rowData) => (
                             <div>
                                 <Button
@@ -226,7 +227,7 @@ export default function ManageAnimal() {
                     <div className="field col-12">
                         <label htmlFor="updateAnimalRare">Rare</label>
                         <InputSwitch
-                            className="card flex justify-content-center"
+                            className=" flex justify-content-center"
                             checked={checked}
                             name='rare'
                             onChange={handleSwitchChange} />
@@ -237,6 +238,7 @@ export default function ManageAnimal() {
                         icon="pi pi-pencil"
                         onClick={handleAddAnimal}
                         className="p-button-primary"
+
                     />
                 </div>
             </Dialog >
