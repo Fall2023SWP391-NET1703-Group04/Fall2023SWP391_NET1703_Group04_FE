@@ -7,7 +7,7 @@ const SideBar = () => {
   return (
     <Sidebar >
       <Menu style={{ position: "fixed", width: "250px" }}>
-        <MenuItem component={<Link to="dashboard" />}> DashBoard</MenuItem>
+        <MenuItem component={<Link to="/admins" />}> DashBoard</MenuItem>
         <SubMenu label="Task">
           <MenuItem component={<Link to="manage-users" />}>
             Manage User

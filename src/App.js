@@ -48,7 +48,7 @@ function App() {
           {/* <Route path="/products" element={<Products />} /> */}
           <Route path="/training" element={<Training />} />
           <Route path="/admins" element={<Admin />}>
-            <Route path="dashboard" element={<DashBoard />} />
+            <Route index element={<DashBoard />} />
             <Route path="manage-users" element={<ManageUser />} />
             <Route path="manage-products" element={<ManageProduct />} />
             <Route path="manage-animals" element={<ManageAnimal />} />
@@ -58,26 +58,13 @@ function App() {
 
             <Route path="manage-diets" element={<ManageDiet />} />
             <Route path="animal-details/:animalId" element={<AnimalDetail />} />
+            <Route path="product-details/:productId" element={<ProductDetail />} />
+
             {/* <Route path="products" element={<Products />} /> */}
 
           </Route>
         </Routes>
       </BrowserRouter>
-
-            <Route path="/admins" element={<Admin />}>
-              <Route path="manage-users" element={<ManageUser />} />
-              <Route path="manage-products" element={<ManageProduct />} />
-              <Route path="manage-animals" element={<ManageAnimal />} />
-              <Route path="manage-foods" element={<ManageFood />} />
-              <Route path="manage-diets" element={<ManageDiet />} />
-              <Route path="animal-details/:animalId" element={<AnimalDetail />} />
-              <Route path="product-details/:productId" element={<ProductDetail />} />
-              {/* <Route path="products" element={<Products />} /> */}
-
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </PrimeReactProvider>
 
     </div>
   );

@@ -226,7 +226,7 @@ const ManageDiet = () => {
             {/* Add dialog */}
             <Dialog
                 refresh={false}
-                header="Add Diet"
+                header="Add Diet Dialog"
                 visible={displayDialog}
                 style={{ width: '500px' }}
                 modal
@@ -235,22 +235,27 @@ const ManageDiet = () => {
 
                 <div className="p-field">
                     <label htmlFor="dietName">Diet Name</label>
+                    <br />
                     <InputText
                         id="dietName"
                         name="dietName"
+                        className='w-100'
                         value={newDiet.dietName}
                         onChange={handleInputChange}
                     />
                 </div>
                 <div className="p-field">
                     <label htmlFor="foodItems">Food</label>
+                    <br />
                     <MultiSelect
                         id="foodItems"
                         optionLabel="foodName"
                         value={selectedFood}
                         options={foodDTOS}
+                        className='w-100'
                         onChange={handleInputFoodChange} />
                 </div>
+                <br />
                 <Button
                     label="Add Diet"
                     icon="pi pi-plus"

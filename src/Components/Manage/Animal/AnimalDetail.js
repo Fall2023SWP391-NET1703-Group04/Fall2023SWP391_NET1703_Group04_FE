@@ -17,14 +17,16 @@ import AnimalDietHistory from './AnimalDietHistory';
 export default function AnimalDetail() {
     const { animalId } = useParams();
     const [animalData, setAnimalData] = useState({});
-    const [updateAnimal, setUpdateAnimal] = useState({});
+    const [updateAnimal, setUpdateAnimal] = useState({
+
+    });
     const [selectedCatalogue, setSelectedCatalogue] = useState({});
     const [catalogues, setCatalogues] = useState([]);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [checked, setChecked] = useState();
     const animalProfile = (
-        <div className="flex align-items-center text-primary">
+        <div className="flex align-items-center text-primary" >
             <span className="pi pi-user mr-2"></span>
             <span className="font-bold text-lg">Animal Details</span>
         </div>
@@ -47,7 +49,6 @@ export default function AnimalDetail() {
             .get(`http://localhost:8080/zoo-server/api/v1/animal/getAnimalById/${animalId}`, { headers: authHeader() })
             .then((response) => {
                 setAnimalData(response.data.data);
-                // setRefresh(false)
             })
             .catch((error) => console.error(error));
 
@@ -55,10 +56,9 @@ export default function AnimalDetail() {
         axios.get('http://localhost:8080/zoo-server/api/v1/catalogue/getAllCatalogues', { headers: authHeader() })
             .then(response => {
                 setCatalogues(response.data)
-                // setRefresh(false)
             })
             .catch(error => console.error(error));
-    }, [refresh]);
+    }, [animalId, refresh]);
 
     const header = (
         <img alt="Card" src={`http://localhost:3000/img/${animalData.image}`} />
@@ -106,6 +106,10 @@ export default function AnimalDetail() {
 
     const handleOpenUpdateAnimalModal = (animalData) => {
         setUpdateAnimal(animalData);
+        setUpdateAnimal({
+            ...updateAnimal,
+            catalogueId: animalData.catalogueDTO.catalogueId
+        });
         setChecked(animalData.rare);
         setSelectedCatalogue(animalData.catalogueDTO)
         setIsUpdateModalOpen(true);
@@ -125,18 +129,23 @@ export default function AnimalDetail() {
     return (
         <div className='grid ' style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
             <div className="card col-4">
-                <Fieldset legend={animalProfile} style={{ justifyContent: "center", display: "flex", alignItems: "center" }}>
-                    <Card title={animalData.animalName} subTitle={animalData.catalogueDTO?.catalogueName} footer={footer} header={header} className="md:w-25rem">
+                <Fieldset legend={animalProfile} >
+                    <Card title={animalData.animalName} subTitle={animalData.catalogueDTO?.catalogueName} footer={footer} header={header}>
                     </Card>
                 </Fieldset>
             </div>
-            <div className="card col-7">
-                <Fieldset legend={training} toggleable>
-                    {AnimalTrainingHistory(animalId)}
-                </Fieldset>
-                <Fieldset legend={diet} toggleable>
-                    {AnimalDietHistory(animalId)}
-                </Fieldset>
+            <div className='col-1'></div>
+            <div className="col-6  ml-3">
+                <div className='card'>
+                    <Fieldset legend={training} toggleable>
+                        {AnimalTrainingHistory(animalId)}
+                    </Fieldset>
+                </div>
+                <div className=' card mt-3'>
+                    <Fieldset legend={diet} toggleable>
+                        {AnimalDietHistory(animalId)}
+                    </Fieldset>
+                </div>
             </div>
 
             {/* Update animal */}
@@ -187,6 +196,8 @@ export default function AnimalDetail() {
                     </div>
                     <div className="field col-12">
                         <label htmlFor="country">Country</label>
+
+                        <br />
                         <InputText
                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
                             id="country"
@@ -197,6 +208,7 @@ export default function AnimalDetail() {
                     </div>
                     <div className="field col-12">
                         <label htmlFor="gender">Gender</label>
+                        <br />
                         <InputText
                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
                             id="gender"
@@ -208,7 +220,7 @@ export default function AnimalDetail() {
                     <div className="field col-12">
                         <label htmlFor="updateAnimalRare">Rare</label>
                         <InputSwitch
-                            className="card flex justify-content-center"
+
                             checked={checked}
                             name='rare'
                             onChange={handleSwitchChange} />

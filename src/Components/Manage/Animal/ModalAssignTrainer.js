@@ -9,6 +9,7 @@ import authHeader from '../../AuthHeader/AuthHeader'
 import { Calendar } from 'primereact/calendar'
 import { Toast } from 'primereact/toast'
 import { InputTextarea } from 'primereact/inputtextarea';
+import { isBuffer } from 'lodash'
 
 export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
     const [newTraining, setNewTraining] = useState({

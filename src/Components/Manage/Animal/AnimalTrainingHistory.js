@@ -32,7 +32,7 @@ export default function AnimalTrainingHistory(animalId) {
     }
 
     return (
-        <div className='container' style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
+        <div className='container' style={{ justifyContent: "center", display: "flex", alignItems: "center" }}>
             {ModalAssignTrainer(animalId, isModalOpen, handleClose)}
             <div className="card">
                 <DataTable value={trainingData} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
