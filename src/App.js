@@ -30,6 +30,8 @@ function App() {
             <Route path="manage-products" element={<ManageProduct />} />
             <Route path="manage-animals" element={<ManageAnimal />} />
             <Route path="manage-foods" element={<ManageFood />} />
+            <Route path="manage-areas" element={<ManageArea />} />
+            <Route path="manage-catalogues" element={<ManageCatalogue />} />
           </Route>
         </Routes>
       </BrowserRouter>
