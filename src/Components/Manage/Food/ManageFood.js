@@ -216,12 +216,24 @@ function ManageFood() {
       });
   };
 
-  return (
-    <div className="" >
-      <h2>Food List</h2>
-      <Button label="Add" icon="pi pi-plus" onClick={handleOpenModal} />
+  const header = (
+    <div>
+      <h1>Food Management</h1>
+      <Button
+        label="Add"
+        icon="pi pi-plus"
+        className="p-button-primary"
+        onClick={handleOpenModal}
+      />
+    </div>
+  );
 
-      <DataTable value={foods} className="p-datatable-striped">
+  return (
+    <div style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
+      {/* <h2>Food List</h2>
+      <Button label="Add" icon="pi pi-plus" onClick={handleOpenModal} /> */}
+
+      <DataTable value={foods} header={header} className="p-datatable-striped">
         <Column field="foodName" header="Food Name" />
         <Column field="dateStart" header="Date Start" body={dateTemplate} />
         <Column field="dateEnd" header="Date End" body={dateTemplate} />

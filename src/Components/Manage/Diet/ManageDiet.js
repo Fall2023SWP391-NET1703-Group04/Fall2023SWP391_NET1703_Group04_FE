@@ -11,6 +11,7 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import authHeader from "../../AuthHeader/AuthHeader";
 import 'primeicons/primeicons.css';
+import '/node_modules/primeflex/primeflex.css';
 
 const ManageDiet = () => {
     const [diets, setDiets] = useState([]);
@@ -51,7 +52,10 @@ const ManageDiet = () => {
     useEffect(() => {
         axios
             .get('http://localhost:8080/zoo-server/api/v1/diet/getAllDiets', { headers: authHeader() })
-            .then((response) => { setDiets(response.data.data); setRefresh(false) })
+            .then((response) => {
+                setDiets(response.data.data);
+                setRefresh(false)
+            })
             .catch((error) => {
                 console.error(error);
             });
@@ -174,9 +178,10 @@ const ManageDiet = () => {
         <div>
             <h1>Diet Management</h1>
             <Button
+                style={{ justifySelf: "left" }}
                 label="Add"
                 icon="pi pi-plus"
-                className="p-button-primary"
+                className="p-button-primary absolute top-0 left-0"
                 onClick={() => setDisplayDialog(true)}
             />
         </div>
@@ -184,14 +189,8 @@ const ManageDiet = () => {
 
     return (
         <div style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
-            <div className="p-fluid" style={{ width: "90%", justifySelf: "center" }}>
-                <DataTable
-                    value={diets}
-                    header={header}
-                    paginator
-                    rows={10}
-                    rowsPerPageOptions={[5, 10, 20]}
-                >
+            <div style={{ width: "90%", justifySelf: "center" }}>
+                <DataTable value={diets} header={header} paginator rows={5} rowsPerPageOptions={[5, 10, 20]}>
                     <Column field="dietName" header="Diet Name" />
                     <Column
                         field="foodDTOS"
@@ -199,7 +198,7 @@ const ManageDiet = () => {
                         body={(rowData) => (
                             <ul>
                                 {rowData.foodDTOS.map((food) => (
-                                    <li key={food.foodId}>{food.foodName}</li>
+                                    <p key={food.foodId}>{food.foodName}</p>
                                 ))}
                             </ul>
                         )}
