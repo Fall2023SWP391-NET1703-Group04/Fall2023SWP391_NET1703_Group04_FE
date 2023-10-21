@@ -15,6 +15,8 @@ import ManageUser from "./Components/Manage/User/ManageUser";
 import ManageProduct from "./Components/Manage/ManageProduct";
 import ManageAnimal from "./Components/Manage/ManageAnimal";
 import ManageFood from "./Components/Manage/Food/ManageFood";
+import ManageCatalogue from "./Components/Manage/Catalogue/ManageCatalogue";
+import ManageArea from "./Components/Manage/Area/ManageArea";
 function App() {
   return (
     <div className="App">
@@ -27,6 +29,7 @@ function App() {
             <Route path="manage-users" element={<ManageUser />} />
             <Route path="manage-products" element={<ManageProduct />} />
             <Route path="manage-animals" element={<ManageAnimal />} />
+
             <Route path="manage-foods" element={<ManageFood />} />
             <Route path="manage-areas" element={<ManageArea />} />
             <Route path="manage-catalogues" element={<ManageCatalogue />} />
