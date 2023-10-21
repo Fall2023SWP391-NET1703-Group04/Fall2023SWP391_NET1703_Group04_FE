@@ -1,10 +1,8 @@
 import { Outlet } from "react-router-dom";
 import SideBar from "../Sidebar/SideBar";
-import { Card } from "primereact/card";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import authHeader from "../AuthHeader/AuthHeader";
-import { Chart } from "primereact/chart";
+import Header from "../Header/Header";
+import { Button } from "primereact/button";
+
 
 export default function Admin() {
 
@@ -14,10 +12,9 @@ export default function Admin() {
       <div style={{ display: "flex" }}>
         <SideBar />
         <Outlet />
-
-
       </div>
 
     </>
   );
-}
+};
+export default Admin;

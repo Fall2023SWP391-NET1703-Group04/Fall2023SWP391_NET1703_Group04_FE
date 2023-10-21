@@ -8,6 +8,8 @@ import {
   Switch,
   useLocation,
 } from "react-router-dom";
+import 'primeicons/primeicons.css';
+import 'primereact/resources/primereact.css';
 import HomePage from "./Components/Homepage/Homepage";
 import Register from "./Components/Register/Register";
 import Admin from "./Components/Admin/Admin";
@@ -23,10 +25,13 @@ import AnimalDetail from "./Components/Manage/Animal/AnimalDetail";
 import Trainer from "./Components/Trainer/Trainer";
 import User from "./Components/Trainer/User";
 import Training from "./Components/Trainer/Training";
+
 import DashBoard from "./Components/DashBoard/DashBoard";
 import Animal from "./Components/AnimalUser/Animal";
 import ProductUser from "./Components/ProductUser/ProductUser";
 import UpdateProfileUser from "./Components/UpdateProfileUser/UpdateProfileUser";
+import Products from "./Components/Product/Products";
+import ProductDetail from "./Components/Manage/Product/ProductDetail";
 function App() {
   return (
     <div className="App">
@@ -58,6 +63,21 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+
+            <Route path="/admins" element={<Admin />}>
+              <Route path="manage-users" element={<ManageUser />} />
+              <Route path="manage-products" element={<ManageProduct />} />
+              <Route path="manage-animals" element={<ManageAnimal />} />
+              <Route path="manage-foods" element={<ManageFood />} />
+              <Route path="manage-diets" element={<ManageDiet />} />
+              <Route path="animal-details/:animalId" element={<AnimalDetail />} />
+              <Route path="product-details/:productId" element={<ProductDetail />} />
+              {/* <Route path="products" element={<Products />} /> */}
+
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </PrimeReactProvider>
 
     </div>
   );

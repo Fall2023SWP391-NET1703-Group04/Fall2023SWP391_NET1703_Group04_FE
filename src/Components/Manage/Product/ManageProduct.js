@@ -3,18 +3,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
-import { InputNumber } from 'primereact/inputnumber';
-import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
-import { useHistory } from 'react-router-dom';
-import { Paginator } from 'primereact/paginator';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dialog } from 'primereact/dialog';
-
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import authHeader from '../../AuthHeader/AuthHeader';
 import axios from 'axios';
-
 export default function ManageProduct() {
 
   const [products4, setProducts4] = useState(null);
@@ -24,6 +19,7 @@ export default function ManageProduct() {
   const [rows, setRows] = useState(10); // Số hàng trên mỗi trang
   const [newProduct, setNewProduct] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCustomer3, setSelectedCustomer3] = useState(null);
   const [refresh, setRefresh] = useState(false);
   // Rest of your code
 
@@ -31,24 +27,15 @@ export default function ManageProduct() {
     setEditingProduct(product);
   };
 
+
   const toast = useRef(null);
 
-  const columns = [
-    { field: 'productId', header: 'productId', editable: false },
-    { field: 'productName', header: 'productName' },
-    { field: 'description', header: 'Description' },
-    { field: 'quantity', header: 'Quantity' },
-    { field: 'price', header: 'Price' },
 
+  const [filters, setFilters] = useState({
+    'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'productName': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
 
-  ];
-
-
-
-
-  const dataTableFuncMap = {
-    'products4': setProducts4
-  };
+  });
 
 
 
@@ -60,81 +47,13 @@ export default function ManageProduct() {
       .then(response => {
 
         setProductLists(response.data.data);
-        fetchProductData('products4');
+        setProducts4(response.data.data);
       })
       .catch(error => {
         console.error('Lỗi khi gửi yêu cầu:', error);
       });
 
   }, []);
-  console.log('checl list', productLists);
-
-  const fetchProductData = (productStateKey) => {
-    // Bạn có thể sử dụng dữ liệu từ productLists
-    const data = productLists;
-    dataTableFuncMap[productStateKey](data);
-  }
-
-
-  const isPositiveInteger = (val) => {
-    let str = String(val);
-    str = str.trim();
-    if (!str) {
-      return false;
-    }
-    str = str.replace(/^0+/, "") || "0";
-    let n = Math.floor(Number(str));
-    return n !== Infinity && String(n) === str && n >= 0;
-  }
-
-
-
-
-
-  const onCellEditComplete = (e) => {
-    let { rowData, newValue, field, originalEvent: event } = e;
-
-    switch (field) {
-      case 'quantity':
-      case 'price':
-        if (isPositiveInteger(newValue))
-          rowData[field] = newValue;
-        else
-          event.preventDefault();
-        break;
-
-      default:
-        if (typeof newValue === 'string' && newValue.trim().length > 0) { // Kiểm tra xem newValue có phải là chuỗi trước khi sử dụng trim
-          rowData[field] = newValue;
-        } else {
-          event.preventDefault();
-        }
-        break;
-    }
-  }
-
-
-
-
-  const cellEditor = (options) => {
-    if (options.field === 'price')
-      return priceEditor(options);
-    else
-      return textEditor(options);
-  }
-
-  const textEditor = (options) => {
-    return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
-  }
-
-  const priceEditor = (options) => {
-    return <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} mode="currency" currency="USD" locale="en-US" />
-  }
-
-
-  const priceBodyTemplate = (rowData) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(rowData.price);
-  }
 
 
   const actionBodyTemplate = (rowData) => {
@@ -143,24 +62,24 @@ export default function ManageProduct() {
 
         <Button
           icon="pi pi-trash"
-          className="p-button-rounded p-button-danger"
+          className="p-button-danger"
           onClick={() => deleteProduct(rowData)}
         />
         <Button
           icon="pi pi-eye"
-          className="p-button-rounded p-button-info"
+          className="p-button-info"
           onClick={() => window.location.href = `product-details/${rowData.productId}`}
         />
       </div>
     );
   };
 
-  columns.push({
-    field: 'actions',
-    header: 'Actions',
-    body: actionBodyTemplate,
-    style: { textAlign: 'center', width: '10%', minWidth: '8rem' },
-  });
+  // columns.push({
+  //   field: 'actions',
+  //   header: 'Actions',
+  //   body: actionBodyTemplate,
+  //   style: { textAlign: 'center', width: '10%', minWidth: '8rem' },
+  // });
 
 
 
@@ -215,7 +134,77 @@ export default function ManageProduct() {
       [name]: event.target.files[0].name
     });
   }
+  const handleInputChangequantity = (event) => {
+    const { name, value } = event.target;
 
+    // Ensure that the input is a positive integer
+    const newValue = value.replace(/\D/g, ''); // Remove non-digit characters
+    setNewProduct({
+      ...newProduct,
+      [name]: newValue,
+    });
+  };
+  const handleInputChangePrice = (event) => {
+    const { name, value } = event.target;
+
+    // Ensure that the input is a non-negative number
+    if (/^\d*\.?\d*$/.test(value)) {
+      setNewProduct({
+        ...newProduct,
+        [name]: value,
+      });
+    }
+  };
+
+  const filtersMap = {
+
+    'filters': { value: filters, callback: setFilters },
+  };
+
+
+  const renderHeader = (filtersKey) => {
+    const filters = filtersMap[`${filtersKey}`].value;
+    const value = filters['global'] ? filters['global'].value : '';
+
+    return (
+      <div class="grid">
+        <div class="col-4">
+          <span className="p-input-icon-left">
+            <i className="pi pi-search" />
+            <InputText type="search" value={value || ''} onChange={(e) => onGlobalFilterChange(e, filtersKey)} placeholder="Product Name Search" />
+          </span>
+        </div>
+        <div className='col-6'></div>
+        <div class="col">
+          <span>
+            <Button
+              label="Add Product"
+              icon="pi pi-pencil"
+              onClick={() => setIsModalOpen(true)}
+              className="p-button-primary p-button-sm"
+            />
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+
+  const onGlobalFilterChange = (event, filtersKey) => {
+    const value = event.target.value;
+    let filters = { ...filtersMap[filtersKey].value };
+    filters['global'].value = value;
+
+    filtersMap[filtersKey].callback(filters);
+  }
+
+  const header3 = renderHeader('filters');
+  const onCustomSaveState = (state) => {
+    sessionStorage.setItem('dt-state-demo-custom', JSON.stringify(state));
+  }
+  const onCustomRestoreState = () => {
+    return JSON.parse(sessionStorage.getItem('dt-state-demo-custom'));
+  }
 
   const visibleProductLists = productLists.slice(first, first + rows);
 
@@ -224,19 +213,15 @@ export default function ManageProduct() {
       <Toast ref={toast} />
       <div className="card p-fluid">
         <h5>List Product</h5>
-        <div className="add-product-button">
-          <Button
-            label="Add Product"
-            icon="pi pi-pencil"
-            onClick={() => setIsModalOpen(true)}
-            className="p-button-primary p-button-sm"
-          />
-        </div>
-
-        <DataTable value={visibleProductLists} editMode="cell" className="editable-cells-table" filterDisplay="row" responsiveLayout="scroll">
-          {columns.map(({ field, header, body }) => (
-            <Column key={field} field={field} header={header} style={{ width: '17%' }} body={body} sortable={field !== 'actions'} filter={field !== 'actions'} className="p-d-flex p-jc-center p-ai-center" />
-          ))}
+        <DataTable value={productLists} paginator rows={10} header={header3} filters={filters} onFilter={(e) => setFilters(e.filters)}
+          selection={selectedCustomer3} onSelectionChange={e => setSelectedCustomer3(e.value)} selectionMode="single" dataKey="id" responsiveLayout="scroll"
+          stateStorage="custom" customSaveState={onCustomSaveState} customRestoreState={onCustomRestoreState} emptyMessage="No Product name found.">
+          <Column field="productId" header="ID" style={{ width: '10%' }}></Column>
+          <Column field="productName" header="Product Name" sortable style={{ width: '20%', textAlign: 'center' }}></Column>
+          <Column field="description" header="Description" sortable style={{ width: '25%' }}></Column>
+          <Column field="price" header="Price" sortable style={{ width: '15%' }}></Column>
+          <Column field="quantity" header="Quantity" sortable style={{ width: '10%', textAlign: 'center' }}></Column>
+          <Column field="Actions" header="Actions" style={{ width: '15%' }} body={actionBodyTemplate}></Column>
         </DataTable>
 
 
@@ -273,13 +258,14 @@ export default function ManageProduct() {
             <div className="field col-12 ">
               <label htmlFor="price">Price</label>
               <br />
-              <InputNumber
+              <InputText
                 id="price"
                 name="price"
                 value={newProduct.price}
-                onChange={handleInputChange}
+                onChange={handleInputChangePrice}
               />
             </div>
+
             <div className="field col-12 ">
               <label htmlFor="quantity">Quantity</label>
               <br />
@@ -287,7 +273,7 @@ export default function ManageProduct() {
                 id="quantity"
                 name="quantity"
                 value={newProduct.quantity}
-                onChange={handleInputChange}
+                onChange={handleInputChangequantity}
               />
             </div>
             <div className="field col-12 ">
@@ -318,15 +304,7 @@ export default function ManageProduct() {
 
 
 
-        <Paginator
-          first={first}
-          rows={rows}
-          totalRecords={productLists.length}
-          onPageChange={(e) => {
-            setFirst(e.first);
-            setRows(e.rows);
-          }}
-        ></Paginator>
+
 
 
 
