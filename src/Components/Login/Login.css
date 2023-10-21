@@ -43,3 +43,8 @@
   font-weight: bold;
   text-decoration: none;
 }
+
+#root > div > div > div > div > div > div {
+  --bs-card-bg: none !important;
+  --bs-card-border-color: none !important;
+}

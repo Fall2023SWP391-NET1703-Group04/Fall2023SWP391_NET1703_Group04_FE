@@ -15,6 +15,8 @@ import ManageUser from "./Components/Manage/User/ManageUser";
 import ManageProduct from "./Components/Manage/Product/ManageProduct";
 import ManageAnimal from "./Components/Manage/Animal/ManageAnimal";
 import ManageFood from "./Components/Manage/Food/ManageFood";
+import ManageCatalogue from "./Components/Manage/Catalogue/ManageCatalogue";
+import ManageArea from "./Components/Manage/Area/ManageArea";
 import ManageDiet from "./Components/Manage/Diet/ManageDiet";
 import { PrimeReactProvider } from "primereact/api";
 import AnimalDetail from "./Components/Manage/Animal/AnimalDetail";
@@ -36,6 +38,7 @@ function App() {
   };
   return (
     <div className="App">
+
       <PrimeReactProvider value={value} >
         <BrowserRouter>
           <Routes>
@@ -45,10 +48,6 @@ function App() {
             <Route path="/trainer" element={<Trainer />} />
             {/* <Route path="/products" element={<Products />} /> */}
             <Route path="/training" element={<Training />} />
-
-
-
-
             <Route path="/admins" element={<Admin />}>
               <Route path="manage-users" element={<ManageUser />} />
               <Route path="manage-products" element={<ManageProduct />} />
@@ -62,6 +61,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </PrimeReactProvider>
+
     </div>
   );
 }
