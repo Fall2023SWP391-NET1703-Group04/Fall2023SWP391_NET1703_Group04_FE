@@ -42,7 +42,8 @@ export default function AnimalTrainingHistory(animalId) {
                     <Column field="fullName" header="Trainer" style={{ width: '16%' }}></Column>
                     <Column field="animalName" header="Animal" style={{ width: '16%' }}></Column>
                     <Column field="dateStart" header="Date Start" style={{ width: '16%' }}></Column>
-                    <Column field="dateEnd" header="Date End" style={{ width: '16%' }}></Column>
+                    {/* {trainingData.dateEnd ? (<Column field="dateEnd" header="Date End" style={{ width: '16%' }}></Column>) : ("Now")} */}
+                    <Column field="dateEnd" header="Date End" style={{ width: '16%' }}></Column>q
                     <Column field="description" header="Description" style={{ width: '16%' }}></Column>
                 </DataTable>
             </div>

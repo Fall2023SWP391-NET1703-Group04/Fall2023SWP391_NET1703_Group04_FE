@@ -24,7 +24,7 @@ export default function AnimalDietHistory(animalId) {
                 setRefresh(false)
             })
             .catch(error => console.error(error));
-    }, [animalId, refresh]);
+    }, [refresh]);
 
     const handleClose = () => {
         setRefresh(true)
