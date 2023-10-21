@@ -45,12 +45,18 @@ export default function AnimalDetail() {
         // Fetch animal data using the `animalId` parameter
         axios
             .get(`http://localhost:8080/zoo-server/api/v1/animal/getAnimalById/${animalId}`, { headers: authHeader() })
-            .then((response) => setAnimalData(response.data.data))
+            .then((response) => {
+                setAnimalData(response.data.data);
+                // setRefresh(false)
+            })
             .catch((error) => console.error(error));
 
         //catalogues
         axios.get('http://localhost:8080/zoo-server/api/v1/catalogue/getAllCatalogues', { headers: authHeader() })
-            .then(response => setCatalogues(response.data))
+            .then(response => {
+                setCatalogues(response.data)
+                // setRefresh(false)
+            })
             .catch(error => console.error(error));
     }, [refresh]);
 

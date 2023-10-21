@@ -1,0 +1,15 @@
+#root > div > div > div:nth-child(1) > div.col-sm-8 > p {
+  text-align: justify;
+}
+#root
+  > div
+  > div
+  > div:nth-child(2)
+  > div.col-sm-8
+  > div
+  > div:nth-child(2)
+  > div
+  > i {
+  width: 5rem;
+  margin: 0rem 0.5rem;
+}

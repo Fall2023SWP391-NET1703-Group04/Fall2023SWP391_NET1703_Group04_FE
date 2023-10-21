@@ -1,0 +1,23 @@
+#root > div > div:nth-child(2) > div > div:nth-child(2) > div > div > img {
+    width: 12.5rem;
+    height: 12.5rem;
+}
+.sponsors-content {
+    background-color: #7ba84d;
+}
+
+#root > div > div.sponsors-content > div > div > div > div > img {
+    width: 12.5rem;
+    height: 12.5rem;
+    border-radius: 50%;
+    box-shadow: 5px 10px #888888;
+}
+
+#root > div > div.sponsors-content > div > div > div > div > h5 {
+    margin-top: 1rem;
+}
+
+#root > div > div.container-md > img {
+    width: 100%;
+    height: auto;
+}

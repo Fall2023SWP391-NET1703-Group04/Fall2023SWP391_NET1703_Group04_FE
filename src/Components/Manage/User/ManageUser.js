@@ -332,6 +332,7 @@ const ManageUser = () => {
         ) : (
           <div className="card">
             <DataTable
+              size={{ label: "Small", value: "small" }}
               value={users}
               paginator
               rows={5}

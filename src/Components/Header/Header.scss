@@ -1,0 +1,36 @@
+.header-container {
+    background-color: #000000;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 1;
+    .btn-login {
+        border-radius: 5px;
+        margin-right: 15px;
+        padding: 0 15px;
+        border: 1px solid #272626;
+        height: 40px;
+    }
+    .btn-signup {
+        border-radius: 5px;
+        padding: 0 15px;
+        background: #303030;
+        color: white;
+        height: 40px;
+        &:hover {
+            background: black;
+        }
+    }
+
+    .navbar {
+        z-index: 10;
+        background-color: rgba(3, 2, 2, 0) !important;
+        .nav-link {
+            color: green;
+            &.active {
+                // & ám chỉ nav-link và active ngang cấp
+                color: red;
+            }
+        }
+    }
+}
