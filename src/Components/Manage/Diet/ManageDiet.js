@@ -12,6 +12,7 @@ import 'primereact/resources/primereact.min.css';
 import authHeader from "../../AuthHeader/AuthHeader";
 import 'primeicons/primeicons.css';
 import '/node_modules/primeflex/primeflex.css';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
 
 const ManageDiet = () => {
     const [diets, setDiets] = useState([]);
@@ -30,6 +31,56 @@ const ManageDiet = () => {
         dietName: '',
         foodDTOS: [],
     }]);
+    const [globalFilterValue, setGlobalFilterValue] = useState('');
+
+
+    //Search by animals name
+    const [filters, setFilters] = useState({
+        'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+        'animalName': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+
+    });
+
+    const initFilters = () => {
+        setFilters({
+            global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+            animalName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+
+        });
+        setGlobalFilterValue('');
+    };
+
+    const clearFilter = () => {
+        initFilters();
+    };
+
+    const onGlobalFilterChange = (e) => {
+        const value = e.target.value;
+        let _filters = { ...filters };
+
+        _filters['global'].value = value;
+
+        setFilters(_filters);
+        setGlobalFilterValue(value);
+    };
+
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-content-between">
+                <Button
+                    label="Add"
+                    icon="pi pi-plus"
+                    className="p-button-primary absolute"
+                    onClick={() => setDisplayDialog(true)}
+                />
+                <Button className='ml-auto' type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search by name" />
+                </span>
+            </div>
+        );
+    };
 
     // Fetch food data
     useEffect(() => {
@@ -174,23 +225,24 @@ const ManageDiet = () => {
             });
     };
 
-    const header = (
-        <div>
-            <h1>Diet Management</h1>
-            <Button
-                style={{ justifySelf: "left" }}
-                label="Add"
-                icon="pi pi-plus"
-                className="p-button-primary absolute top-0 left-0"
-                onClick={() => setDisplayDialog(true)}
-            />
-        </div>
-    );
+    const header = renderHeader();
+    // <div>
+    //     <h1>Diet Management</h1>
+    // <Button
+    //     style={{ justifySelf: "left" }}
+    //     label="Add"
+    //     icon="pi pi-plus"
+    //     className="p-button-primary absolute top-0 left-0"
+    //     onClick={() => setDisplayDialog(true)}
+    // />
+    // </div>
+
 
     return (
         <div style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
             <div style={{ width: "90%", justifySelf: "center" }}>
-                <DataTable value={diets} header={header} paginator rows={5} rowsPerPageOptions={[5, 10, 20]}>
+                <h1>Diet Management</h1>
+                <DataTable value={diets} header={header} paginator rows={5} rowsPerPageOptions={[5, 10, 20]} filters={filters} onFilter={(e) => setFilters(e.filters)}>
                     <Column field="dietName" header="Diet Name" />
                     <Column
                         field="foodDTOS"

@@ -10,6 +10,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Toast } from 'primereact/toast';
 import { Link } from 'react-router-dom';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
 
 export default function ManageAnimal() {
     const [animals, setAnimals] = useState([]);
@@ -20,6 +21,50 @@ export default function ManageAnimal() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [checked, setChecked] = useState();
     const toast = useRef(null);
+    const [globalFilterValue, setGlobalFilterValue] = useState('');
+
+    //Search by animals name
+    const [filters, setFilters] = useState({
+        'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+        'animalName': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+
+    });
+
+    const initFilters = () => {
+        setFilters({
+            global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+            animalName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+
+        });
+        setGlobalFilterValue('');
+    };
+
+    const clearFilter = () => {
+        initFilters();
+    };
+
+    const onGlobalFilterChange = (e) => {
+        const value = e.target.value;
+        let _filters = { ...filters };
+
+        _filters['global'].value = value;
+
+        setFilters(_filters);
+        setGlobalFilterValue(value);
+    };
+
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-content-between">
+                <Button label="Add" icon="pi pi-plus" onClick={handleOpenModal} />
+                <Button className='ml-auto' type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search by name" />
+                </span>
+            </div>
+        );
+    };
 
     //Add new animal
     const handleOpenModal = () => {
@@ -76,7 +121,6 @@ export default function ManageAnimal() {
     }
 
     const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
-    const paginatorRight = <Button label="Add" icon="pi pi-plus" onClick={handleOpenModal} />;
 
     //Get data
     useEffect(() => {
@@ -115,11 +159,7 @@ export default function ManageAnimal() {
                 console.error(error);
             });
     }
-    const header = (
-        <div>
-            <h1>Animal Management</h1>
-        </div>
-    );
+    const header = renderHeader();
 
     const show = (message, color) => {
         toast.current.show({
@@ -131,9 +171,11 @@ export default function ManageAnimal() {
         <div className='container' style={{ width: "100%" }}>
             <Toast ref={toast} />
             <div className="card mt-5">
+                <h1>List Animal</h1>
                 <DataTable value={animals} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} header={header} tableStyle={{ minWidth: '50rem' }}
                     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                    currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}>
+                    currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft}
+                    filters={filters} onFilter={(e) => setFilters(e.filters)}>
                     <Column field="animalName" header="Name" style={{ width: '15%' }}></Column>
                     <Column field="catalogueDTO.catalogueName" header="Catalogue" style={{ width: '15%' }}></Column>
                     <Column field="image" header="Image" style={{ width: '15%' }} body={imageBody}></Column>
@@ -221,7 +263,6 @@ export default function ManageAnimal() {
                                 id="image"
                                 onChange={onUpload}
                             />
-                            {/* <FileUpload mode="basic" name="image" accept="image/*" maxFileSize={1000000} onUpload={onUpload} /> */}
                         </div>
                     </div>
                     <div className="field col-12">
