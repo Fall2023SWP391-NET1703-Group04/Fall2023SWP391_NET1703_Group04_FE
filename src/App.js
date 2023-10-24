@@ -32,6 +32,7 @@ import ProductUser from "./Components/ProductUser/ProductUser";
 import UpdateProfileUser from "./Components/UpdateProfileUser/UpdateProfileUser";
 import Products from "./Components/Product/Products";
 import ProductDetail from "./Components/Manage/Product/ProductDetail";
+import ManageNews from "./Components/Manage/News/ManageNews";
 function App() {
   return (
     <div className="App">
@@ -55,7 +56,7 @@ function App() {
             <Route path="manage-foods" element={<ManageFood />} />
             <Route path="manage-areas" element={<ManageArea />} />
             <Route path="manage-catalogues" element={<ManageCatalogue />} />
-
+            <Route path="manage-news" element={<ManageNews />} />
             <Route path="manage-diets" element={<ManageDiet />} />
             <Route path="animal-details/:animalId" element={<AnimalDetail />} />
             <Route path="product-details/:productId" element={<ProductDetail />} />
