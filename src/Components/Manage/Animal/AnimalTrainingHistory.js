@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -24,7 +23,7 @@ export default function AnimalTrainingHistory(animalId) {
                 setRefresh(false)
             })
             .catch(error => console.error(error));
-    }, [refresh]);
+    }, [refresh, animalId]);
 
     const handleClose = () => {
         setIsModalOpen(false)
@@ -33,8 +32,8 @@ export default function AnimalTrainingHistory(animalId) {
 
     return (
         <div className='container' style={{ justifyContent: "center", display: "flex", alignItems: "center" }}>
-            {ModalAssignTrainer(animalId, isModalOpen, handleClose)}
             <div className="card">
+                {ModalAssignTrainer(animalId, isModalOpen, handleClose)}
                 <DataTable value={trainingData} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
                     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                     currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}>
@@ -43,7 +42,7 @@ export default function AnimalTrainingHistory(animalId) {
                     <Column field="animalName" header="Animal" style={{ width: '16%' }}></Column>
                     <Column field="dateStart" header="Date Start" style={{ width: '16%' }}></Column>
                     {/* {trainingData.dateEnd ? (<Column field="dateEnd" header="Date End" style={{ width: '16%' }}></Column>) : ("Now")} */}
-                    <Column field="dateEnd" header="Date End" style={{ width: '16%' }}></Column>q
+                    <Column field="dateEnd" header="Date End" style={{ width: '16%' }}></Column>
                     <Column field="description" header="Description" style={{ width: '16%' }}></Column>
                 </DataTable>
             </div>

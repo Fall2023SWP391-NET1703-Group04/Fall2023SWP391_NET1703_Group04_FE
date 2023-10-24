@@ -9,13 +9,16 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Toast } from 'primereact/toast';
-import { Link } from 'react-router-dom';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { Countries } from '../../Data/Countries';
+import { Gender } from '../../Data/Gender';
 
 export default function ManageAnimal() {
     const [animals, setAnimals] = useState([]);
     const [newAnimal, setNewAnimal] = useState([])
     const [selectedCatalogue, setSelectedCatalogue] = useState({});
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [selectedGender, setSelectedGender] = useState(null);
     const [catalogues, setCatalogues] = useState([])
     const [refresh, setRefresh] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,12 +82,30 @@ export default function ManageAnimal() {
         });
     }
 
-    const handleSelectedChange = (event) => {
-        setSelectedCatalogue(event.value);
-        setNewAnimal({
-            ...newAnimal,
-            catalogueId: event.target.value.catalogueId
-        });
+    const handleSelectedChange = (event, name) => {
+        console.log(event, name);
+        if (name === "catalogueId") {
+            setSelectedCatalogue(event.value);
+            setNewAnimal({
+                ...newAnimal,
+                catalogueId: event.target.value.catalogueId
+            });
+        }
+        else if (name === "country") {
+            setSelectedCountry(event.value)
+            setNewAnimal({
+                ...newAnimal,
+                country: event.target.value.name
+            });
+        }
+        else {
+            setSelectedGender(event.value)
+            setNewAnimal({
+                ...newAnimal,
+                gender: event.target.value.name
+            });
+        }
+
     }
 
     const onUpload = (event) => {
@@ -201,6 +222,8 @@ export default function ManageAnimal() {
                     />
                 </DataTable>
             </div>
+
+            {/* Add animal */}
             <Dialog
                 header="Add Animal"
                 visible={isModalOpen}
@@ -214,6 +237,7 @@ export default function ManageAnimal() {
                         <br />
                         <InputText
                             id="animalName"
+                            className='w-full'
                             name="animalName"
                             value={newAnimal.animalName}
                             onChange={handleInputChange}
@@ -225,7 +249,7 @@ export default function ManageAnimal() {
                         <br />
                         <Dropdown
                             value={selectedCatalogue}
-                            onChange={handleSelectedChange}
+                            onChange={(e) => handleSelectedChange(e, 'catalogueId')}
                             options={catalogues}
                             name='catalogueId'
                             optionLabel='catalogueName'
@@ -235,35 +259,51 @@ export default function ManageAnimal() {
                     <div className="field col-12 ">
                         <label htmlFor="country">Country</label>
                         <br />
-                        <InputText
+                        {/* <InputText
                             id="country"
+                            className='w-full'
                             name="country"
                             value={newAnimal.country}
                             onChange={handleInputChange}
+                        /> */}
+                        <Dropdown
+                            value={selectedCountry}
+                            onChange={(e) => handleSelectedChange(e, 'country')}
+                            name="country"
+                            options={Countries} optionLabel="name"
+                            placeholder="Select a Country"
+                            filter className="w-full"
                         />
                     </div>
                     <div className="field col-12 ">
                         <label htmlFor="gender">Gender</label>
                         <br />
-                        <InputText
+                        {/* <InputText
                             id="gender"
+                            className='w-full'
                             name="gender"
                             value={newAnimal.gender}
                             onChange={handleInputChange}
+                        /> */}
+                        <Dropdown
+                            value={selectedGender}
+                            onChange={(e) => handleSelectedChange(e, 'gender')}
+                            name="gender"
+                            options={Gender} optionLabel="name"
+                            placeholder="Select a Gender"
+                            filter className="w-full"
                         />
                     </div>
                     <div className="field col-12 ">
-                        <div className="field col-12">
-                            <label htmlFor="image">Animal Image</label>
-                            <br />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                name="image"
-                                id="image"
-                                onChange={onUpload}
-                            />
-                        </div>
+                        <label htmlFor="image">Animal Image</label>
+                        <br />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            name="image"
+                            id="image"
+                            onChange={onUpload}
+                        />
                     </div>
                     <div className="field col-12">
                         <label htmlFor="updateAnimalRare">Rare</label>

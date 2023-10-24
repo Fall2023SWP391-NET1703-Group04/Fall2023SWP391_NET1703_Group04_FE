@@ -6,9 +6,7 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
-import { Menu } from "primereact/menu";
 import { Toast } from "primereact/toast";
-import { classNames } from "primereact/utils";
 import dayjs from "dayjs";
 import authHeader from "../../AuthHeader/AuthHeader";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
@@ -18,7 +16,7 @@ function ManageFood() {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   const toast = useRef(null);
-  const menu = useRef(null);
+  // const menu = useRef(null);
 
   const [globalFilterValue, setGlobalFilterValue] = useState('');
 
@@ -269,23 +267,15 @@ function ManageFood() {
   };
 
   const header = renderHeader();
-  //  (
-  //   <div>
-  //     <h1>Food Management</h1>
-  // <Button
-  //   label="Add"
-  //   icon="pi pi-plus"
-  //   className="p-button-primary"
-  //   onClick={handleOpenModal}
-  // />
-  //   </div>
-  // );
+
 
   return (
-    <div style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
-      <div style={{ width: "90%", justifySelf: "center" }}>
+    <div className="flex w-full justify-content-center align-items-center">
+      <div className="justify-self-center w-11">
         <h1>Food Management</h1>
-        <DataTable value={foods} header={header} className="p-datatable-striped" filters={filters} onFilter={(e) => setFilters(e.filters)}>
+        <DataTable value={foods} header={header} className="p-datatable-striped"
+          paginator rows={5} rowsPerPageOptions={[5, 10, 20]}
+          filters={filters} onFilter={(e) => setFilters(e.filters)}>
           <Column field="foodName" header="Food Name" />
           <Column field="dateStart" header="Date Start" body={dateTemplate} />
           <Column field="dateEnd" header="Date End" body={dateTemplate} />
@@ -295,10 +285,10 @@ function ManageFood() {
           <Column field="status" header="Status" body={statusTemplate} />
           <Column header="Interact" body={actionTemplate} />
         </DataTable>
-      </div>
+      </div >
 
       {/* Add Food Modal */}
-      <Dialog header="Add Food" visible={isModalOpen} onHide={handleCloseModal}>
+      <Dialog Dialog header="Add Food" visible={isModalOpen} onHide={handleCloseModal} >
         <form>
           <div className="p-field">
             <label htmlFor="foodName">Food Name</label>
@@ -364,10 +354,10 @@ function ManageFood() {
           </div>
           <Button label="Add Food" icon="pi pi-check" type="button" onClick={handleAddFood} />
         </form>
-      </Dialog>
+      </Dialog >
 
       {/* Update Food Modal */}
-      <Dialog
+      <Dialog Dialog
         header="Update Food"
         visible={isUpdateModalOpen}
         onHide={handleCloseUpdateModal}
@@ -441,7 +431,7 @@ function ManageFood() {
             onClick={handleUpdateFood}
           />
         </form>
-      </Dialog>
+      </Dialog >
 
       <Toast ref={toast} />
     </div>

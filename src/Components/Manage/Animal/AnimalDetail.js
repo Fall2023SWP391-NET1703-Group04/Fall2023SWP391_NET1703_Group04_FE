@@ -13,6 +13,7 @@ import { InputSwitch } from 'primereact/inputswitch';
 import { Dropdown } from 'primereact/dropdown';
 import AnimalTrainingHistory from './AnimalTrainingHistory';
 import AnimalDietHistory from './AnimalDietHistory';
+import AnimalCageHistory from './AnimalCageHistory';
 
 export default function AnimalDetail() {
     const { animalId } = useParams();
@@ -39,6 +40,11 @@ export default function AnimalDetail() {
     const diet = (
         <div className="flex align-items-center text-primary">
             <span className="font-bold text-lg">Diet History</span>
+        </div>
+    );
+    const cage = (
+        <div className="flex align-items-center text-primary">
+            <span className="font-bold text-lg">Cage History</span>
         </div>
     );
 
@@ -137,13 +143,18 @@ export default function AnimalDetail() {
             <div className='col-1'></div>
             <div className="col-6  ml-3">
                 <div className='card'>
-                    <Fieldset legend={training} toggleable>
+                    <Fieldset legend={training} toggleable collapsed>
                         {AnimalTrainingHistory(animalId)}
                     </Fieldset>
                 </div>
                 <div className=' card mt-3'>
-                    <Fieldset legend={diet} toggleable>
+                    <Fieldset legend={diet} toggleable collapsed>
                         {AnimalDietHistory(animalId)}
+                    </Fieldset>
+                </div>
+                <div className=' card mt-3'>
+                    <Fieldset legend={cage} toggleable collapsed>
+                        {AnimalCageHistory(animalId)}
                     </Fieldset>
                 </div>
             </div>
@@ -185,7 +196,7 @@ export default function AnimalDetail() {
                         <label htmlFor="updateCatalogue">Catalogue Name</label>
                         <br />
                         <Dropdown
-                            className="w-full md:w-14rem text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
+                            className="w-full "
                             value={selectedCatalogue}
                             onChange={handleSelectedChange}
                             options={catalogues}
@@ -219,8 +230,8 @@ export default function AnimalDetail() {
                     </div>
                     <div className="field col-12">
                         <label htmlFor="updateAnimalRare">Rare</label>
+                        <br />
                         <InputSwitch
-
                             checked={checked}
                             name='rare'
                             onChange={handleSwitchChange} />

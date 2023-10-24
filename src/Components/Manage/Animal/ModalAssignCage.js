@@ -9,7 +9,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { useRef } from 'react'
 import { Toast } from 'primereact/toast'
 
-export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
+export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
     const [dietData, setNewDietData] = useState([])
     const [refresh, setRefresh] = useState(false);
     const [SelectedDiet, setSelectedDiet] = useState({});

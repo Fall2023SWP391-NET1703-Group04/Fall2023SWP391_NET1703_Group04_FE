@@ -122,6 +122,7 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
                         <br />
                         <Calendar
                             id="dateStart"
+                            className='w-full'
                             name="dateStart"
                             value={newTraining.dateStart}
                             onChange={(e) => handleUpdateInputChange(e.value, "dateStart")}
@@ -133,6 +134,7 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
                         <br />
                         <Calendar
                             id="dateEnd"
+                            className='w-full'
                             name="dateEnd"
                             value={newTraining.dateEnd}
                             onChange={(e) => handleUpdateInputChange(e.value, "dateEnd")}
@@ -143,16 +145,17 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
                         <br />
                         <InputTextarea
                             id="description"
+                            className='w-full -min-h-full'
                             name="description"
                             value={newTraining.description}
                             onChange={handleInputChange}
                         />
                     </div>
                     <Button
+                        className="p-button-primary mt-5 "
                         label="Add training"
                         icon="pi pi-pencil"
                         onClick={handleAddTraining}
-                        className="p-button-primary"
                     />
                 </div>
             </Dialog >
