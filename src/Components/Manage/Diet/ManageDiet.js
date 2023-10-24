@@ -6,7 +6,6 @@ import { Column } from 'primereact/column';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { MultiSelect } from 'primereact/multiselect';
-import { confirmPopup } from 'primereact/confirmpopup';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import authHeader from "../../AuthHeader/AuthHeader";
@@ -19,7 +18,7 @@ const ManageDiet = () => {
     const [refresh, setRefresh] = useState(false);
     const [foodDTOS, setFoodDTOS] = useState([]);
     const [selectedFood, setSelectedFood] = useState([]);
-    const [selectedDiet, setSelectedDiet] = useState(null);
+    // const [selectedDiet, setSelectedDiet] = useState(null);
     const [newDiet, setNewDiet] = useState([{
         dietName: "",
         foodDTOS: []
