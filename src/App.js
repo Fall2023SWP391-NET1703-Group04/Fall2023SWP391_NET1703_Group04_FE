@@ -8,6 +8,8 @@ import {
   Switch,
   useLocation,
 } from "react-router-dom";
+import 'primeicons/primeicons.css';
+import 'primereact/resources/primereact.css';
 import HomePage from "./Components/Homepage/Homepage";
 import Register from "./Components/Register/Register";
 import Admin from "./Components/Admin/Admin";
@@ -23,44 +25,47 @@ import AnimalDetail from "./Components/Manage/Animal/AnimalDetail";
 import Trainer from "./Components/Trainer/Trainer";
 import User from "./Components/Trainer/User";
 import Training from "./Components/Trainer/Training";
+
+import DashBoard from "./Components/DashBoard/DashBoard";
+import Animal from "./Components/AnimalUser/Animal";
+import ProductUser from "./Components/ProductUser/ProductUser";
+import UpdateProfileUser from "./Components/UpdateProfileUser/UpdateProfileUser";
 import Products from "./Components/Product/Products";
+import ProductDetail from "./Components/Manage/Product/ProductDetail";
+import ManageNews from "./Components/Manage/News/ManageNews";
 function App() {
-  const value = {
-    zIndex: {
-      modal: 1100,    // dialog, sidebar
-      overlay: 1000,  // dropdown, overlaypanel
-      menu: 1000,     // overlay menus
-      tooltip: 1100,  // tooltip
-      toast: 1200     // toast
-    },
-    autoZIndex: true,
-    refresh: false,
-  };
   return (
     <div className="App">
 
-      <PrimeReactProvider value={value} >
-        <BrowserRouter>
-          <Routes>
-            <Route index element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/trainer" element={<Trainer />} />
-            {/* <Route path="/products" element={<Products />} /> */}
-            <Route path="/training" element={<Training />} />
-            <Route path="/admins" element={<Admin />}>
-              <Route path="manage-users" element={<ManageUser />} />
-              <Route path="manage-products" element={<ManageProduct />} />
-              <Route path="manage-animals" element={<ManageAnimal />} />
-              <Route path="manage-foods" element={<ManageFood />} />
-              <Route path="manage-diets" element={<ManageDiet />} />
-              <Route path="animal-details/:animalId" element={<AnimalDetail />} />
-              {/* <Route path="products" element={<Products />} /> */}
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/animals" element={<Animal />} />
+          <Route path="/products" element={<ProductUser />} />
+          <Route path="/update-profile-user" element={<UpdateProfileUser />} />
+          <Route path="/trainer" element={<Trainer />} />
+          {/* <Route path="/products" element={<Products />} /> */}
+          <Route path="/training" element={<Training />} />
+          <Route path="/admins" element={<Admin />}>
+            <Route index element={<DashBoard />} />
+            <Route path="manage-users" element={<ManageUser />} />
+            <Route path="manage-products" element={<ManageProduct />} />
+            <Route path="manage-animals" element={<ManageAnimal />} />
+            <Route path="manage-foods" element={<ManageFood />} />
+            <Route path="manage-areas" element={<ManageArea />} />
+            <Route path="manage-catalogues" element={<ManageCatalogue />} />
+            <Route path="manage-news" element={<ManageNews />} />
+            <Route path="manage-diets" element={<ManageDiet />} />
+            <Route path="animal-details/:animalId" element={<AnimalDetail />} />
+            <Route path="product-details/:productId" element={<ProductDetail />} />
 
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </PrimeReactProvider>
+            {/* <Route path="products" element={<Products />} /> */}
+
+          </Route>
+        </Routes>
+      </BrowserRouter>
 
     </div>
   );

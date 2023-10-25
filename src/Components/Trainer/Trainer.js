@@ -345,6 +345,7 @@ export default function Trainer() {
 
                     {displayWithDefaultPhone('phoneNumber')}
                   </div>
+
                   <div className="field flex">
                     <label
                       className="mb-1 mr-2 font-bold"

@@ -27,7 +27,7 @@ const AnimalDetail = () => {
                   <img
                     class="card-img-top"
                     src="img/bg-1.jpg"
-                    alt="Card image cap"
+                    alt="Card"
                   />
                   <div class="card-body">
                     <h5 class="card-title">Card title</h5>

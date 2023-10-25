@@ -6,18 +6,68 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
-import { Menu } from "primereact/menu";
 import { Toast } from "primereact/toast";
-import { classNames } from "primereact/utils";
 import dayjs from "dayjs";
 import authHeader from "../../AuthHeader/AuthHeader";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
 function ManageFood() {
   const [foods, setFoods] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   const toast = useRef(null);
-  const menu = useRef(null);
+  // const menu = useRef(null);
+
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
+
+
+  //Search by animals name
+  const [filters, setFilters] = useState({
+    'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'animalName': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+
+  });
+
+  const initFilters = () => {
+    setFilters({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      animalName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+
+    });
+    setGlobalFilterValue('');
+  };
+
+  const clearFilter = () => {
+    initFilters();
+  };
+
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+
+    _filters['global'].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+
+  const renderHeader = () => {
+    return (
+      <div className="flex justify-content-between">
+        <Button
+          label="Add"
+          icon="pi pi-plus"
+          className="p-button-primary"
+          onClick={handleOpenModal}
+        />
+        <Button className='ml-auto' type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" />
+          <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search by name" />
+        </span>
+      </div>
+    );
+  };
 
   // Alert
   const showMessage = (severity, summary, detail) => {
@@ -216,39 +266,33 @@ function ManageFood() {
       });
   };
 
-  const header = (
-    <div>
-      <h1>Food Management</h1>
-      <Button
-        label="Add"
-        icon="pi pi-plus"
-        className="p-button-primary"
-        onClick={handleOpenModal}
-      />
-    </div>
-  );
+  const header = renderHeader();
+
 
   return (
-    <div style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
-      {/* <h2>Food List</h2>
-      <Button label="Add" icon="pi pi-plus" onClick={handleOpenModal} /> */}
-
-      <DataTable value={foods} header={header} className="p-datatable-striped">
-        <Column field="foodName" header="Food Name" />
-        <Column field="dateStart" header="Date Start" body={dateTemplate} />
-        <Column field="dateEnd" header="Date End" body={dateTemplate} />
-        <Column field="nutriment" header="Nutrition" />
-        <Column field="quantity" header="Quantity" />
-        <Column field="unit" header="Unit (g)" />
-        <Column field="status" header="Status" body={statusTemplate} />
-        <Column header="Interact" body={actionTemplate} />
-      </DataTable>
+    <div className="flex w-full justify-content-center align-items-center">
+      <div className="justify-self-center w-11">
+        <h1>Food Management</h1>
+        <DataTable value={foods} header={header} className="p-datatable-striped"
+          paginator rows={5} rowsPerPageOptions={[5, 10, 20]}
+          filters={filters} onFilter={(e) => setFilters(e.filters)}>
+          <Column field="foodName" header="Food Name" />
+          <Column field="dateStart" header="Date Start" body={dateTemplate} />
+          <Column field="dateEnd" header="Date End" body={dateTemplate} />
+          <Column field="nutriment" header="Nutrition" />
+          <Column field="quantity" header="Quantity" />
+          <Column field="unit" header="Unit (g)" />
+          <Column field="status" header="Status" body={statusTemplate} />
+          <Column header="Interact" body={actionTemplate} />
+        </DataTable>
+      </div >
 
       {/* Add Food Modal */}
-      <Dialog header="Add Food" visible={isModalOpen} onHide={handleCloseModal}>
+      <Dialog Dialog header="Add Food" visible={isModalOpen} onHide={handleCloseModal} >
         <form>
           <div className="p-field">
             <label htmlFor="foodName">Food Name</label>
+            <br />
             <InputText
               id="foodName"
               name="foodName"
@@ -258,6 +302,7 @@ function ManageFood() {
           </div>
           <div className="p-field">
             <label htmlFor="dateStart">Date Start</label>
+            <br />
             <Calendar
               id="dateStart"
               name="dateStart"
@@ -267,6 +312,7 @@ function ManageFood() {
           </div>
           <div className="p-field">
             <label htmlFor="dateEnd">Date End</label>
+            <br />
             <Calendar
               id="dateEnd"
               name="dateEnd"
@@ -276,6 +322,7 @@ function ManageFood() {
           </div>
           <div className="p-field">
             <label htmlFor="nutriment">Nutrition</label>
+            <br />
             <InputText
               id="nutriment"
               name="nutriment"
@@ -285,6 +332,7 @@ function ManageFood() {
           </div>
           <div className="p-field">
             <label htmlFor="quantity">Quantity</label>
+            <br />
             <InputText
               id="quantity"
               name="quantity"
@@ -295,6 +343,7 @@ function ManageFood() {
           </div>
           <div className="p-field">
             <label htmlFor="unit">Unit (g)</label>
+            <br />
             <InputText
               id="unit"
               name="unit"
@@ -305,10 +354,10 @@ function ManageFood() {
           </div>
           <Button label="Add Food" icon="pi pi-check" type="button" onClick={handleAddFood} />
         </form>
-      </Dialog>
+      </Dialog >
 
       {/* Update Food Modal */}
-      <Dialog
+      <Dialog Dialog
         header="Update Food"
         visible={isUpdateModalOpen}
         onHide={handleCloseUpdateModal}
@@ -316,6 +365,7 @@ function ManageFood() {
         <form>
           <div className="p-field">
             <label htmlFor="foodName">Food Name</label>
+            <br />
             <InputText
               id="foodName"
               name="foodName"
@@ -325,6 +375,7 @@ function ManageFood() {
           </div>
           <div className="p-field">
             <label htmlFor="dateStart">Date Start</label>
+            <br />
             <Calendar
               id="dateStart"
               name="dateStart"
@@ -334,6 +385,7 @@ function ManageFood() {
           </div>
           <div className="p-field">
             <label htmlFor="dateEnd">Date End</label>
+            <br />
             <Calendar
               id="dateEnd"
               name="dateEnd"
@@ -343,6 +395,7 @@ function ManageFood() {
           </div>
           <div className="p-field">
             <label htmlFor="nutriment">Nutrition</label>
+            <br />
             <InputText
               id="nutriment"
               name="nutriment"
@@ -352,6 +405,7 @@ function ManageFood() {
           </div>
           <div className="p-field">
             <label htmlFor="quantity">Quantity</label>
+            <br />
             <InputText
               id="quantity"
               name="quantity"
@@ -362,6 +416,7 @@ function ManageFood() {
           </div>
           <div className="p-field">
             <label htmlFor="unit">Unit (g)</label>
+            <br />
             <InputText
               id="unit"
               name="unit"
@@ -376,7 +431,7 @@ function ManageFood() {
             onClick={handleUpdateFood}
           />
         </form>
-      </Dialog>
+      </Dialog >
 
       <Toast ref={toast} />
     </div>

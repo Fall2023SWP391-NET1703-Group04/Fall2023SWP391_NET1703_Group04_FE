@@ -14,6 +14,7 @@ import { Toast } from "primereact/toast";
 import "primeicons/primeicons.css";
 import "./Login.css";
 import axios from "axios";
+import { useRef } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -42,15 +43,29 @@ const Login = () => {
     form.restart();
   };
 
+  // //Get data
+  // useEffect(() => {
+  //   // Fetch the list of diets from your API endpoint
+  //   axios.get('http://localhost:8080/zoo-server/api/v1/animal/getAllAnimal', { headers: authHeader() })
+  //     .then(response => {
+  //       setAnimals(response.data.data)
+  //       setRefresh(false)
+  //     })
+  //     .catch(error => console.error(error));
+
+  //   axios.get(`http://localhost:8080/zoo-server/api/v1/catalogue/getAllCatalogues`, { headers: authHeader() })
+  //     .then(response => setCatalogues(response.data))
+  //     .catch(error => console.error(error));
+  // }, [refresh]);
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
     // Make a POST request when the form is submitted
     axios
       .post("http://localhost:8080/zoo-server/api/v1/auth/signIn", dataLogin)
       .then((response) => {
-        console.log("POST request response:", response);
+
         setTimeout(() => {
-          console.log(response);
+          show(response.data.message, 'green');
           localStorage.setItem("user", JSON.stringify(response));
           switch (response.data.role) {
             case "ROLE_ADMIN":
@@ -62,15 +77,18 @@ const Login = () => {
             case "ROLE_TRAINER":
               navigate("/trainer");
               break;
+            default:
+              navigate("/home");
 
           }
         }, 1000);
       })
       .catch((error) => {
-        console.error("POST request error:", error);
+        show(error.response.data.message, 'red');
         // Handle any errors that occur during the POST request
       });
   };
+
 
   const isFormFieldValid = (meta) => !!(meta.touched && meta.error);
   const getFormErrorMessage = (meta) => {
@@ -89,22 +107,18 @@ const Login = () => {
       />
     </div>
   );
-  const passwordHeader = <h6>Pick a password</h6>;
-  const passwordFooter = (
-    <React.Fragment>
-      <Divider />
-      <p className="mt-2">Suggestions</p>
-      <ul className="pl-2 ml-2 mt-0" style={{ lineHeight: "1.5" }}>
-        <li>At least one lowercase</li>
-        <li>At least one uppercase</li>
-        <li>At least one numeric</li>
-        <li>Minimum 8 characters</li>
-      </ul>
-    </React.Fragment>
-  );
+
+  const toast = useRef(null);
+  const show = (message, color) => {
+    toast.current.show({
+      summary: 'Notifications', detail: message, life: 3000,
+      style: { backgroundColor: color, color: 'white', border: '2px solid yellow' },
+    });
+  };
 
   return (
     <>
+      <Toast ref={toast} />
       <div className="wrapper">
         <div className="wrapper-2">
           <div className="form-demo">
@@ -155,19 +169,14 @@ const Login = () => {
                               <i className="pi pi-envelope" />
                               <InputText
                                 id="email"
-                                {...input}
-                                className={classNames({
-                                  "p-invalid": isFormFieldValid(meta),
-                                })}
+
                                 name="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                               />
                               <label
                                 htmlFor="email"
-                                className={classNames({
-                                  "p-error": isFormFieldValid(meta),
-                                })}
+
                               >
                                 Email*
                               </label>
@@ -188,8 +197,6 @@ const Login = () => {
                                 className={classNames({
                                   "p-invalid": isFormFieldValid(meta),
                                 })}
-                                header={passwordHeader}
-                                footer={passwordFooter}
                                 name="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
