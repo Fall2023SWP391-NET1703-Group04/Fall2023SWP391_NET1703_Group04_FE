@@ -63,7 +63,7 @@ const Login = () => {
     axios
       .post("http://localhost:8080/zoo-server/api/v1/auth/signIn", dataLogin)
       .then((response) => {
-        console.log("POST request response:", response);
+
         setTimeout(() => {
           show(response.data.message, 'green');
           localStorage.setItem("user", JSON.stringify(response));

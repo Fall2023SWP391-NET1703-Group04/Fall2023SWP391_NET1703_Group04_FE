@@ -201,15 +201,6 @@ export default function ProductDetail() {
         );
     };
 
-    /*<label htmlFor="updateDescription">Description</label>
-                  <br />
-                  <InputTextarea
-                    id="description"
-                    name="description"
-                    value={newProduct.description}
-                    onChange={handleInputChange}
-                  /> */
-
     const displayWithDefaultDescription = (field, defaultValue = 'Not Provided') => {
         return isEditing ? (
             <InputTextarea

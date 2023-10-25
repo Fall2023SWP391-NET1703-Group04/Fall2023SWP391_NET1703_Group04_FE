@@ -26,7 +26,7 @@ export default function ManageNews() {
     const setIsModalOpen1 = (isOpen, newsId) => {
         setIsModalOpen(isOpen);
         setNewsId(newsId);
-        console.log('hahaah', newsId);
+
     };
     const [selectedCustomer3, setSelectedCustomer3] = useState(null);
     const [refresh, setRefresh] = useState(false);
@@ -129,9 +129,9 @@ export default function ManageNews() {
             });
     }
 
-    const getNewsByID = () => {
+    const getNewsByID = (id) => {
         console.log('check news id', newsId);
-        axios.get(`http://localhost:8080/zoo-server/api/v1/new/getNewsById${newsId}`, { headers: authHeader() })
+        axios.get(`http://localhost:8080/zoo-server/api/v1/new/getNewsById${id}`, { headers: authHeader() })
             .then((response) => {
                 setEditingNews(response.data); // Make sure response.data.data is an array
             })
@@ -141,9 +141,9 @@ export default function ManageNews() {
     };
 
     console.log('check news by id', setEditingNews);
-    const handleUpdateNews = () => {
+    const handleUpdateNews = (id) => {
         axios
-            .put(`http://localhost:8080/zoo-server/api/v1/new/updateNew/${newsId}`, editingNews, { headers: authHeader() })
+            .put(`http://localhost:8080/zoo-server/api/v1/new/updateNew/${id}`, editingNews, { headers: authHeader() })
             .then((response) => {
                 setEditingNews(false);
                 alert('Product updated successfully');
