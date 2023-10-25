@@ -74,13 +74,6 @@ export default function ManageProduct() {
     );
   };
 
-  // columns.push({
-  //   field: 'actions',
-  //   header: 'Actions',
-  //   body: actionBodyTemplate,
-  //   style: { textAlign: 'center', width: '10%', minWidth: '8rem' },
-  // });
-
 
 
 
@@ -300,15 +293,6 @@ export default function ManageProduct() {
             />
           </div>
         </Dialog >
-
-
-
-
-
-
-
-
-
       </div>
     </div>
   );
