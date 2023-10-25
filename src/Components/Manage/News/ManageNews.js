@@ -26,6 +26,7 @@ export default function ManageNews() {
     const setIsModalOpen1 = (isOpen, newsId) => {
         setIsModalOpen(isOpen);
         setNewsId(newsId);
+        console.log('hahaah', newsId);
     };
     const [selectedCustomer3, setSelectedCustomer3] = useState(null);
     const [refresh, setRefresh] = useState(false);
@@ -74,7 +75,11 @@ export default function ManageNews() {
                 <Button
                     icon="pi pi-pencil"
                     className="p-button-pencil"
-                    onClick={() => setIsModalOpen1(true, rowData.newsId)}
+                    onClick={() => {
+                        setIsModalOpen1(true, rowData.newsId);
+                        getNewsByID();
+                        //getNewsByID(rowData.newsId);
+                    }}
                 />
 
             </div>
@@ -125,6 +130,7 @@ export default function ManageNews() {
     }
 
     const getNewsByID = () => {
+        console.log('check news id', newsId);
         axios.get(`http://localhost:8080/zoo-server/api/v1/new/getNewsById${newsId}`, { headers: authHeader() })
             .then((response) => {
                 setEditingNews(response.data); // Make sure response.data.data is an array
@@ -364,7 +370,7 @@ export default function ManageNews() {
                             label="Update News"
                             icon="pi pi-pencil"
                             className="p-button-success"
-                            onClick={() => handleUpdateNews(newsId)}
+                            onClick={() => handleUpdateNews()}
                         />
                     </div>
                 </Dialog >
