@@ -22,7 +22,7 @@ const HomePage = () => {
   );
 };
 
-const VideoZoo = () => {};
+const VideoZoo = () => { };
 
 const WelcomeHomePage = () => {
   return (
