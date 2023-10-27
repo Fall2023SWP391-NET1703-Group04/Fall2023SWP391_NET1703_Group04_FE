@@ -10,37 +10,37 @@ import { useRef } from 'react'
 import { Toast } from 'primereact/toast'
 
 export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
-    const [dietData, setNewDietData] = useState([])
+    const [cageData, setCageData] = useState([])
     const [refresh, setRefresh] = useState(false);
     const [SelectedDiet, setSelectedDiet] = useState({});
     const toast = useRef(null);
-    const [newDiet, setNewDiet] = useState({
-        "animalDietManagementName": "",
+    const [newCage, setNewCage] = useState({
+        "animalCageDetailName": "",
+        "animalCageId": 0,
         "animalId": animalId,
         "dateEnd": "",
-        "dateStart": "",
-        "dietId": 0
+        "dateStart": ""
     })
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/zoo-server/api/v1/diet/getAllDiets`, { headers: authHeader() })
-            .then(response => setNewDietData(response.data.data))
+        axios.get(`http://localhost:8080/zoo-server/api/v1/animalCage/getAllAnimalCage`, { headers: authHeader() })
+            .then(response => setCageData(response.data.data))
             .catch(error => console.error(error));
     }, [refresh]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setNewDiet({
-            ...newDiet,
+        setNewCage({
+            ...newCage,
             [name]: value
         });
     }
 
     const handleSelectedChange = (event) => {
         setSelectedDiet(event.value);
-        setNewDiet({
-            ...newDiet,
-            dietId: event.target.value.dietId
+        setNewCage({
+            ...newCage,
+            animalCageId: event.target.value.animalCageId
         });
     }
 
@@ -49,19 +49,19 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
             const { name, value } = event.target;
             console.log(value);
 
-            setNewDiet({ ...newDiet, [name]: value });
+            setNewCage({ ...newCage, [name]: value });
         } else {
             // Convert the selected date to a valid Date object or null
             const dateValue = event ? new Date(event) : null;
 
             // Use the formatted date value in the state
-            setNewDiet({ ...newDiet, [name]: dateValue });
+            setNewCage({ ...newCage, [name]: dateValue });
         }
     };
 
-    const handleAddDiet = () => {
+    const handleAddCage = () => {
         axios
-            .post("http://localhost:8080/zoo-server/api/v1/animal-diet-management/createAnimalDietManagement", newDiet, { headers: authHeader() })
+            .post("http://localhost:8080/zoo-server/api/v1/AnimalCageDetail/createNewAnimalCageDetail", newCage, { headers: authHeader() })
             .then((response) => {
                 show(response.data.message, 'green');
                 setTimeout(handleClose, 2000);
@@ -82,7 +82,7 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
     return (
         <div>
             <Dialog
-                header="Add Diet"
+                header="Add Cage For Animal"
                 visible={isModalOpen}
                 style={{ width: '800px' }}
                 modal
@@ -91,15 +91,15 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
                 <Toast ref={toast} />
                 <div className="formgrid grid">
                     <div className="field col-12">
-                        <label htmlFor="animalDietManagementName">Diet</label>
+                        <label htmlFor="animalDietManagementName">Cage</label>
                         <br />
                         <Dropdown
                             value={SelectedDiet}
                             onChange={handleSelectedChange}
-                            options={dietData}
+                            options={cageData}
                             name='dietId'
-                            optionLabel='dietName'
-                            placeholder="Select a Diet"
+                            optionLabel='animalCageName'
+                            placeholder="Select a Cage"
                         />
                     </div>
                     <div className="field col-12">
@@ -109,7 +109,7 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
                             id="dateStart"
                             className='w-full'
                             name="dateStart"
-                            value={newDiet.dateStart}
+                            value={newCage.dateStart}
                             onChange={(e) => handleUpdateInputChange(e.value, "dateStart")}
                         />
 
@@ -121,25 +121,25 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
                             id="dateEnd"
                             className='w-full'
                             name="dateEnd"
-                            value={newDiet.dateEnd}
+                            value={newCage.dateEnd}
                             onChange={(e) => handleUpdateInputChange(e.value, "dateEnd")}
                         />
                     </div>
                     <div className="field col-12 ">
-                        <label htmlFor="animalDietManagementName">Description</label>
+                        <label htmlFor="animalCageDetailName">Description</label>
                         <br />
                         <InputTextarea
-                            id="animalDietManagementName"
+                            id="animalCageDetailName"
                             className='w-full min-h-full'
-                            name="animalDietManagementName"
-                            value={newDiet.description}
+                            name="animalCageDetailName"
+                            value={newCage.description}
                             onChange={handleInputChange}
                         />
                     </div>
                     <Button
                         label="Add Diet"
                         icon="pi pi-pencil"
-                        onClick={handleAddDiet}
+                        onClick={handleAddCage}
                         className="p-button-primary mt-5 "
                     />
                 </div>
