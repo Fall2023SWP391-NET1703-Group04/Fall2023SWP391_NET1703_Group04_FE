@@ -12,4 +12,4 @@ Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 DOCUMENT:
-https://drive.google.com/drive/u/1/folders/1KP-QzSMYN-o8HizrzCpxiVnHd3y2Yfw9
+https://drive.google.com/drive/folders/1KP-QzSMYN-o8HizrzCpxiVnHd3y2Yfw9?usp=sharing
