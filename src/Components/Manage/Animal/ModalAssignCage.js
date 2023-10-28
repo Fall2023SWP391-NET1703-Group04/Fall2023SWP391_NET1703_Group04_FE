@@ -12,7 +12,7 @@ import { Toast } from 'primereact/toast'
 export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
     const [cageData, setCageData] = useState([])
     const [refresh, setRefresh] = useState(false);
-    const [SelectedDiet, setSelectedDiet] = useState({});
+    const [selectedCage, setSelectedCage] = useState({});
     const toast = useRef(null);
     const [newCage, setNewCage] = useState({
         "animalCageDetailName": "",
@@ -37,7 +37,7 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
     }
 
     const handleSelectedChange = (event) => {
-        setSelectedDiet(event.value);
+        setSelectedCage(event.value);
         setNewCage({
             ...newCage,
             animalCageId: event.target.value.animalCageId
@@ -94,7 +94,7 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
                         <label htmlFor="animalDietManagementName">Cage</label>
                         <br />
                         <Dropdown
-                            value={SelectedDiet}
+                            value={selectedCage}
                             onChange={handleSelectedChange}
                             options={cageData}
                             name='dietId'

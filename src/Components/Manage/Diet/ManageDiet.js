@@ -111,7 +111,7 @@ const ManageDiet = () => {
             });
     }, [refresh]);
 
-    //add diet
+    //Add diet
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewDiet((prevState) => {
@@ -353,5 +353,4 @@ const ManageDiet = () => {
         </div>
     );
 };
-
 export default ManageDiet;

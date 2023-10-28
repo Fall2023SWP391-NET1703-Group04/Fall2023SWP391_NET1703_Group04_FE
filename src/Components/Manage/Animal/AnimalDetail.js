@@ -148,7 +148,7 @@ export default function AnimalDetail() {
                     </Fieldset>
                 </div>
                 <div className=' card mt-3'>
-                    <Fieldset legend={diet} toggleable collapsed>
+                    <Fieldset legend={diet} toggleable >
                         {AnimalDietHistory(animalId)}
                     </Fieldset>
                 </div>
