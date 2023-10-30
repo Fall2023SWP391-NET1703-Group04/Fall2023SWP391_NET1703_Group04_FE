@@ -37,7 +37,6 @@ export default function AnimalTrainingHistory(animalId) {
                 <DataTable value={trainingData} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
                     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                     currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}>
-                    <Column field="animalTrainingName" header="Training Name" style={{ width: '16%' }}></Column>
                     <Column field="fullName" header="Trainer" style={{ width: '16%' }}></Column>
                     <Column field="animalName" header="Animal" style={{ width: '16%' }}></Column>
                     <Column field="dateStart" header="Date Start" style={{ width: '16%' }}></Column>

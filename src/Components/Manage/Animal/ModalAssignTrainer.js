@@ -2,19 +2,15 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
 import { Dropdown } from 'primereact/dropdown'
-import { InputSwitch } from 'primereact/inputswitch'
-import { InputText } from 'primereact/inputtext'
 import axios from 'axios'
 import authHeader from '../../AuthHeader/AuthHeader'
 import { Calendar } from 'primereact/calendar'
 import { Toast } from 'primereact/toast'
 import { InputTextarea } from 'primereact/inputtextarea';
-import { isBuffer } from 'lodash'
 
 export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
     const [newTraining, setNewTraining] = useState({
         "animalId": animalId,
-        "animalTrainingName": "",
         "dateEnd": "",
         "dateStart": "",
         "description": "",
@@ -94,16 +90,6 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
             >
                 <Toast ref={toast} />
                 <div class="formgrid grid">
-                    <div className="field col-12 ">
-                        <label htmlFor="animalTrainingName">Training Name</label>
-                        <br />
-                        <InputText
-                            id="animalTrainingName"
-                            name="animalTrainingName"
-                            value={newTraining.animalTrainingName}
-                            onChange={handleInputChange}
-                        />
-                    </div>
 
                     <div className="field col-12">
                         <label htmlFor="updateCatalogue">Trainer</label>

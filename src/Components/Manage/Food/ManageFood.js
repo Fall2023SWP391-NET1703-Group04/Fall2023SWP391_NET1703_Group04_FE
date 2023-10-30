@@ -14,12 +14,9 @@ function ManageFood() {
   const [foods, setFoods] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-
+  const [refresh, setRefresh] = useState(false);
   const toast = useRef(null);
-  // const menu = useRef(null);
-
   const [globalFilterValue, setGlobalFilterValue] = useState('');
-
 
   //Search by animals name
   const [filters, setFilters] = useState({
@@ -114,11 +111,12 @@ function ManageFood() {
           dateEnd: new Date(food.dateEnd),
         }));
         setFoods(foodsWithDateObjects);
+        setRefresh(false);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [refresh]);
 
   // Add DATA
   const handleOpenModal = () => {
@@ -149,24 +147,12 @@ function ManageFood() {
     }
   };
 
+  //Add food
   const handleAddFood = () => {
     axios
       .post("http://localhost:8080/zoo-server/api/v1/food/createNewFood", newFood, { headers: authHeader() })
-      .then((response) => {
-        axios
-          .get("http://localhost:8080/zoo-server/api/v1/food/getAllFoods", { headers: authHeader() })
-          .then((response) => {
-            const foodsWithDateObjects = response.data.data.map((food) => ({
-              ...food,
-              dateStart: new Date(food.dateStart),
-              dateEnd: new Date(food.dateEnd),
-            }));
-            setFoods(foodsWithDateObjects);
-            showMessage("success", "Add Successfully", "");
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+      .then(() => {
+        setRefresh(true)
         setIsModalOpen(false);
       })
       .catch((error) => {
@@ -178,21 +164,8 @@ function ManageFood() {
   const handleDeleteFood = (foodId) => {
     axios
       .delete(`http://localhost:8080/zoo-server/api/v1/food/deleteFood/${foodId}`, { headers: authHeader() })
-      .then((response) => {
-        axios
-          .get("http://localhost:8080/zoo-server/api/v1/food/getAllFoods", { headers: authHeader() })
-          .then((response) => {
-            const foodsWithDateObjects = response.data.data.map((food) => ({
-              ...food,
-              dateStart: new Date(food.dateStart),
-              dateEnd: new Date(food.dateEnd),
-            }));
-            setFoods(foodsWithDateObjects);
-            showMessage("success", "Delete Successfully", "");
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+      .then(() => {
+        setRefresh(true)
       })
       .catch((error) => {
         console.error(error);
@@ -244,21 +217,8 @@ function ManageFood() {
   const handleUpdateFood = () => {
     axios
       .put(`http://localhost:8080/zoo-server/api/v1/food/updateFood/${updateFood.foodId}`, updateFood, { headers: authHeader() })
-      .then((response) => {
-        axios
-          .get("http://localhost:8080/zoo-server/api/v1/food/getAllFoods", { headers: authHeader() })
-          .then((response) => {
-            const foodsWithDateObjects = response.data.data.map((food) => ({
-              ...food,
-              dateStart: new Date(food.dateStart),
-              dateEnd: new Date(food.dateEnd),
-            }));
-            setFoods(foodsWithDateObjects);
-            showMessage("success", "Update Successfully", "");
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+      .then(() => {
+        setRefresh(true)
         handleCloseUpdateModal();
       })
       .catch((error) => {
@@ -289,71 +249,69 @@ function ManageFood() {
 
       {/* Add Food Modal */}
       <Dialog Dialog header="Add Food" visible={isModalOpen} onHide={handleCloseModal} >
-        <form>
-          <div className="p-field">
-            <label htmlFor="foodName">Food Name</label>
-            <br />
-            <InputText
-              id="foodName"
-              name="foodName"
-              value={newFood.foodName}
-              onChange={(e) => handleInputChange(e, "foodName")}
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="dateStart">Date Start</label>
-            <br />
-            <Calendar
-              id="dateStart"
-              name="dateStart"
-              value={newFood.dateStart}
-              onChange={(e) => handleInputChange(e.value, "dateStart")}
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="dateEnd">Date End</label>
-            <br />
-            <Calendar
-              id="dateEnd"
-              name="dateEnd"
-              value={newFood.dateEnd}
-              onChange={(e) => handleInputChange(e.value, "dateEnd")}
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="nutriment">Nutrition</label>
-            <br />
-            <InputText
-              id="nutriment"
-              name="nutriment"
-              value={newFood.nutriment}
-              onChange={(e) => handleInputChange(e, "nutriment")}
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="quantity">Quantity</label>
-            <br />
-            <InputText
-              id="quantity"
-              name="quantity"
-              keyfilter="int"
-              value={newFood.quantity}
-              onChange={(e) => handleInputChange(e, "quantity")}
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="unit">Unit (g)</label>
-            <br />
-            <InputText
-              id="unit"
-              name="unit"
-              keyfilter="int"
-              value={newFood.unit}
-              onChange={(e) => handleInputChange(e, "unit")}
-            />
-          </div>
-          <Button label="Add Food" icon="pi pi-check" type="button" onClick={handleAddFood} />
-        </form>
+        <div className="p-field">
+          <label htmlFor="foodName">Food Name</label>
+          <br />
+          <InputText
+            id="foodName"
+            name="foodName"
+            value={newFood.foodName}
+            onChange={(e) => handleInputChange(e, "foodName")}
+          />
+        </div>
+        <div className="p-field">
+          <label htmlFor="dateStart">Date Start</label>
+          <br />
+          <Calendar
+            id="dateStart"
+            name="dateStart"
+            value={newFood.dateStart}
+            onChange={(e) => handleInputChange(e.value, "dateStart")}
+          />
+        </div>
+        <div className="p-field">
+          <label htmlFor="dateEnd">Date End</label>
+          <br />
+          <Calendar
+            id="dateEnd"
+            name="dateEnd"
+            value={newFood.dateEnd}
+            onChange={(e) => handleInputChange(e.value, "dateEnd")}
+          />
+        </div>
+        <div className="p-field">
+          <label htmlFor="nutriment">Nutrition</label>
+          <br />
+          <InputText
+            id="nutriment"
+            name="nutriment"
+            value={newFood.nutriment}
+            onChange={(e) => handleInputChange(e, "nutriment")}
+          />
+        </div>
+        <div className="p-field">
+          <label htmlFor="quantity">Quantity</label>
+          <br />
+          <InputText
+            id="quantity"
+            name="quantity"
+            keyfilter="int"
+            value={newFood.quantity}
+            onChange={(e) => handleInputChange(e, "quantity")}
+          />
+        </div>
+        <div className="p-field">
+          <label htmlFor="unit">Unit (g)</label>
+          <br />
+          <InputText
+            id="unit"
+            name="unit"
+            keyfilter="int"
+            value={newFood.unit}
+            onChange={(e) => handleInputChange(e, "unit")}
+          />
+        </div>
+        <Button label="Add Food" icon="pi pi-check" type="button" onClick={handleAddFood} />
       </Dialog >
 
       {/* Update Food Modal */}
@@ -362,77 +320,74 @@ function ManageFood() {
         visible={isUpdateModalOpen}
         onHide={handleCloseUpdateModal}
       >
-        <form>
-          <div className="p-field">
-            <label htmlFor="foodName">Food Name</label>
-            <br />
-            <InputText
-              id="foodName"
-              name="foodName"
-              value={updateFood.foodName}
-              onChange={(e) => handleUpdateInputChange(e, "foodName")}
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="dateStart">Date Start</label>
-            <br />
-            <Calendar
-              id="dateStart"
-              name="dateStart"
-              value={updateFood.dateStart}
-              onChange={(e) => handleUpdateInputChange(e.value, "dateStart")}
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="dateEnd">Date End</label>
-            <br />
-            <Calendar
-              id="dateEnd"
-              name="dateEnd"
-              value={updateFood.dateEnd}
-              onChange={(e) => handleUpdateInputChange(e.value, "dateEnd")}
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="nutriment">Nutrition</label>
-            <br />
-            <InputText
-              id="nutriment"
-              name="nutriment"
-              value={updateFood.nutriment}
-              onChange={(e) => handleUpdateInputChange(e, "nutriment")}
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="quantity">Quantity</label>
-            <br />
-            <InputText
-              id="quantity"
-              name="quantity"
-              keyfilter="int"
-              value={updateFood.quantity}
-              onChange={(e) => handleUpdateInputChange(e, "quantity")}
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="unit">Unit (g)</label>
-            <br />
-            <InputText
-              id="unit"
-              name="unit"
-              keyfilter="int"
-              value={updateFood.unit}
-              onChange={(e) => handleUpdateInputChange(e, "unit")}
-            />
-          </div>
-          <Button
-            label="Update Food"
-            icon="pi pi-check"
-            onClick={handleUpdateFood}
+        <div className="p-field">
+          <label htmlFor="foodName">Food Name</label>
+          <br />
+          <InputText
+            id="foodName"
+            name="foodName"
+            value={updateFood.foodName}
+            onChange={(e) => handleUpdateInputChange(e, "foodName")}
           />
-        </form>
+        </div>
+        <div className="p-field">
+          <label htmlFor="dateStart">Date Start</label>
+          <br />
+          <Calendar
+            id="dateStart"
+            name="dateStart"
+            value={updateFood.dateStart}
+            onChange={(e) => handleUpdateInputChange(e.value, "dateStart")}
+          />
+        </div>
+        <div className="p-field">
+          <label htmlFor="dateEnd">Date End</label>
+          <br />
+          <Calendar
+            id="dateEnd"
+            name="dateEnd"
+            value={updateFood.dateEnd}
+            onChange={(e) => handleUpdateInputChange(e.value, "dateEnd")}
+          />
+        </div>
+        <div className="p-field">
+          <label htmlFor="nutriment">Nutrition</label>
+          <br />
+          <InputText
+            id="nutriment"
+            name="nutriment"
+            value={updateFood.nutriment}
+            onChange={(e) => handleUpdateInputChange(e, "nutriment")}
+          />
+        </div>
+        <div className="p-field">
+          <label htmlFor="quantity">Quantity</label>
+          <br />
+          <InputText
+            id="quantity"
+            name="quantity"
+            keyfilter="int"
+            value={updateFood.quantity}
+            onChange={(e) => handleUpdateInputChange(e, "quantity")}
+          />
+        </div>
+        <div className="p-field">
+          <label htmlFor="unit">Unit (g)</label>
+          <br />
+          <InputText
+            id="unit"
+            name="unit"
+            keyfilter="int"
+            value={updateFood.unit}
+            onChange={(e) => handleUpdateInputChange(e, "unit")}
+          />
+        </div>
+        <Button
+          label="Update Food"
+          icon="pi pi-check"
+          onClick={handleUpdateFood}
+        />
       </Dialog >
-
       <Toast ref={toast} />
     </div>
   );
