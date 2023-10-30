@@ -86,8 +86,9 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
     };
 
     const handleAssignDiet = () => {
+        console.log(newAnimalDiet);
         axios
-            .post("http://localhost:8080/zoo-server/api/v1/animal-diet-management/createAnimalDietManagement", newDiet, { headers: authHeader() })
+            .post("http://localhost:8080/zoo-server/api/v1/animal-diet-management/createAnimalDietManagement", newAnimalDiet, { headers: authHeader() })
             .then((response) => {
                 show(response.data.message, 'green');
                 setTimeout(handleClose, 2000);
@@ -218,7 +219,7 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
                         />
                     </div>
                     <Button
-                        label="Add Diet"
+                        label="Assign Diet"
                         icon="pi pi-pencil"
                         onClick={handleAssignDiet}
                         className="p-button-primary mt-5 "
