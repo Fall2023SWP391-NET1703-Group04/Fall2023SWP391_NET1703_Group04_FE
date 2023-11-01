@@ -9,12 +9,15 @@ import { Paginator } from "primereact/paginator";
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import _ from "lodash";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
 
 const ManageCatalogue = () => {
   //----------------------------------------------------------------
   //Get
   const [catalogues, setCatalogues] = useState([]);
   const [areas, setAreas] = useState([]);
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
+
   useEffect(() => {
     axios
       .get("/zoo-server/api/v1/catalogue/getAllCatalogues", {
@@ -29,6 +32,53 @@ const ManageCatalogue = () => {
   }, []);
 
   //----------------------------------------------------------------
+  //Search by name
+  const [filters, setFilters] = useState({
+    'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'animalName': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+
+  });
+
+  const initFilters = () => {
+    setFilters({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      animalName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+
+    });
+    setGlobalFilterValue('');
+  };
+
+  const clearFilter = () => {
+    initFilters();
+  };
+
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+
+    _filters['global'].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+
+  const renderHeader = () => {
+    return (
+      <div className="flex justify-content-between">
+        <Button
+          label="Add"
+          icon="pi pi-plus"
+          onClick={() => setVisibleAdd(true)}
+        />
+        <Button className='ml-auto' type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" />
+          <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search by name" />
+        </span>
+      </div>
+    );
+  };
+
   //Add
   const [visibleAdd, setVisibleAdd] = useState(false);
   const footerContent = (
@@ -169,19 +219,14 @@ const ManageCatalogue = () => {
         console.error("Error updating catalogue:", error);
       });
   };
+
+  const header = renderHeader();
+
   return (
     <div>
       {" "}
-      <div className="card">
+      <div className="card container">
         <h1>Catalogues List</h1>
-        <div className="card flex justify-content-center">
-          <Button
-            label="Add"
-            icon="pi pi-plus"
-            onClick={() => setVisibleAdd(true)}
-          />
-        </div>
-
         <Dialog
           header="Add Catalogs"
           visible={visibleAdd}
@@ -217,6 +262,8 @@ const ManageCatalogue = () => {
           </div>
         </Dialog>
         <DataTable
+          header={header}
+          filters={filters} onFilter={(e) => setFilters(e.filters)}
           value={catalogues}
           paginator
           rows={5}
@@ -228,13 +275,13 @@ const ManageCatalogue = () => {
             field="catalogueId"
             header="Catalogue Id"
             sortable
-            style={{ width: "25%" }}
+            style={{ width: "10%" }}
           ></Column>
           <Column
             field="catalogueName"
             header="Catalogue Name"
             sortable
-            style={{ width: "25%" }}
+            style={{ width: "40%" }}
           ></Column>
           <Column
             header="Action"
@@ -250,6 +297,7 @@ const ManageCatalogue = () => {
                   Delete
                 </Button>
                 <Button
+                  className="ml-3"
                   rounded
                   onClick={() => {
                     handleClickBtnUpdate(catalogue);
@@ -259,7 +307,7 @@ const ManageCatalogue = () => {
                 </Button>
               </div>
             )}
-            style={{ width: "25%" }}
+            style={{ width: "30%" }}
           ></Column>
         </DataTable>
       </div>
