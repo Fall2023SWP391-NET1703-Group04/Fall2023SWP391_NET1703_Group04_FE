@@ -10,9 +10,15 @@ export default function Admin() {
   return (
     <>
 
-      <div style={{ display: "flex" }}>
-        <SideBar />
-        <Outlet />
+      <div className=" grid">
+        <div className="col-2">
+
+          <SideBar />
+        </div>
+        <div className="col-10">
+
+          <Outlet />
+        </div>
       </div>
 
     </>

@@ -34,7 +34,7 @@ const ManageDiet = () => {
     const [globalFilterValue, setGlobalFilterValue] = useState('');
 
     const [data, setData] = useState({})
-    //Search by animals name
+    //Search by name
     const [filters, setFilters] = useState({
         'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
         'animalName': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },

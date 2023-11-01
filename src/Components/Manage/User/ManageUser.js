@@ -12,10 +12,13 @@ import { Password } from "primereact/password";
 import { InputMask } from "primereact/inputmask";
 import _ from "lodash";
 import { fetchUsers } from "../../services/userServices";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
 const ManageUser = () => {
   //Modal add
   const [visible, setVisible] = useState(false);
   const [visibleUpdateUser, setVisibleUpdateUser] = useState(false);
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
+
   const footerContent = (
     <div>
       <Button
@@ -32,6 +35,36 @@ const ManageUser = () => {
       />
     </div>
   );
+
+  //Search by name
+  const [filters, setFilters] = useState({
+    'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'animalName': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+
+  });
+
+  const initFilters = () => {
+    setFilters({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      animalName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+
+    });
+    setGlobalFilterValue('');
+  };
+
+  const clearFilter = () => {
+    initFilters();
+  };
+
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+
+    _filters['global'].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
   const footerContentUpdateUser = (
     <div>
       <Button
@@ -194,16 +227,29 @@ const ManageUser = () => {
       });
   };
 
+  const renderHeader = () => {
+    return (
+      <div className="flex justify-content-between">
+        <Button
+          label="Add"
+          icon="pi pi-plus"
+          onClick={() => setVisible(true)}
+        />
+        <Button className='ml-auto' type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" />
+          <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search by name" />
+        </span>
+      </div>
+    );
+  };
+  const header = renderHeader();
   return (
     <>
-      <div className="table-user">
+      <div className="table-user container">
         <h1>User List</h1>
         <div className="card flex justify-content-center">
-          <Button
-            label="Add"
-            icon="pi pi-plus"
-            onClick={() => setVisible(true)}
-          />
+
           <Dialog
             header="Add User"
             visible={visible}
@@ -332,6 +378,8 @@ const ManageUser = () => {
         ) : (
           <div className="card">
             <DataTable
+              header={header}
+              filters={filters} onFilter={(e) => setFilters(e.filters)}
               size={{ label: "Small", value: "small" }}
               value={users}
               paginator
@@ -391,16 +439,16 @@ const ManageUser = () => {
                   return users.roleDTO.roleName === "ROLE_ADMIN"
                     ? "ADMIN"
                     : users.roleDTO.roleName === "ROLE_CUSTOMER"
-                    ? "CUSTOMER"
-                    : users.roleDTO.roleName === "ROLE_STAFF"
-                    ? "STAFF"
-                    : users.roleDTO.roleName === "ROLE_FOODMANAGER"
-                    ? "FOODMANAGER"
-                    : users.roleDTO.roleName === "ROLE_TRAINER"
-                    ? "TRAINER"
-                    : users.roleDTO.roleName === ""
-                    ? "none"
-                    : "Dont' have anything";
+                      ? "CUSTOMER"
+                      : users.roleDTO.roleName === "ROLE_STAFF"
+                        ? "STAFF"
+                        : users.roleDTO.roleName === "ROLE_FOODMANAGER"
+                          ? "FOODMANAGER"
+                          : users.roleDTO.roleName === "ROLE_TRAINER"
+                            ? "TRAINER"
+                            : users.roleDTO.roleName === ""
+                              ? "none"
+                              : "Dont' have anything";
                 }}
                 sortable
                 style={{ width: "25%" }}
