@@ -15,7 +15,13 @@ import { Gender } from '../../Data/Gender';
 
 export default function ManageAnimal() {
     const [animals, setAnimals] = useState([]);
-    const [newAnimal, setNewAnimal] = useState([])
+    const [newAnimal, setNewAnimal] = useState([{
+        "animalName": "",
+        "catalogueId": null,
+        "country": "",
+        "gender": "",
+        "image": ""
+    }])
     const [selectedCatalogue, setSelectedCatalogue] = useState({});
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [selectedGender, setSelectedGender] = useState(null);
@@ -25,7 +31,7 @@ export default function ManageAnimal() {
     const [checked, setChecked] = useState();
     const toast = useRef(null);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
-
+    const defaultImage = "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg";
     //Search by animals name
     const [filters, setFilters] = useState({
         'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -136,7 +142,19 @@ export default function ManageAnimal() {
                 setRefresh(true)
             })
             .catch((error) => {
-                show(error.response.data.message, 'red');
+                if (newAnimal.animalName === "") {
+                    show("Please, input animal name", 'red');
+                }
+                else if (newAnimal.catalogueId === null) {
+                    show("Please, choose catalogue", 'red');
+                }
+                else if (newAnimal.image === "") {
+                    show("Please, choose image", 'red');
+                }
+                else {
+                    // show("All field empty", 'red');
+                    show(error.response.data.message, 'red');
+                }
                 console.error(error);
             });
     }
@@ -159,15 +177,22 @@ export default function ManageAnimal() {
     }, [refresh]);
 
     const imageBody = (rowData) => {
+        const imageUrl = `http://localhost:3000/img/${rowData.image}`;
+        const fallbackImageUrl = defaultImage;
+
         return (
             <img
-                src={`http://localhost:3000/img/${rowData.image}`} // Replace with the correct image URL property in your data
+                src={imageUrl || fallbackImageUrl}
                 alt="Animal"
                 width="50"
                 height="50"
+                onError={(e) => {
+                    e.target.src = fallbackImageUrl;
+                }}
             />
         );
     };
+
 
     //delete
     const handleDeleteAnimal = (animalId) => {
@@ -237,6 +262,7 @@ export default function ManageAnimal() {
                         <br />
                         <InputText
                             id="animalName"
+                            required
                             className='w-full'
                             name="animalName"
                             value={newAnimal.animalName}
@@ -259,13 +285,6 @@ export default function ManageAnimal() {
                     <div className="field col-12 ">
                         <label htmlFor="country">Country</label>
                         <br />
-                        {/* <InputText
-                            id="country"
-                            className='w-full'
-                            name="country"
-                            value={newAnimal.country}
-                            onChange={handleInputChange}
-                        /> */}
                         <Dropdown
                             value={selectedCountry}
                             onChange={(e) => handleSelectedChange(e, 'country')}
@@ -278,13 +297,6 @@ export default function ManageAnimal() {
                     <div className="field col-12 ">
                         <label htmlFor="gender">Gender</label>
                         <br />
-                        {/* <InputText
-                            id="gender"
-                            className='w-full'
-                            name="gender"
-                            value={newAnimal.gender}
-                            onChange={handleInputChange}
-                        /> */}
                         <Dropdown
                             value={selectedGender}
                             onChange={(e) => handleSelectedChange(e, 'gender')}

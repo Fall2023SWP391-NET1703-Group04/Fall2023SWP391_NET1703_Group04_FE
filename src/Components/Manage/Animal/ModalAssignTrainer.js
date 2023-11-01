@@ -14,7 +14,7 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
         "dateEnd": "",
         "dateStart": "",
         "description": "",
-        "userId": 0
+        "userId": null
     })
     const [trainerData, setTrainerData] = useState([])
     const [message, setMessage] = useState('')
@@ -67,7 +67,16 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
 
             })
             .catch((error) => {
-                show(error.response.data.message, 'red');
+                if (newTraining.userId === null) {
+                    show("Please, choose trainer", 'red');
+                }
+                else if (newTraining.dateStart === "") {
+                    show("Please, choose date start", 'red');
+                }
+                else {
+                    show(error.response.data.message, 'red');
+                }
+                // show(error.response.data.message, 'red');
             });
     }
 
@@ -131,7 +140,7 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
                         <br />
                         <InputTextarea
                             id="description"
-                            className='w-full -min-h-full'
+                            className='w-full min-h-full'
                             name="description"
                             value={newTraining.description}
                             onChange={handleInputChange}

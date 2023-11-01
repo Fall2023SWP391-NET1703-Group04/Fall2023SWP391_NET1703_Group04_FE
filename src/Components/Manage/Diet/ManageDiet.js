@@ -12,6 +12,7 @@ import authHeader from "../../AuthHeader/AuthHeader";
 import 'primeicons/primeicons.css';
 import '/node_modules/primeflex/primeflex.css';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import ModalUpdateDiet from './ModalUpdateDiet';
 
 const ManageDiet = () => {
     const [diets, setDiets] = useState([]);
@@ -26,13 +27,13 @@ const ManageDiet = () => {
     const [displayDialog, setDisplayDialog] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [updateDiet, setUpdateDiet] = useState([{
-        dietId: null,
+        dietId: 0,
         dietName: '',
         foodDTOS: [],
     }]);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
 
-
+    const [data, setData] = useState({})
     //Search by animals name
     const [filters, setFilters] = useState({
         'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -161,7 +162,6 @@ const ManageDiet = () => {
         axios
             .delete(`http://localhost:8080/zoo-server/api/v1/diet/deleteDiet/${dietId}`, { headers: authHeader() })
             .then(() => {
-                // setDiets(diets.filter((diet) => diet.dietId !== dietId));
                 setRefresh(true)
             })
             .catch((error) => {
@@ -170,75 +170,76 @@ const ManageDiet = () => {
     }
 
     //Update diet
-    const handleInputUpdateChange = (e) => {
-        const { name, value } = e.target;
-        setNewDiet((prevState) => {
-            if (name === "dietName") {
-                // If the input name is "dietName," update it directly
-                return {
-
-                    ...prevState["0"],
-                    [name]: value,
-
-                };
-            } else {
-                // For other input fields, update only the top-level state
-                return {
-                    ...prevState,
-                    [name]: value,
-                };
-            }
-        });
-    };
+    // const handleInputUpdateChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setUpdateDiet((prevState) => {
+    //         if (name === "dietName") {
+    //             // If the input name is "dietName," update it directly
+    //             return {
+    //                 ...prevState["0"],
+    //                 [name]: value,
+    //             };
+    //         } else {
+    //             // For other input fields, update only the top-level state
+    //             return {
+    //                 ...prevState,
+    //                 [name]: value,
+    //             };
+    //         }
+    //     });
+    // };
 
 
-    const handleInputFoodUpdateChange = (event) => {
-        setSelectedFood(event.value)
-        const foodItems = event.value
-        setNewDiet({
-            ...newDiet,
-            foodDTOS: foodItems,
-        });
+    // const handleInputFoodUpdateChange = (event) => {
+    //     setSelectedFood(event.value)
+    //     const foodItems = event.value
+    //     setUpdateDiet({
+    //         ...updateDiet,
+    //         foodDTOS: foodItems,
+    //     });
+    // }
+
+    // const handleOpenUpdateModal = (diet) => {
+    //     console.log("diet", diet)
+    //     setUpdateDiet({
+    //         dietId: diet.dietId,
+    //         dietName: diet.dietName,
+    //         foodDTOS: diet.foodDTOS,
+    //     });
+    //     setSelectedFood(diet.foodDTOS);
+    //     setIsUpdateModalOpen(true);
+    // };
+
+    // const handleUpdateDiet = () => {
+    //     axios
+    //         .put(`http://localhost:8080/zoo-server/api/v1/diet/updateDiet/${updateDiet.dietId}`, updateDiet, { headers: authHeader() })
+    //         .then(() => {
+    //             setIsUpdateModalOpen(false);
+    //             setRefresh(true)
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //         });
+    // };
+    const handleClose = () => {
+        setIsUpdateModalOpen(false)
+        setRefresh(true)
+    }
+    const openUpdateModal = (rowData) => {
+        setData(rowData)
+        setIsUpdateModalOpen(true)
+
     }
 
-    const handleOpenUpdateModal = (diet) => {
-        console.log(diet)
-        setUpdateDiet({
-            dietId: diet.dietId,
-            dietName: diet.dietName,
-            foodDTOS: diet.foodDTOS,
-        });
-        setSelectedFood(diet.foodDTOS);
-        setIsUpdateModalOpen(true);
-    };
 
-    const handleUpdateDiet = () => {
-        axios
-            .put(`http://localhost:8080/zoo-server/api/v1/diet/updateDiet/${updateDiet.dietId}`, updateDiet, { headers: authHeader() })
-            .then((response) => {
-                setIsUpdateModalOpen(false);
-                setRefresh(true)
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    };
+
 
     const header = renderHeader();
-    // <div>
-    //     <h1>Diet Management</h1>
-    // <Button
-    //     style={{ justifySelf: "left" }}
-    //     label="Add"
-    //     icon="pi pi-plus"
-    //     className="p-button-primary absolute top-0 left-0"
-    //     onClick={() => setDisplayDialog(true)}
-    // />
-    // </div>
-
 
     return (
+
         <div style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
+            {ModalUpdateDiet(data, isUpdateModalOpen, handleClose)}
             <div style={{ width: "90%", justifySelf: "center" }}>
                 <h1>Diet Management</h1>
                 <DataTable value={diets} header={header} paginator rows={5} rowsPerPageOptions={[5, 10, 20]} filters={filters} onFilter={(e) => setFilters(e.filters)}>
@@ -266,8 +267,12 @@ const ManageDiet = () => {
                                 <Button
                                     icon="pi pi-pencil"
                                     className="p-button-rounded p-button-info"
-                                    onClick={() => handleOpenUpdateModal(rowData)}
+                                    onClick={() => {
+                                        openUpdateModal(rowData);
+                                        // ModalUpdateDiet(rowData, isUpdateModalOpen, handleClose)
+                                    }}
                                 />
+
                             </div>
                         )}
                     />
@@ -317,7 +322,7 @@ const ManageDiet = () => {
             </Dialog>
 
             {/* Update dialog */}
-            <Dialog
+            {/* <Dialog
                 header="Update Diet"
                 visible={isUpdateModalOpen}
                 style={{ width: '500px' }}
@@ -326,17 +331,21 @@ const ManageDiet = () => {
             >
                 <div className="p-field">
                     <label htmlFor="updateDietName">Diet Name</label>
+                    <br />
                     <InputText
-                        id="updateDietName"
-                        name="updateDietName"
+                        id="dietName"
+                        className='w-full'
+                        name="dietName"
                         value={updateDiet.dietName}
                         onChange={handleInputUpdateChange}
                     />
                 </div>
                 <div className="p-field">
                     <label htmlFor="updateFoodItems">Food</label>
+                    <br />
                     <MultiSelect
                         id="updateFoodItems"
+                        className='w-full'
                         optionLabel="foodName"
                         value={selectedFood}
                         options={foodDTOS}
@@ -347,9 +356,9 @@ const ManageDiet = () => {
                     label="Update Diet"
                     icon="pi pi-pencil"
                     onClick={handleUpdateDiet}
-                    className="p-button-primary"
+                    className="p-button-primary mt-5"
                 />
-            </Dialog>
+            </Dialog> */}
         </div>
     );
 };
