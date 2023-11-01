@@ -86,7 +86,6 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
     };
 
     const handleAssignDiet = () => {
-        console.log(newAnimalDiet);
         axios
             .post("http://localhost:8080/zoo-server/api/v1/animal-diet-management/createAnimalDietManagement", newAnimalDiet, { headers: authHeader() })
             .then((response) => {
@@ -95,8 +94,12 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
                 setRefresh(true)
             })
             .catch((error) => {
-                show(error.response.data.message, 'red');
-                console.error(error);
+                if (newAnimalDiet.dateStart === "") {
+                    show("Please, choose date start", 'red');
+                }
+                else {
+                    show(error.response.data.message, 'red');
+                }
             });
     }
 
@@ -143,6 +146,12 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
                 setSelectedFood([])
             })
             .catch((error) => {
+                // if(newDiet.dateStart === "" ) {
+
+                // }
+                // else {
+
+                // }
                 console.error(error);
             });
     };
