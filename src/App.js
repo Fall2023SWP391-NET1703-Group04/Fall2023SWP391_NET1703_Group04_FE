@@ -34,6 +34,7 @@ import Products from "./Components/Product/Products";
 import ProductDetail from "./Components/Manage/Product/ProductDetail";
 import ManageNews from "./Components/Manage/News/ManageNews";
 import NewUser from "./Components/NewsUser/NewsUser";
+import ManageCage from "./Components/Manage/Cage/ManageCage";
 function App() {
   return (
     <div className="App">
@@ -65,6 +66,7 @@ function App() {
             <Route path="manage-catalogues" element={<ManageCatalogue />} />
             <Route path="manage-news" element={<ManageNews />} />
             <Route path="manage-diets" element={<ManageDiet />} />
+            <Route path="manage-cages" element={<ManageCage />} />
             <Route path="animal-details/:animalId" element={<AnimalDetail />} />
             <Route
               path="product-details/:productId"
