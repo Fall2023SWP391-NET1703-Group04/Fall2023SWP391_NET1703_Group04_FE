@@ -36,6 +36,9 @@ function Header() {
               <NavLink to={`/products`} className="nav-link">
                 Product
               </NavLink>
+              <NavLink to={`/news-user`} className="nav-link">
+                News
+              </NavLink>
               <NavDropdown
                 title={
                   <Image
