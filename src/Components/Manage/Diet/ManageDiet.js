@@ -19,19 +19,15 @@ const ManageDiet = () => {
     const [refresh, setRefresh] = useState(false);
     const [foodDTOS, setFoodDTOS] = useState([]);
     const [selectedFood, setSelectedFood] = useState([]);
-    // const [selectedDiet, setSelectedDiet] = useState(null);
     const [newDiet, setNewDiet] = useState([{
         dietName: "",
         foodDTOS: []
     }]);
     const [displayDialog, setDisplayDialog] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-    const [updateDiet, setUpdateDiet] = useState([{
-        dietId: 0,
-        dietName: '',
-        foodDTOS: [],
-    }]);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
+    const [isAddButtonDisabled, setIsAddButtonDisabled] = useState(false);
+
 
     const [data, setData] = useState({})
     //Search by name
@@ -134,7 +130,6 @@ const ManageDiet = () => {
         });
     };
 
-
     const handleInputFoodChange = (event) => {
         console.log(event.value);
         setSelectedFood(event.value)
@@ -149,6 +144,7 @@ const ManageDiet = () => {
         await axios
             .post('http://localhost:8080/zoo-server/api/v1/diet/createNewDiet', newDiet, { headers: authHeader() })
             .then(() => {
+                setIsAddButtonDisabled(true);
                 setDisplayDialog(false);
                 setRefresh(true)
                 setSelectedFood([])
@@ -169,58 +165,6 @@ const ManageDiet = () => {
             });
     }
 
-    //Update diet
-    // const handleInputUpdateChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setUpdateDiet((prevState) => {
-    //         if (name === "dietName") {
-    //             // If the input name is "dietName," update it directly
-    //             return {
-    //                 ...prevState["0"],
-    //                 [name]: value,
-    //             };
-    //         } else {
-    //             // For other input fields, update only the top-level state
-    //             return {
-    //                 ...prevState,
-    //                 [name]: value,
-    //             };
-    //         }
-    //     });
-    // };
-
-
-    // const handleInputFoodUpdateChange = (event) => {
-    //     setSelectedFood(event.value)
-    //     const foodItems = event.value
-    //     setUpdateDiet({
-    //         ...updateDiet,
-    //         foodDTOS: foodItems,
-    //     });
-    // }
-
-    // const handleOpenUpdateModal = (diet) => {
-    //     console.log("diet", diet)
-    //     setUpdateDiet({
-    //         dietId: diet.dietId,
-    //         dietName: diet.dietName,
-    //         foodDTOS: diet.foodDTOS,
-    //     });
-    //     setSelectedFood(diet.foodDTOS);
-    //     setIsUpdateModalOpen(true);
-    // };
-
-    // const handleUpdateDiet = () => {
-    //     axios
-    //         .put(`http://localhost:8080/zoo-server/api/v1/diet/updateDiet/${updateDiet.dietId}`, updateDiet, { headers: authHeader() })
-    //         .then(() => {
-    //             setIsUpdateModalOpen(false);
-    //             setRefresh(true)
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-    // };
     const handleClose = () => {
         setIsUpdateModalOpen(false)
         setRefresh(true)
@@ -231,9 +175,6 @@ const ManageDiet = () => {
 
     }
 
-
-
-
     const header = renderHeader();
 
     return (
@@ -242,7 +183,9 @@ const ManageDiet = () => {
             {ModalUpdateDiet(data, isUpdateModalOpen, handleClose)}
             <div style={{ width: "90%", justifySelf: "center" }}>
                 <h1>Diet Management</h1>
-                <DataTable value={diets} header={header} paginator rows={5} rowsPerPageOptions={[5, 10, 20]} filters={filters} onFilter={(e) => setFilters(e.filters)}>
+                <DataTable value={diets} header={header} stripedRows
+                    paginator rows={5} rowsPerPageOptions={[5, 10, 20]}
+                    filters={filters} onFilter={(e) => setFilters(e.filters)}>
                     <Column field="dietName" header="Diet Name" />
                     <Column
                         field="foodDTOS"
@@ -269,7 +212,6 @@ const ManageDiet = () => {
                                     className="p-button-rounded p-button-info"
                                     onClick={() => {
                                         openUpdateModal(rowData);
-                                        // ModalUpdateDiet(rowData, isUpdateModalOpen, handleClose)
                                     }}
                                 />
 
@@ -315,50 +257,12 @@ const ManageDiet = () => {
                 <Button
                     label="Add Diet"
                     icon="pi pi-plus"
+                    disabled={isAddButtonDisabled}
                     onClick={() => handleAddDiet()}
                     className="p-button-primary"
                 />
 
             </Dialog>
-
-            {/* Update dialog */}
-            {/* <Dialog
-                header="Update Diet"
-                visible={isUpdateModalOpen}
-                style={{ width: '500px' }}
-                modal
-                onHide={() => setIsUpdateModalOpen(false)}
-            >
-                <div className="p-field">
-                    <label htmlFor="updateDietName">Diet Name</label>
-                    <br />
-                    <InputText
-                        id="dietName"
-                        className='w-full'
-                        name="dietName"
-                        value={updateDiet.dietName}
-                        onChange={handleInputUpdateChange}
-                    />
-                </div>
-                <div className="p-field">
-                    <label htmlFor="updateFoodItems">Food</label>
-                    <br />
-                    <MultiSelect
-                        id="updateFoodItems"
-                        className='w-full'
-                        optionLabel="foodName"
-                        value={selectedFood}
-                        options={foodDTOS}
-                        onChange={handleInputFoodUpdateChange}
-                    />
-                </div>
-                <Button
-                    label="Update Diet"
-                    icon="pi pi-pencil"
-                    onClick={handleUpdateDiet}
-                    className="p-button-primary mt-5"
-                />
-            </Dialog> */}
         </div>
     );
 };
