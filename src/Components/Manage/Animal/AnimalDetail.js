@@ -29,6 +29,7 @@ export default function AnimalDetail() {
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [checked, setChecked] = useState();
+    const country = "";
     const toast = useRef(null);
     const defaultImage = "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg";
 
@@ -60,6 +61,9 @@ export default function AnimalDetail() {
             .then((response) => {
                 setAnimalData(response.data.data);
                 setUpdateAnimal(response.data.data);
+                //
+                setSelectedCountry(response.data.data.country);
+                setSelectedGender(response.data.data.gender);
                 setRefresh(false)
             })
             .catch((error) => console.error(error));
@@ -151,6 +155,7 @@ export default function AnimalDetail() {
         });
         setSelectedCatalogue(animalData.catalogueDTO);
         setSelectedCountry(animalData.country);
+        setSelectedGender(animalData.gender);
         setIsUpdateModalOpen(true);
     }
 

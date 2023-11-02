@@ -1,34 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
-import { Dropdown } from 'primereact/dropdown'
 import axios from 'axios'
 import authHeader from '../../AuthHeader/AuthHeader'
 import { Toast } from 'primereact/toast'
-import { InputTextarea } from 'primereact/inputtextarea';
 import { InputText } from 'primereact/inputtext'
 import { MultiSelect } from 'primereact/multiselect'
 
 export default function ModalUpdateDiet(data, isModalOpen, handleClose) {
     const [foodDTOS, setFoodDTOS] = useState([])
-    const [diets, setDiets] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [selectedFood, setSelectedFood] = useState([]);
-    // const [selectedDiet, setSelectedDiet] = useState(null);
-    const [newDiet, setNewDiet] = useState([{
-        dietName: "",
-        foodDTOS: []
-    }]);
-    // const dietId = data.dietId;
-    // const dietName = data.dietName;
-    // const foods = data.foodDTOS;
-
-    const [updateDiet, setUpdateDiet] = useState([{
-        // dietId: dietId,
-        // dietName: dietName,
-        // foodDTOS: foods,
-    }]);
-
+    const [updateDiet, setUpdateDiet] = useState([{}]);
+    const [isAddButtonDisabled, setIsAddButtonDisabled] = useState(false);
     const diet = {
         dietId: data.dietId,
         dietName: data.dietName,
@@ -94,6 +78,7 @@ export default function ModalUpdateDiet(data, isModalOpen, handleClose) {
                 setRefresh(true)
             })
             .catch((error) => {
+                show(error.response.data.message, 'red');
                 console.error(error);
             });
     };
@@ -116,6 +101,7 @@ export default function ModalUpdateDiet(data, isModalOpen, handleClose) {
                 modal
                 onHide={() => handleClose()}
             >
+                <Toast ref={toast} />
                 <div className="p-field">
                     <label htmlFor="updateDietName">Diet Name</label>
                     <br />
@@ -142,6 +128,7 @@ export default function ModalUpdateDiet(data, isModalOpen, handleClose) {
                 <Button
                     label="Update Diet"
                     icon="pi pi-pencil"
+                    disabled={isAddButtonDisabled}
                     onClick={handleUpdateDiet}
                     className="p-button-primary mt-5"
                 />
