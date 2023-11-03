@@ -12,7 +12,6 @@ export default function ModalUpdateDiet(data, isModalOpen, handleClose) {
     const [refresh, setRefresh] = useState(false);
     const [selectedFood, setSelectedFood] = useState([]);
     const [updateDiet, setUpdateDiet] = useState([{}]);
-    const [isAddButtonDisabled, setIsAddButtonDisabled] = useState(false);
     const diet = {
         dietId: data.dietId,
         dietName: data.dietName,
@@ -128,7 +127,7 @@ export default function ModalUpdateDiet(data, isModalOpen, handleClose) {
                 <Button
                     label="Update Diet"
                     icon="pi pi-pencil"
-                    disabled={isAddButtonDisabled}
+                    // disabled={isAddButtonDisabled}
                     onClick={handleUpdateDiet}
                     className="p-button-primary mt-5"
                 />

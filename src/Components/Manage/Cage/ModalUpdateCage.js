@@ -11,12 +11,13 @@ import { InputTextarea } from 'primereact/inputtextarea'
 export default function ModalUpdateCage(data, isModalOpen, handleClose) {
     const [areas, setAreas] = useState([]);
     const [refresh, setRefresh] = useState(false);
-    const [selectedArea, setSelectedArea] = useState([]);
+    const [selectedArea, setSelectedArea] = useState(data.areaName);
     const [updateCage, setUpdateCage] = useState([]);
     const cage = {
         cageId: data.animalCageId,
         animalCageName: data.animalCageName,
         areaId: data.areaId,
+        areaName: data.areaName,
         description: data.description,
     }
 
@@ -24,7 +25,6 @@ export default function ModalUpdateCage(data, isModalOpen, handleClose) {
         axios
             .get('http://localhost:8080/zoo-server/api/v1/area/getAllAreas', { headers: authHeader() })
             .then((response) => {
-                console.log(response.data.data);
                 setAreas(response.data);
             })
             .catch((error) => {
@@ -50,8 +50,13 @@ export default function ModalUpdateCage(data, isModalOpen, handleClose) {
     }
 
     const handleUpdateCage = () => {
+        var requestData = {
+            animalCageName: updateCage.animalCageName ? updateCage.animalCageName : data.animalCageName,
+            areaId: updateCage.areaId ? updateCage.areaId : data.areaId,
+            description: updateCage.description ? updateCage.description : data.description
+        }
         axios
-            .put(`http://localhost:8080/zoo-server/api/v1/animalCage/updateAnimalCage/${cage.cageId}`, updateCage, { headers: authHeader() })
+            .put(`http://localhost:8080/zoo-server/api/v1/animalCage/updateAnimalCage/${cage.cageId}`, requestData, { headers: authHeader() })
             .then(() => {
                 handleClose();
                 setRefresh(true)
@@ -71,6 +76,7 @@ export default function ModalUpdateCage(data, isModalOpen, handleClose) {
             style: { backgroundColor: color, color: 'white', border: '2px solid yellow' },
         });
     };
+
     return (
         <div>
             <Dialog
@@ -81,7 +87,7 @@ export default function ModalUpdateCage(data, isModalOpen, handleClose) {
                 onHide={() => handleClose()}
             >
                 <Toast ref={toast} />
-                <div className="p-field">
+                <div className="field col-12 ">
                     <label htmlFor="updateDietName">Cage Name</label>
                     <br />
                     <InputText
@@ -97,7 +103,7 @@ export default function ModalUpdateCage(data, isModalOpen, handleClose) {
                     <label htmlFor="cageName">Area</label>
                     <br />
                     <Dropdown
-                        value={selectedArea}
+                        value={selectedArea ? selectedArea : cage.areaName}
                         onChange={handleSelectedChange}
                         options={areas}
                         name='areaId'
