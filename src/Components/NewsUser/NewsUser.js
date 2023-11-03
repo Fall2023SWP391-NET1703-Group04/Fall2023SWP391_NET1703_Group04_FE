@@ -1,103 +1,67 @@
+import axios from "axios";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import React, { useState, useEffect } from "react";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Button } from "primereact/button";
-import { Rating } from "primereact/rating";
-import { Tag } from "primereact/tag";
+import authHeader from "../AuthHeader/AuthHeader";
 // import { ProductService } from "./service/ProductService";
 const NewUser = () => {
-  const [products, setProducts] = useState([]);
+  const [newsData, setNewsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // ProductService.getProductsMini().then((data) => setProducts(data));
+    // Define the URL
+    const apiUrl = "http://localhost:8080/zoo-server/api/v1/new/getAllNews";
+
+    // Make the Axios GET request
+    axios
+      .get(apiUrl, { headers: authHeader() })
+      .then((response) => {
+        setNewsData(response.data.data); // Update the state with the fetched data
+        setLoading(false); // Set loading to false
+      })
+      .catch((err) => {
+        setError(err); // Handle any errors
+        setLoading(false); // Set loading to false
+      });
   }, []);
 
-  const formatCurrency = (value) => {
-    return value.toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-    });
-  };
+  console.log(newsData);
 
-  const imageBodyTemplate = (product) => {
-    return (
-      <img
-        src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`}
-        alt={product.image}
-        className="w-6rem shadow-2 border-round"
-      />
-    );
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  const priceBodyTemplate = (product) => {
-    return formatCurrency(product.price);
-  };
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
-  const ratingBodyTemplate = (product) => {
-    return <Rating value={product.rating} readOnly cancel={false} />;
-  };
-
-  const statusBodyTemplate = (product) => {
-    return (
-      <Tag
-        value={product.inventoryStatus}
-        severity={getSeverity(product)}
-      ></Tag>
-    );
-  };
-
-  const getSeverity = (product) => {
-    switch (product.inventoryStatus) {
-      case "INSTOCK":
-        return "success";
-
-      case "LOWSTOCK":
-        return "warning";
-
-      case "OUTOFSTOCK":
-        return "danger";
-
-      default:
-        return null;
-    }
-  };
-
-  const header = (
-    <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-      <span className="text-xl text-900 font-bold">Products</span>
-      <Button icon="pi pi-refresh" rounded raised />
-    </div>
-  );
-  const footer = `In total there are ${
-    products ? products.length : 0
-  } products.`;
   return (
     <>
       <Header />
-      <div className="card">
-        <DataTable
-          value={products}
-          header={header}
-          footer={footer}
-          tableStyle={{ minWidth: "60rem" }}
-        >
-          <Column field="name" header="Name"></Column>
-          <Column header="Image" body={imageBodyTemplate}></Column>
-          <Column
-            field="price"
-            header="Price"
-            body={priceBodyTemplate}
-          ></Column>
-          <Column field="category" header="Category"></Column>
-          <Column
-            field="rating"
-            header="Reviews"
-            body={ratingBodyTemplate}
-          ></Column>
-          <Column header="Status" body={statusBodyTemplate}></Column>
-        </DataTable>
+      <div class="container">
+        <div class="row">
+          {newsData != null &&
+            newsData.length > 0 &&
+            newsData.map((newData) => {
+              return (
+                <>
+                  <div class="col-6">
+                    <div class="card" style={{ width: "18rem;" }}>
+                      <div class="card-body">
+                        <h5 class="card-title">{newData.title}</h5>
+                        <p class="card-text">{newData.content}</p>
+                        <p class="card-text">
+                          Created Date: {newData.createdDate}
+                        </p>
+                        <p class="card-text">New Type: {newData.newsType}</p>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              );
+            })}
+        </div>
       </div>
       <Footer />
     </>
