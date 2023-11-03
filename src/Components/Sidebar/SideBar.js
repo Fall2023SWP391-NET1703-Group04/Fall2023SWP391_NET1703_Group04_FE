@@ -5,8 +5,7 @@ import { Button } from "primereact/button";
 const SideBar = () => {
   const navigate = useNavigate();
   return (
-
-    <Sidebar style={{ width: "100%" }}>
+    <Sidebar className="w-full">
       <Menu >
 
         <MenuItem component={<Link to="/admins" />}> DashBoard</MenuItem>
@@ -40,16 +39,6 @@ const SideBar = () => {
             Manage Roles
           </MenuItem>
         </SubMenu>
-        <MenuItem>
-          <Button
-            onClick={() => {
-              localStorage.removeItem("user");
-              navigate("/");
-            }}
-          >
-            Logout
-          </Button>
-        </MenuItem>
       </Menu>
     </Sidebar>
   );
