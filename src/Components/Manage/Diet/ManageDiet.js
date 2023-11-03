@@ -188,8 +188,8 @@ const ManageDiet = () => {
                     filters={filters} onFilter={(e) => setFilters(e.filters)}>
                     <Column field="dietName" header="Diet Name" />
                     <Column
-                        field="foodDTOS"
                         header="Food"
+                        field="foodDTOS"
                         body={(rowData) => (
                             <ul>
                                 {rowData.foodDTOS.map((food) => (

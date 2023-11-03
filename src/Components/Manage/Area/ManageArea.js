@@ -311,6 +311,7 @@ const ManageArea = () => {
             <div style={{ display: "flex" }}>
               <Button
                 severity="danger"
+                className="mr-1"
                 onClick={() => {
                   handleClickBtnDelete(area.areaId);
                 }}
@@ -320,11 +321,16 @@ const ManageArea = () => {
               </Button>
               <Button
                 rounded
-                onClick={() => {
-                  handleClickBtnUpdate(area);
-                }}
+                className="mr-1"
+                onClick={() => handleClickBtnUpdate(area)}
               >
                 Update
+              </Button>
+              <Button
+                rounded
+                onClick={() => window.location.href = `cage-details/${area.areaId}`}
+              >
+                View
               </Button>
             </div>
           )}

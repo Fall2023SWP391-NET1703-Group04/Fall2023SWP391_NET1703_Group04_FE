@@ -22,16 +22,10 @@ const ManageCage = () => {
     const [refresh, setRefresh] = useState(false);
     const [areas, setAreas] = useState([]);
     const [selectedArea, setSelectedArea] = useState([]);
-    // const [selectedDiet, setSelectedDiet] = useState(null);
     const [newCage, setNewCage] = useState([]);
     const [displayDialog, setDisplayDialog] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [updateCage, setUpdateCage] = useState([{
-        cageId: null,
-        cageName: '',
-        areas: [],
-    }]);
     const [data, setData] = useState({})
     const toast = useRef(null);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
@@ -187,16 +181,7 @@ const ManageCage = () => {
                     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                     currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}>
                     <Column field="animalCageName" header="Cage Name" style={{ width: '25%' }}></Column>
-                    <Column
-                        field="areaDTO"
-                        header="Area"
-                        style={{ width: '25%' }}
-                        body={(rowData) => (
-                            <p>
-                                {rowData.areaDTO.areaName}
-                            </p>
-                        )}
-                    />
+                    <Column field="areaName" header="Area" style={{ width: '25%' }}></Column>
                     <Column field="description" header="Description" style={{ width: '25%' }}></Column>
                     <Column
                         style={{ width: '25%' }}
