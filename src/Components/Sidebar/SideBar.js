@@ -7,6 +7,7 @@ const SideBar = () => {
   return (
     <Sidebar className="w-full">
       <Menu >
+
         <MenuItem component={<Link to="/admins" />}> DashBoard</MenuItem>
         <SubMenu label="Task">
           <MenuItem component={<Link to="manage-users" />}>
@@ -33,13 +34,13 @@ const SideBar = () => {
           <MenuItem component={<Link to="manage-diets" />}>
             Manage Diet
           </MenuItem>
-          <MenuItem component={<Link to="manage-news" />}>
-            Manage News
+          <MenuItem component={<Link to="manage-news" />}>Manage News</MenuItem>
+          <MenuItem component={<Link to="manage-roles" />}>
+            Manage Roles
           </MenuItem>
         </SubMenu>
       </Menu>
-
-    </Sidebar >
+    </Sidebar>
   );
 };
 

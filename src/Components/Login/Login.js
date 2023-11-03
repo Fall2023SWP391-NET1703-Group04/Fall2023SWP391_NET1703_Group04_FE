@@ -71,7 +71,7 @@ const Login = () => {
               navigate("/admins");
               break;
             case "ROLE_CUSTOMER":
-              navigate("/home");
+              navigate("/");
               break;
             case "ROLE_TRAINER":
               navigate("/trainer");
