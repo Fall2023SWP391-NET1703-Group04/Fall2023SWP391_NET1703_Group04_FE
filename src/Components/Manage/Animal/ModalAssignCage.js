@@ -137,7 +137,7 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
                         />
                     </div>
                     <Button
-                        label="Add Diet"
+                        label="Add Cage"
                         icon="pi pi-pencil"
                         onClick={handleAddCage}
                         className="p-button-primary mt-5 "

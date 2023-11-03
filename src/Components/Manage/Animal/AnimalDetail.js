@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Fieldset } from 'primereact/fieldset';
@@ -14,18 +14,25 @@ import { Dropdown } from 'primereact/dropdown';
 import AnimalTrainingHistory from './AnimalTrainingHistory';
 import AnimalDietHistory from './AnimalDietHistory';
 import AnimalCageHistory from './AnimalCageHistory';
+import { Countries } from "../../Data/Countries"
+import { Gender } from '../../Data/Gender';
+import { Toast } from 'primereact/toast';
 
 export default function AnimalDetail() {
     const { animalId } = useParams();
     const [animalData, setAnimalData] = useState({});
-    const [updateAnimal, setUpdateAnimal] = useState({
-
-    });
+    const [updateAnimal, setUpdateAnimal] = useState({});
     const [selectedCatalogue, setSelectedCatalogue] = useState({});
+    const [selectedCountry, setSelectedCountry] = useState();
+    const [selectedGender, setSelectedGender] = useState();
     const [catalogues, setCatalogues] = useState([]);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [checked, setChecked] = useState();
+    const country = "";
+    const toast = useRef(null);
+    const defaultImage = "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg";
+
     const animalProfile = (
         <div className="flex align-items-center text-primary" >
             <span className="pi pi-user mr-2"></span>
@@ -48,13 +55,16 @@ export default function AnimalDetail() {
         </div>
     );
 
-
     useEffect(() => {
-        // Fetch animal data using the `animalId` parameter
         axios
             .get(`http://localhost:8080/zoo-server/api/v1/animal/getAnimalById/${animalId}`, { headers: authHeader() })
             .then((response) => {
                 setAnimalData(response.data.data);
+                setUpdateAnimal(response.data.data);
+                //
+                setSelectedCountry(response.data.data.country);
+                setSelectedGender(response.data.data.gender);
+                setRefresh(false)
             })
             .catch((error) => console.error(error));
 
@@ -66,13 +76,24 @@ export default function AnimalDetail() {
             .catch(error => console.error(error));
     }, [animalId, refresh]);
 
-    const header = (
-        <img alt="Card" src={`http://localhost:3000/img/${animalData.image}`} />
-    );
+    const header = () => {
+        const imageUrl = `http://localhost:3000/img/${animalData.image}`;
+        const fallbackImageUrl = defaultImage;
+
+        return (
+            <img
+                src={imageUrl || fallbackImageUrl}
+                alt="Animal"
+                onError={(e) => {
+                    e.target.src = fallbackImageUrl;
+                }}
+            />
+        );
+    };
 
     const footer = (
         <>
-            <Button label="Update" onClick={() => handleOpenUpdateAnimalModal(animalData)} icon="pi pi-pencil" />
+            <Button label="Update" onClick={() => handleOpenUpdateAnimalModal()} icon="pi pi-pencil" />
         </>
     );
 
@@ -93,14 +114,30 @@ export default function AnimalDetail() {
         });
     }
 
-    const handleSelectedChange = (event) => {
-        console.log(event.target.value)
-        setSelectedCatalogue(event.value);
-        setUpdateAnimal({
-            ...updateAnimal,
-            catalogueId: event.target.value.catalogueId
-        });
+    const handleSelectedChange = (event, name) => {
+        if (name === "catalogueId") {
+            setSelectedCatalogue(event.value);
+            setUpdateAnimal({
+                ...updateAnimal,
+                catalogueId: event.target.value.catalogueId
+            });
+        }
+        else if (name === "country") {
+            setSelectedCountry(event.value)
+            setUpdateAnimal({
+                ...updateAnimal,
+                country: event.target.value.name
+            })
+        }
+        else {
+            setSelectedGender(event.value)
+            setUpdateAnimal({
+                ...updateAnimal,
+                gender: event.target.value.name
+            });
+        }
     }
+
     const handleSwitchChange = (event) => {
         setChecked(event.value)
         const { name, value } = event.target;
@@ -110,30 +147,41 @@ export default function AnimalDetail() {
         });
     }
 
-    const handleOpenUpdateAnimalModal = (animalData) => {
-        setUpdateAnimal(animalData);
+    const handleOpenUpdateAnimalModal = () => {
+        // setUpdateAnimal(animalData);
         setUpdateAnimal({
             ...updateAnimal,
-            catalogueId: animalData.catalogueDTO.catalogueId
+            catalogueId: animalData.catalogueDTO.catalogueId,
         });
-        setChecked(animalData.rare);
-        setSelectedCatalogue(animalData.catalogueDTO)
+        setSelectedCatalogue(animalData.catalogueDTO);
+        setSelectedCountry(animalData.country);
+        setSelectedGender(animalData.gender);
         setIsUpdateModalOpen(true);
     }
 
     const handleUpdateAnimal = async () => {
         await axios
-            .put(`http://localhost:8080/zoo-server/api/v1/animal/updateAnimal/${updateAnimal.animalId}`, updateAnimal, { headers: authHeader() })
-            .then((response) => {
+            .put(`http://localhost:8080/zoo-server/api/v1/animal/updateAnimal/${animalId}`, updateAnimal, { headers: authHeader() })
+            .then(() => {
                 setRefresh(true)
                 setIsUpdateModalOpen(false);
             })
             .catch((error) => {
+                show(error.response.data.message, 'red');
                 console.error(error);
             });
     }
+
+    const show = (message, color) => {
+        toast.current.show({
+            summary: 'Notifications', detail: message, life: 3000,
+            style: { backgroundColor: color, color: 'white', border: '2px solid yellow' },
+        });
+    };
+
     return (
         <div className='grid ' style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
+            <Toast ref={toast} />
             <div className="card col-4">
                 <Fieldset legend={animalProfile} >
                     <Card title={animalData.animalName} subTitle={animalData.catalogueDTO?.catalogueName} footer={footer} header={header}>
@@ -178,7 +226,6 @@ export default function AnimalDetail() {
                             id="image"
                             onChange={onUpload}
                         />
-                        {/* <FileUpload mode="basic" name="image" accept="image/*" maxFileSize={1000000} onUpload={onUpload} /> */}
                     </div>
 
                     <div className="field col-12 ">
@@ -198,34 +245,38 @@ export default function AnimalDetail() {
                         <Dropdown
                             className="w-full "
                             value={selectedCatalogue}
-                            onChange={handleSelectedChange}
+                            onChange={(e) => handleSelectedChange(e, 'catalogueId')}
                             options={catalogues}
                             name='catalogueId'
                             optionLabel='catalogueName'
                             placeholder="Select a Catalogue"
                         />
                     </div>
+
                     <div className="field col-12">
                         <label htmlFor="country">Country</label>
-
                         <br />
-                        <InputText
-                            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-                            id="country"
+                        <Dropdown
+                            className="w-full"
+                            value={selectedCountry}
+                            onChange={(e) => handleSelectedChange(e, 'country')}
                             name="country"
-                            value={updateAnimal.country}
-                            onChange={handleInputChange}
+                            options={Countries} optionLabel="name"
+                            placeholder="Select a Country"
+                            filter
                         />
                     </div>
+
                     <div className="field col-12">
                         <label htmlFor="gender">Gender</label>
                         <br />
-                        <InputText
-                            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-                            id="gender"
+                        <Dropdown
+                            value={selectedGender}
+                            onChange={(e) => handleSelectedChange(e, 'gender')}
                             name="gender"
-                            value={updateAnimal.gender}
-                            onChange={handleInputChange}
+                            options={Gender} optionLabel="name"
+                            placeholder="Select a Gender"
+                            filter className="w-full"
                         />
                     </div>
                     <div className="field col-12">

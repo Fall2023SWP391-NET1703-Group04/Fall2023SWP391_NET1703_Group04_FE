@@ -16,6 +16,7 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
     const [refresh, setRefresh] = useState(false);
     const [selectedDiet, setSelectedDiet] = useState({});
     const toast = useRef(null);
+    const [isAddButtonDisabled, setIsAddButtonDisabled] = useState(true);
     const [newAnimalDiet, setNewAnimalDiet] = useState({
         "animalDietManagementName": "",
         "animalId": animalId,
@@ -35,7 +36,10 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
 
     useEffect(() => {
         axios.get(`http://localhost:8080/zoo-server/api/v1/diet/getAllDiets`, { headers: authHeader() })
-            .then(response => setNewDietData(response.data.data))
+            .then(response => {
+                setNewDietData(response.data.data)
+                setRefresh(false)
+            })
             .catch(error => console.error(error));
 
         axios
@@ -47,6 +51,7 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
                     dateEnd: new Date(food.dateEnd),
                 }));
                 setFoodDTOS(foodsWithDateObjects);
+                setRefresh(false)
             })
             .catch((error) => {
                 console.error(error);
@@ -86,7 +91,6 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
     };
 
     const handleAssignDiet = () => {
-        console.log(newAnimalDiet);
         axios
             .post("http://localhost:8080/zoo-server/api/v1/animal-diet-management/createAnimalDietManagement", newAnimalDiet, { headers: authHeader() })
             .then((response) => {
@@ -95,8 +99,12 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
                 setRefresh(true)
             })
             .catch((error) => {
-                show(error.response.data.message, 'red');
-                console.error(error);
+                if (newAnimalDiet.dateStart === "") {
+                    show("Please, choose date start", 'red');
+                }
+                else {
+                    show(error.response.data.message, 'red');
+                }
             });
     }
 
@@ -135,6 +143,7 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
     }
 
     const handleAddDiet = async () => {
+        setIsAddButtonDisabled(true);
         await axios
             .post('http://localhost:8080/zoo-server/api/v1/diet/createNewDiet', newDiet, { headers: authHeader() })
             .then(() => {

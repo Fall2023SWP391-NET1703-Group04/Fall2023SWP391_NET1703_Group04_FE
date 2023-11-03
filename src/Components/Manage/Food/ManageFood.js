@@ -237,6 +237,7 @@ function ManageFood() {
           paginator rows={5} rowsPerPageOptions={[5, 10, 20]}
           filters={filters} onFilter={(e) => setFilters(e.filters)}>
           <Column field="foodName" header="Food Name" />
+          <Column field="image" header="Image" />
           <Column field="dateStart" header="Date Start" body={dateTemplate} />
           <Column field="dateEnd" header="Date End" body={dateTemplate} />
           <Column field="nutriment" header="Nutrition" />

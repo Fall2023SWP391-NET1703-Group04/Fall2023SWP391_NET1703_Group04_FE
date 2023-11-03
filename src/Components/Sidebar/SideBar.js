@@ -5,8 +5,10 @@ import { Button } from "primereact/button";
 const SideBar = () => {
   const navigate = useNavigate();
   return (
-    <Sidebar>
-      <Menu style={{ position: "fixed", width: "250px" }}>
+
+    <Sidebar style={{ width: "100%" }}>
+      <Menu >
+
         <MenuItem component={<Link to="/admins" />}> DashBoard</MenuItem>
         <SubMenu label="Task">
           <MenuItem component={<Link to="manage-users" />}>

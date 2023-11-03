@@ -204,7 +204,7 @@ export default function ManageProduct() {
   return (
     <div className="datatable-editing-demo">
       <Toast ref={toast} />
-      <div className="card p-fluid">
+      <div className="card container ">
         <h5>List Product</h5>
         <DataTable value={productLists} paginator rows={10} header={header3} filters={filters} onFilter={(e) => setFilters(e.filters)}
           selection={selectedCustomer3} onSelectionChange={e => setSelectedCustomer3(e.value)} selectionMode="single" dataKey="id" responsiveLayout="scroll"
