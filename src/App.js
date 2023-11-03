@@ -36,6 +36,8 @@ import ManageNews from "./Components/Manage/News/ManageNews";
 import NewUser from "./Components/NewsUser/NewsUser";
 import AnimalListUser from "./Components/AnimalUser/AnimalListUser";
 import ManageRole from "./Components/Manage/Role/ManageRole";
+import ManageCage from "./Components/Manage/Cage/ManageCage";
+
 function App() {
   return (
     <div className="App">
@@ -69,6 +71,7 @@ function App() {
             <Route path="manage-news" element={<ManageNews />} />
             <Route path="manage-diets" element={<ManageDiet />} />
             <Route path="manage-roles" element={<ManageRole />} />
+            <Route path="manage-cages" element={<ManageCage />} />
             <Route path="animal-details/:animalId" element={<AnimalDetail />} />
             <Route
               path="product-details/:productId"

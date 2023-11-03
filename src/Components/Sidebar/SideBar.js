@@ -24,6 +24,9 @@ const SideBar = () => {
           <MenuItem component={<Link to="manage-areas" />}>
             Manage Areas
           </MenuItem>
+          <MenuItem component={<Link to="manage-cages" />}>
+            Manage Cages
+          </MenuItem>
           <MenuItem component={<Link to="manage-catalogues" />}>
             Manage Catalogues
           </MenuItem>

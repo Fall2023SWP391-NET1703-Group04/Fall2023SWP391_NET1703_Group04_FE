@@ -173,116 +173,117 @@ const DashBoard = () => {
         setChartPieFoodData(foodData);
         setChartPieFoodOptions(foodOptions);
     }, [animalCageIsNotUseList.length, animalCageList.length, foodIsNotExpiredList.length, foodList.length]);
-    return (<div class="col-8 ml-2">
-        <div class="grid mt-3">
-            <h5>DashBoard</h5>
-            <div class="col-12">
-                <div class="flex flex-wrap column-gap-4 row-gap-6">
-                    <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
-                        <Card title="Total Animal" className="h-20rem w-12rem">
-                            <h2 className="m-0">{animalList.length}</h2>
-                            <img
-                                src="http://localhost:3000/img/images.png"
-                                alt="img"
-                                style={{ width: "70px", height: "100px" }}
-                                className="mt-5"
-                            />
-                        </Card>
+    return (
+        <div class="col-8 ml-6 w-10 ">
+            <div class="flex justify-content-center grid mt-3">
+                <h1>DashBoard</h1>
+                <div class="col-12">
+                    <div class="flex flex-wrap column-gap-4 row-gap-6 ml-6">
+                        <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
+                            <Card title="Total Animal" className="h-20rem w-12rem">
+                                <h2 className="m-0">{animalList.length}</h2>
+                                <img
+                                    src="http://localhost:3000/img/images.png"
+                                    alt="img"
+                                    style={{ width: "70px", height: "100px" }}
+                                    className="mt-5"
+                                />
+                            </Card>
+                        </div>
+                        <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
+                            <Card title="Total User" className="h-20rem w-12rem">
+                                <h2 className="m-0">{userList.length}</h2>
+                                <img
+                                    src="http://localhost:3000/img/666201.png"
+                                    alt="img"
+                                    style={{ width: "70px", height: "100px" }}
+                                    className="mt-5"
+                                />
+                            </Card>
+                        </div>
+                        <div class="border-round w-12rem h-20rem  font-bold flex align-items-center justify-content-center">
+                            <Card title="Total Trainer" className="h-20rem w-12rem">
+                                <h2 className="m-0">{trainerList.length}</h2>
+                                <img
+                                    src="http://localhost:3000/img/trainer.png"
+                                    alt="img"
+                                    style={{ width: "70px", height: "100px" }}
+                                    className="mt-5"
+                                />
+                            </Card>
+                        </div>
+                        <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
+                            <Card title="Total Diet" className="h-20rem w-12rem">
+                                <h2 className="m-0">{dietList.length}</h2>
+                                <img
+                                    src="http://localhost:3000/img/6774898.png"
+                                    alt="img"
+                                    style={{ width: "70px", height: "100px" }}
+                                    className="mt-5"
+                                />
+                            </Card>
+                        </div>
+                        <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
+                            <Card title="Total Food" className="h-20rem w-12rem">
+                                <h2 className="m-0">{foodList.length}</h2>
+                                <img
+                                    src="http://localhost:3000/img/food.png"
+                                    alt="img"
+                                    style={{ width: "70px", height: "100px" }}
+                                    className="mt-5"
+                                />
+                            </Card>
+                        </div>
+                        <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
+                            <Card title="Products" className="h-20rem w-12rem">
+                                <h2 className="m-0">{productList.length}</h2>
+                                <img
+                                    src="http://localhost:3000/img/zoo_gift.jpg"
+                                    alt="img"
+                                    style={{ width: "70px", height: "100px" }}
+                                    className="mt-5"
+                                />
+                            </Card>
+                        </div>
+                        <div class="border-round w-12rem h-20rem  font-bold flex align-items-center justify-content-center">
+                            <Card title="Total Cage" className="h-20rem w-12rem">
+                                <h2 className="m-0">{animalCageList.length}</h2>
+                                <img
+                                    src="http://localhost:3000/img/animal_cage_icon.png"
+                                    alt="img"
+                                    style={{ width: "70px", height: "100px" }}
+                                    className="mt-5"
+                                />
+                            </Card>
+                        </div>
                     </div>
-                    <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
-                        <Card title="Total User" className="h-20rem w-12rem">
-                            <h2 className="m-0">{userList.length}</h2>
-                            <img
-                                src="http://localhost:3000/img/666201.png"
-                                alt="img"
-                                style={{ width: "70px", height: "100px" }}
-                                className="mt-5"
+                </div>
+                <div class="col-6">
+                    <div class="text-center p-3 border-round-sm  font-bold">
+                        <div className="card flex justify-content-center">
+                            <Chart
+                                type="pie"
+                                data={chartPieData}
+                                options={chartPieOptions}
+                                className="w-full"
                             />
-                        </Card>
+                        </div>
                     </div>
-                    <div class="border-round w-12rem h-20rem  font-bold flex align-items-center justify-content-center">
-                        <Card title="Total Trainer" className="h-20rem w-12rem">
-                            <h2 className="m-0">{trainerList.length}</h2>
-                            <img
-                                src="http://localhost:3000/img/trainer.png"
-                                alt="img"
-                                style={{ width: "70px", height: "100px" }}
-                                className="mt-5"
+                </div>
+                <div class="col-6">
+                    <div class="text-center p-3 border-round-sm  font-bold">
+                        <div className="card flex justify-content-center">
+                            <Chart
+                                type="pie"
+                                data={chartPieFoodData}
+                                options={chartPieFoodOptions}
+                                className="w-full"
                             />
-                        </Card>
-                    </div>
-                    <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
-                        <Card title="Total Diet" className="h-20rem w-12rem">
-                            <h2 className="m-0">{dietList.length}</h2>
-                            <img
-                                src="http://localhost:3000/img/6774898.png"
-                                alt="img"
-                                style={{ width: "70px", height: "100px" }}
-                                className="mt-5"
-                            />
-                        </Card>
-                    </div>
-                    <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
-                        <Card title="Total Food" className="h-20rem w-12rem">
-                            <h2 className="m-0">{foodList.length}</h2>
-                            <img
-                                src="http://localhost:3000/img/food.png"
-                                alt="img"
-                                style={{ width: "70px", height: "100px" }}
-                                className="mt-5"
-                            />
-                        </Card>
-                    </div>
-                    <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
-                        <Card title="Products" className="h-20rem w-12rem">
-                            <h2 className="m-0">{productList.length}</h2>
-                            <img
-                                src="http://localhost:3000/img/zoo_gift.jpg"
-                                alt="img"
-                                style={{ width: "70px", height: "100px" }}
-                                className="mt-5"
-                            />
-                        </Card>
-                    </div>
-                    <div class="border-round w-12rem h-20rem  font-bold flex align-items-center justify-content-center">
-                        <Card title="Total Cage" className="h-20rem w-12rem">
-                            <h2 className="m-0">{animalCageList.length}</h2>
-                            <img
-                                src="http://localhost:3000/img/animal_cage_icon.png"
-                                alt="img"
-                                style={{ width: "70px", height: "100px" }}
-                                className="mt-5"
-                            />
-                        </Card>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-6">
-                <div class="text-center p-3 border-round-sm  font-bold">
-                    <div className="card flex justify-content-center">
-                        <Chart
-                            type="pie"
-                            data={chartPieData}
-                            options={chartPieOptions}
-                            className="w-full"
-                        />
-                    </div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="text-center p-3 border-round-sm  font-bold">
-                    <div className="card flex justify-content-center">
-                        <Chart
-                            type="pie"
-                            data={chartPieFoodData}
-                            options={chartPieFoodOptions}
-                            className="w-full"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>)
+        </div>)
 }
 
 export default DashBoard;
