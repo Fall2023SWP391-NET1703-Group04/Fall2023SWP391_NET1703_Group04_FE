@@ -6,9 +6,12 @@ import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 import "./Header.scss";
+import { Button } from "react-bootstrap";
 
 function Header() {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -25,7 +28,7 @@ function Header() {
             >
               <NavLink
                 style={{ marginLeft: "35rem" }}
-                to={`/home`}
+                to={`/`}
                 className="nav-link"
               >
                 Home
@@ -39,31 +42,39 @@ function Header() {
               <NavLink to={`/news-user`} className="nav-link">
                 News
               </NavLink>
-              <NavDropdown
-                title={
-                  <Image
-                    src="img/user-img.png"
-                    style={{ width: "2rem", height: "2rem" }}
-                    thumbnail
-                  />
-                }
-                id="navbarScrollingDropdown"
-              >
-                <NavDropdown.Item>
-                  <Link to={`/update-profile-user`} className="nav-link">
-                    Update Profile
-                  </Link>
-                </NavDropdown.Item>
-                <NavDropdown.Item
-                  href="#action4"
-                  onClick={() => {
-                    localStorage.removeItem("user");
-                    navigate("/");
-                  }}
+              {user != null && (
+                <NavDropdown
+                  title={
+                    <Image
+                      src="img/user-img.png"
+                      style={{ width: "2rem", height: "2rem" }}
+                      thumbnail
+                    />
+                  }
+                  id="navbarScrollingDropdown"
                 >
-                  Log out
-                </NavDropdown.Item>
-              </NavDropdown>
+                  <NavDropdown.Item>
+                    <Link to={`/update-profile-user`} className="nav-link">
+                      Update Profile
+                    </Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    href="#action4"
+                    onClick={() => {
+                      localStorage.removeItem("user");
+                      navigate("/");
+                    }}
+                  >
+                    Log out
+                  </NavDropdown.Item>
+                </NavDropdown>
+              )}
+
+              {user === null && (
+                <Button>
+                  <Link to="/login"> Login</Link>
+                </Button>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
