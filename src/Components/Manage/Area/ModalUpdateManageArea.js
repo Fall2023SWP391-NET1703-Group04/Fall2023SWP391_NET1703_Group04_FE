@@ -6,38 +6,28 @@ import axios from 'axios'
 import authHeader from '../../AuthHeader/AuthHeader'
 import { Calendar } from 'primereact/calendar'
 import { Toast } from 'primereact/toast'
-import { InputTextarea } from 'primereact/inputtextarea';
 
-export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
-    const [newTraining, setNewTraining] = useState({
-        "animalId": animalId,
-        "dateEnd": "",
-        "dateStart": "",
-        "description": "",
-        "userId": null
+export default function ModalUpdateManageArea(areaId, areaManagement, isModalOpen, handleClose) {
+    const [updateAreaManage, setUpdateAreaManage] = useState({
+        areaId: areaId,
+        dateStart: null,
+        dateEnd: "",
+        userId: areaManagement.userId,
     })
-    const [trainerData, setTrainerData] = useState([])
-    const [selectedTrainer, setSelectedTrainer] = useState({});
+    const [staffData, setStaffData] = useState([])
+    const [selectedStaff, setSelectedStaff] = useState({});
 
-
+    console.log(updateAreaManage);
     useEffect(() => {
-        axios.get(`http://localhost:8080/zoo-server/api/v1/user/getAllTrainers`, { headers: authHeader() })
-            .then(response => setTrainerData(response.data.data))
+        axios.get(`http://localhost:8080/zoo-server/api/v1/user/getAllStaffs`, { headers: authHeader() })
+            .then(response => setStaffData(response.data.data))
             .catch(error => console.error(error));
     }, []);
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setNewTraining({
-            ...newTraining,
-            [name]: value
-        });
-    }
-
     const handleSelectedChange = (event) => {
-        setSelectedTrainer(event.value);
-        setNewTraining({
-            ...newTraining,
+        setSelectedStaff(event.value);
+        setUpdateAreaManage({
+            ...updateAreaManage,
             userId: event.target.value.userId
         });
     }
@@ -45,39 +35,44 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
     const handleUpdateInputChange = (event, name) => {
         if (name !== 'dateStart' && name !== 'dateEnd') {
             const { name, value } = event.target;
-            console.log(value);
 
-            setNewTraining({ ...newTraining, [name]: value });
+            setUpdateAreaManage({ ...updateAreaManage, [name]: value });
         } else {
             // Convert the selected date to a valid Date object or null
             const dateValue = event ? new Date(event) : null;
 
             // Use the formatted date value in the state
-            setNewTraining({ ...newTraining, [name]: dateValue });
+            setUpdateAreaManage({ ...updateAreaManage, [name]: dateValue });
         }
     };
 
-    const handleAddTraining = async () => {
+    const handleUpdateArea = async () => {
+        var requestData = {
+            areaId: areaId,
+            dateStart: updateAreaManage.dateStart ? updateAreaManage.dateStart : areaManagement.dateStart,
+            dateEnd: updateAreaManage.dateEnd ? updateAreaManage.dateEnd : areaManagement.dateEnd,
+            userId: updateAreaManage.userId ? updateAreaManage.userId : areaManagement.userId,
+        }
         await axios
-            .post("http://localhost:8080/zoo-server/api/v1/animal-management/createAnimalManagement", newTraining, { headers: authHeader() })
+            .put(`http://localhost:8080/zoo-server/api/v1/area-management/updateAreaManagement/${areaManagement.areaManagementId}`, requestData, { headers: authHeader() })
             .then((response) => {
                 show(response.data.message, 'green');
                 setTimeout(handleClose, 2000);
-
             })
             .catch((error) => {
-                if (newTraining.userId === null) {
+                if (updateAreaManage.userId === null) {
                     show("Please, choose trainer", 'red');
                 }
-                else if (newTraining.dateStart === "") {
+                else if (updateAreaManage.dateStart === "") {
                     show("Please, choose date start", 'red');
                 }
                 else {
                     show(error.response.data.message, 'red');
                 }
-                // show(error.response.data.message, 'red');
             });
     }
+
+
 
     const toast = useRef(null);
 
@@ -90,7 +85,7 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
     return (
         <div>
             <Dialog
-                header="Add Training"
+                header="Update Assign Staff"
                 visible={isModalOpen}
                 style={{ width: '800px' }}
                 modal
@@ -100,15 +95,15 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
                 <div class="formgrid grid">
 
                     <div className="field col-12">
-                        <label htmlFor="updateCatalogue">Trainer</label>
+                        <label htmlFor="updateCatalogue">Staff</label>
                         <br />
                         <Dropdown
-                            value={selectedTrainer}
+                            value={selectedStaff}
                             onChange={handleSelectedChange}
-                            options={trainerData}
+                            options={staffData}
                             name='userId'
                             optionLabel='fullName'
-                            placeholder="Select a Trainer"
+                            placeholder="Select a Staff"
                         />
                     </div>
                     <div className="field col-12">
@@ -118,7 +113,7 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
                             id="dateStart"
                             className='w-full'
                             name="dateStart"
-                            value={newTraining.dateStart}
+                            value={updateAreaManage.dateStart ? updateAreaManage.dateStart : areaManagement.dateStart}
                             onChange={(e) => handleUpdateInputChange(e.value, "dateStart")}
                         />
 
@@ -130,26 +125,15 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
                             id="dateEnd"
                             className='w-full'
                             name="dateEnd"
-                            value={newTraining.dateEnd}
+                            value={updateAreaManage.dateEnd ? updateAreaManage.dateEnd : areaManagement.dateEnd}
                             onChange={(e) => handleUpdateInputChange(e.value, "dateEnd")}
-                        />
-                    </div>
-                    <div className="field col-12 ">
-                        <label htmlFor="description">Description</label>
-                        <br />
-                        <InputTextarea
-                            id="description"
-                            className='w-full min-h-full'
-                            name="description"
-                            value={newTraining.description}
-                            onChange={handleInputChange}
                         />
                     </div>
                     <Button
                         className="p-button-primary mt-5 "
-                        label="Add training"
+                        label="Update Area manage"
                         icon="pi pi-pencil"
-                        onClick={handleAddTraining}
+                        onClick={handleUpdateArea}
                     />
                 </div>
             </Dialog >
