@@ -1,35 +1,22 @@
-import React, { useState, useEffect, useRef, state } from 'react';
-import { Button } from 'primereact/button';
-import { Card } from 'primereact/card';
-import { InputText } from 'primereact/inputtext';
-import { forEach, indexOf } from 'lodash';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
 import axios from 'axios';
-import authHeader from '../AuthHeader/AuthHeader';
-import { Toast } from 'primereact/toast';
-import { Link } from 'react-router-dom';
-import { Rating } from 'primereact/rating';
+import { Button } from 'primereact/button';
 import { DataView } from 'primereact/dataview';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { DataViewLayoutOptions } from 'primereact/dataview';
-import { DataScroller } from 'primereact/datascroller';
-import { InputNumber } from 'primereact/inputnumber';
-import { Dropdown } from 'primereact/dropdown';
 import { Dialog } from 'primereact/dialog';
+import { Dropdown } from 'primereact/dropdown';
+import { InputNumber } from 'primereact/inputnumber';
+import { Toast } from 'primereact/toast';
+import React, { useEffect, useRef, useState } from 'react';
+import authHeader from '../AuthHeader/AuthHeader';
+import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
 import './Cart.css';
 export default function Cart() {
-    const [value3, setValue3] = useState(1);
     const currentUserId = JSON.parse(localStorage.getItem("user"))?.data?.userId;
     const [listProduct, setListProduct] = useState([]);
     const [refresh, setRefresh] = useState(false); // Nếu cần refresh lại để lấy sản phẩm mới
     const [cartList, setCartList] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
-    const [totalPriceDiscout, setTotalPriceDiscout] = useState(0);
-    const totalProduct = 0;
-    const totalPriceOfProduct = 0;
-    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const [visible, setVisible] = useState(false);
     const toast = useRef(null);
     const toastBC = useRef(null);
@@ -132,14 +119,16 @@ export default function Cart() {
 
 
     const handleAddOder = () => {
-        const newOders = ({
+        const newOder = ({
             paymentMethod: selectedPayment.name,
             productList: listProduct,
             userId: currentUserId
         })
-
+        if (newOder.productList.length == 0) {
+            return show('No  product to buy', 'red');
+        }
         axios
-            .post("http://localhost:8080/zoo-server/api/v1/order/createNewBooking", newOders, { headers: authHeader() })
+            .post("http://localhost:8080/zoo-server/api/v1/order/createNewBooking", newOder, { headers: authHeader() })
             .then((response) => {
                 if (response.data.status === true) {
                     localStorage.removeItem(`CART_${currentUserId}`);
