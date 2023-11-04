@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 export default function AnimalListUser() {
   const navigate = useNavigate();
   const [animals, setAnimals] = useState([]);
+  const defaultImage = "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg";
   useEffect(() => {
     const fetchAnimals = async () => {
       try {
@@ -28,6 +29,7 @@ export default function AnimalListUser() {
 
     fetchAnimals();
   }, []);
+
   console.log(animals);
   return (
     <>
@@ -35,18 +37,23 @@ export default function AnimalListUser() {
         <div class="row" style={{ marginTop: "2rem", marginBottom: "2rem" }}>
           {animals.map((animal) => (
             <div class="col">
-              <div class="card" style={{ width: "18rem" }}>
+              <div class="card" style={{ width: "18rem", height: "28rem" }}>
                 <img
                   class="card-img-top"
-                  src={`http://localhost:3000/img/${animal.image}`}
+                  style={{ height: "300px" }}
+                  src={`http://localhost:3000/img/${animal.image}` || defaultImage}
+
                   alt="Card"
+                  onError={(e) => {
+                    e.target.src = defaultImage;
+                  }}
                 />
                 <div class="card-body">
                   <h5 class="card-title">{animal.animalName}</h5>
                   <p class="card-text">{animal.catalogueDTO.catalogueName}</p>
 
                   <Link to={`animals-detail-user/${animal.animalId}`}>
-                    <button>Go detail</button>
+                    <Button>Go detail</Button>
                   </Link>
                 </div>
               </div>
