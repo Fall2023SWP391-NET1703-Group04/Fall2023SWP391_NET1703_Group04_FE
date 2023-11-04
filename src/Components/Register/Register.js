@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from "react";
-// import { useForm, Controller } from "react-hook-form";
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
-import { Dropdown } from "primereact/dropdown";
-import { Calendar } from "primereact/calendar";
-import { Password } from "primereact/password";
-import { Checkbox } from "primereact/checkbox";
-import { Dialog } from "primereact/dialog";
-import { Divider } from "primereact/divider";
-import { classNames } from "primereact/utils";
+import React, { useEffect, useRef, useState } from "react";
 import "./Register.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import authHeader from "../AuthHeader/AuthHeader";
+import { Toast } from "primereact/toast";
 const Register = () => {
+  const toast = useRef(null);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -36,7 +29,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/zoo-server/api/v1/auth/signIn",
+        "http://localhost:8080/zoo-server/api/v1/auth/registerNewUser",
         formData,
         {
           headers: authHeader(),
@@ -45,12 +38,14 @@ const Register = () => {
       console.log(response);
 
       if (response.status === 200) {
+        show(response.data.message, 'green');
         // Registration successful
         const token = response.data.token;
         // You can save the JWT token in localStorage or a secure storage mechanism
         localStorage.setItem("jwtToken", token);
 
         setAlertMessage("Registration successful!");
+        navigate("/login");
       } else {
         setAlertMessage("Registration failed.");
       }
@@ -58,9 +53,18 @@ const Register = () => {
       setAlertMessage("Registration failed.");
     }
   };
+
+  const show = (message, color) => {
+    toast.current.show({
+      summary: 'Notifications', detail: message, life: 3000,
+      style: { backgroundColor: color, color: 'white', border: '2px solid yellow' },
+    });
+  };
+
   return (
     <>
       <div className="wrapper-register">
+        <Toast ref={toast} />
         <div className="box">
           <span className="borderLine"></span>
           <form onSubmit={handleSubmit}>
