@@ -69,6 +69,8 @@ const Login = () => {
           switch (response.data.role) {
             case "ROLE_ADMIN":
               navigate("/admins");
+              // navigate("/product");
+              // navigate("/user-history");
               break;
             case "ROLE_CUSTOMER":
               navigate("/");

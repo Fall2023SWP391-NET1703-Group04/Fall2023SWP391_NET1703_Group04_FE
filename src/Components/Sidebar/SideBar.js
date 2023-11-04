@@ -38,6 +38,9 @@ const SideBar = () => {
           <MenuItem component={<Link to="manage-roles" />}>
             Manage Roles
           </MenuItem>
+          <MenuItem component={<Link to="product" />}>
+            Product
+          </MenuItem>
         </SubMenu>
       </Menu>
     </Sidebar>

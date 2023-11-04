@@ -21,11 +21,10 @@ export default function ManageProduct() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCustomer3, setSelectedCustomer3] = useState(null);
   const [refresh, setRefresh] = useState(false);
+
   // Rest of your code
 
-  const handleEditProduct = (product) => {
-    setEditingProduct(product);
-  };
+
 
 
   const toast = useRef(null);
@@ -39,7 +38,10 @@ export default function ManageProduct() {
 
 
 
-  const [productLists, setProductLists] = useState([]);
+  const [productLists, setProductLists] = useState([
+
+
+  ]);
   const apiUrl = `http://localhost:8080/zoo-server/api/v1/product/getAllProduct`;
   useEffect(() => {
 
@@ -202,7 +204,7 @@ export default function ManageProduct() {
   const visibleProductLists = productLists.slice(first, first + rows);
 
   return (
-    <div className="datatable-editing-demo">
+    <div className="datatable-editing-demo w-full">
       <Toast ref={toast} />
       <div className="card container ">
         <h5>List Product</h5>

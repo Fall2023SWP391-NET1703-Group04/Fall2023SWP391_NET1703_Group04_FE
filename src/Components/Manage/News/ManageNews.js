@@ -14,20 +14,18 @@ import axios from 'axios';
 export default function ManageNews() {
 
     const [news4, SetNews4] = useState(null);
-
+    const [isEditing, setIsEditing] = useState(false);
     const [editingNews, setEditingNews] = useState([]);
     const [first, setFirst] = useState(0); // Số thứ tự hàng đầu tiên của trang
     const [rows, setRows] = useState(10); // Số hàng trên mỗi trangxxxxxxxxxxxxxx
     const [newNews, setNewNews] = useState([])
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+
     const [newsId, setNewsId] = useState(null);
 
-    const setIsModalOpen1 = (isOpen, newsId) => {
-        setIsModalOpen(isOpen);
-        setNewsId(newsId);
 
-    };
+    const [isModalOpen1, setIsModalOpen1] = useState(false);
     const [selectedCustomer3, setSelectedCustomer3] = useState(null);
     const [refresh, setRefresh] = useState(false);
     // Rest of your code
@@ -59,7 +57,7 @@ export default function ManageNews() {
                 console.error('Lỗi khi gửi yêu cầu:', error);
             });
 
-    }, []);
+    }, [!refresh]);
 
 
 
@@ -76,9 +74,11 @@ export default function ManageNews() {
                     icon="pi pi-pencil"
                     className="p-button-pencil"
                     onClick={() => {
-                        setIsModalOpen1(true, rowData.newsId);
-                        getNewsByID();
-                        //getNewsByID(rowData.newsId);
+                        setIsModalOpen1(true);
+                        setIsEditing(true);
+                        getNewsByID(rowData.newsId);
+                        setNewsId(rowData.newsId);
+
                     }}
                 />
 
@@ -90,7 +90,32 @@ export default function ManageNews() {
 
 
 
+    const renderHeader = (filtersKey) => {
+        const filters = filtersMap[`${filtersKey}`].value;
+        const value = filters['global'] ? filters['global'].value : '';
 
+        return (
+            <div class="grid">
+                <div class="col-4">
+                    <span className="p-input-icon-left">
+                        <i className="pi pi-search" />
+                        <InputText type="search" value={value || ''} onChange={(e) => onGlobalFilterChange(e, filtersKey)} placeholder="News Title Search" />
+                    </span>
+                </div>
+                <div className='col-6'></div>
+                <div class="col">
+                    <span>
+                        <Button
+                            label="Add News"
+                            icon="pi pi-pencil"
+                            onClick={() => setIsModalOpen(true)}
+                            className="p-button-primary p-button-sm"
+                        />
+                    </span>
+                </div>
+            </div>
+        );
+    }
 
     const deleteNews = (news) => {
         axios
@@ -130,20 +155,21 @@ export default function ManageNews() {
     }
 
     const getNewsByID = (id) => {
-        console.log('check news id', newsId);
+
         axios.get(`http://localhost:8080/zoo-server/api/v1/new/getNewsById${id}`, { headers: authHeader() })
             .then((response) => {
-                setEditingNews(response.data); // Make sure response.data.data is an array
+                setEditingNews(response.data.data); // Make sure response.data.data is an array
             })
             .catch((error) => {
                 console.error('Error fetching user profile:', error);
             });
     };
+    console.log('check get news by id', editingNews)
+    console.log('check news id', newsId);
 
-    console.log('check news by id', setEditingNews);
-    const handleUpdateNews = (id) => {
+    const handleUpdateNews = (newsId) => {
         axios
-            .put(`http://localhost:8080/zoo-server/api/v1/new/updateNew/${id}`, editingNews, { headers: authHeader() })
+            .put(`http://localhost:8080/zoo-server/api/v1/new/updateNew/${newsId}`, editingNews, { headers: authHeader() })
             .then((response) => {
                 setEditingNews(false);
                 alert('Product updated successfully');
@@ -158,6 +184,13 @@ export default function ManageNews() {
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setNewNews({
+            ...newNews,
+            [name]: value
+        });
+    }
+    const handleInputChangeUpdate = (event) => {
+        const { name, value } = event.target;
+        setEditingNews({
             ...newNews,
             [name]: value
         });
@@ -188,38 +221,7 @@ export default function ManageNews() {
     };
 
 
-    const renderHeader = (filtersKey) => {
-        const filters = filtersMap[`${filtersKey}`].value;
-        const value = filters['global'] ? filters['global'].value : '';
 
-        return (
-            <div class="grid">
-                <div class="col-4">
-                    <span className="p-input-icon-left">
-                        <i className="pi pi-search" />
-                        <InputText type="search" value={value || ''} onChange={(e) => onGlobalFilterChange(e, filtersKey)} placeholder="News Title Search" />
-                    </span>
-                </div>
-                <div className='col-6'></div>
-                <div class="col">
-                    <span>
-                        <Button
-                            label="Add News"
-                            icon="pi pi-pencil"
-                            onClick={() => setIsModalOpen(true)}
-                            className="p-button-primary p-button-sm"
-                        />
-                    </span>
-                </div>
-            </div>
-        );
-    }
-    const handleUpdateInputChange = (event, name) => {
-        const dateValue = event ? new Date(event) : null;
-        const formattedDate = dateValue ? dateValue.toLocaleDateString('en-CA') : '';
-        setNewNews({ ...newNews, [name]: formattedDate });
-
-    };
 
     const onGlobalFilterChange = (event, filtersKey) => {
         const value = event.target.value;
@@ -237,10 +239,53 @@ export default function ManageNews() {
         return JSON.parse(sessionStorage.getItem('dt-state-demo-custom'));
     }
 
+    const displayWithDefault = (field, defaultValue = 'Not Provided') => {
+        return isEditing ? (
+            <input
+                className="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                name={field}
+                type="text"
+                placeholder={`Enter your ${field}`}
+                value={editingNews[field] || ''} x
+                onChange={handleInputChangeUpdate}
 
+            />
+        ) : (
+            <span>{editingNews[field] || defaultValue}</span>
+        );
+    };
+    const displayWithDefaultDate = (field, defaultValue = 'Not Provided') => {
+        return isEditing ? (
+            <Calendar
+                id="dateCreated"
+                name="dateCreated"
+                value={editingNews.dateCreated}
+                onChange={handleInputChangeUpdate}
+                className='w-full'
+            />
+        ) : (
+            <span>{editingNews[field] || defaultValue}</span>
+        );
+    };
+
+    const displayWithDefaultDescription = (field, defaultValue = 'Not Provided') => {
+        return isEditing ? (
+            <InputTextarea
+                className="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                id={field}
+                name={field}
+                type="text"
+                placeholder={`Enter ${field}`}
+                value={editingNews[field] || ''}
+                onChange={handleInputChangeUpdate}
+            />
+        ) : (
+            <span>{editingNews[field] || defaultValue}</span>
+        );
+    };
 
     return (
-        <div className="datatable-editing-demo">
+        <div className="datatable-editing-demo  w-full">
             <Toast ref={toast} />
             <div className="card container">
                 <h5>List News</h5>
@@ -273,6 +318,7 @@ export default function ManageNews() {
                                 name="title"
                                 value={newNews.title}
                                 onChange={handleInputChange}
+                                className='w-full'
                             />
                         </div>
 
@@ -280,10 +326,11 @@ export default function ManageNews() {
                             <label htmlFor="updateContent">Content</label>
                             <br />
                             <InputTextarea
-                                id="description"
-                                name="description"
+                                id="content"
+                                name="content"
                                 value={newNews.content}
                                 onChange={handleInputChange}
+                                className='w-full'
                             />
                         </div>
                         <div className="field col-12 ">
@@ -294,31 +341,36 @@ export default function ManageNews() {
                                 name="newsType"
                                 value={newNews.newsType}
                                 onChange={handleInputChange}
+                                className='w-full'
                             />
                         </div>
 
                         <div className="field col-12">
-                            <label htmlFor="dateStart">Date Created News (yyyy-MM-dd)</label>
+                            <label htmlFor="dateStart">Date Created News </label>
                             <br />
                             <Calendar
                                 id="dateCreated"
                                 name="dateCreated"
-                                value={newNews.dateCreated} // Chuyển dữ liệu về kiểu Date
-                                onChange={(e) => handleUpdateInputChange(e, "dateCreated")}
+                                value={newNews.dateCreated}
+                                onChange={handleInputChange}
+                                className='w-full'
                             />
+                            <br />
+
                         </div>
                         <Button
                             label="Add News"
                             icon="pi pi-pencil"
                             onClick={handleAddNews}
                             className="p-button-primary"
+
                         />
                     </div>
                 </Dialog >
                 {/* update news */}
                 <Dialog
                     header="Update News"
-                    visible={isModalOpen}
+                    visible={isModalOpen1}
                     style={{ width: '800px' }}
                     modal
                     onHide={() => setIsModalOpen1(false)}
@@ -327,50 +379,33 @@ export default function ManageNews() {
                         <div className="field col-12 ">
                             <label htmlFor="title">Title News</label>
                             <br />
-                            <InputText
-                                id="title"
-                                name="title"
-                                value={editingNews.title}
-                                onChange={handleInputChange}
-                            />
+                            {displayWithDefault('title')}
                         </div>
 
                         <div className="field col-12">
                             <label htmlFor="updateContent">Content</label>
                             <br />
-                            <InputTextarea
-                                id="description"
-                                name="description"
-                                value={editingNews.content}
-                                onChange={handleInputChange}
-                            />
+                            {displayWithDefaultDescription('content')}
                         </div>
+
                         <div className="field col-12 ">
                             <label htmlFor="newsType">News Types</label>
                             <br />
-                            <InputText
-                                id="newsType"
-                                name="newsType"
-                                value={editingNews.newsType}
-                                onChange={handleInputChange}
-                            />
+
+                            {displayWithDefault('newsType')}
                         </div>
 
                         <div className="field col-12">
                             <label htmlFor="dateStart">Date Created News (yyyy-MM-dd)</label>
                             <br />
-                            <Calendar
-                                id="dateCreated"
-                                name="dateCreated"
-                                value={editingNews.dateCreated} // Chuyển dữ liệu về kiểu Date
-                                onChange={(e) => handleUpdateInputChange(e, "dateCreated")}
-                            />
+                            {displayWithDefaultDate('dateStart')}
+
                         </div>
                         <Button
                             label="Update News"
                             icon="pi pi-pencil"
                             className="p-button-success"
-                            onClick={() => handleUpdateNews()}
+                            onClick={() => handleUpdateNews(newsId)}
                         />
                     </div>
                 </Dialog >
