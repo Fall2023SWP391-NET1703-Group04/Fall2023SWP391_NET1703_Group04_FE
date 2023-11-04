@@ -287,7 +287,7 @@ export default function ManageNews() {
     return (
         <div className="datatable-editing-demo  w-full">
             <Toast ref={toast} />
-            <div className="card p-fluid">
+            <div className="card container">
                 <h5>List News</h5>
                 <DataTable value={newsLists} paginator rows={10} header={header3} filters={filters} onFilter={(e) => setFilters(e.filters)}
                     selection={selectedCustomer3} onSelectionChange={e => setSelectedCustomer3(e.value)} selectionMode="single" dataKey="id" responsiveLayout="scroll"

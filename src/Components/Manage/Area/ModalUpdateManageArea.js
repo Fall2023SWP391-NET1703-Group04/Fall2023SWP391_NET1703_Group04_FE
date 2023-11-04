@@ -1,77 +1,80 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
 import { Dropdown } from 'primereact/dropdown'
 import axios from 'axios'
 import authHeader from '../../AuthHeader/AuthHeader'
 import { Calendar } from 'primereact/calendar'
-import { InputTextarea } from 'primereact/inputtextarea';
-import { useRef } from 'react'
 import { Toast } from 'primereact/toast'
 
-export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
-    const [cageData, setCageData] = useState([])
-    const [refresh, setRefresh] = useState(false);
-    const [selectedCage, setSelectedCage] = useState({});
-    const toast = useRef(null);
-    const [newCage, setNewCage] = useState({
-        "animalCageDetailName": "",
-        "animalCageId": 0,
-        "animalId": animalId,
-        "dateEnd": "",
-        "dateStart": ""
+export default function ModalUpdateManageArea(areaId, areaManagement, isModalOpen, handleClose) {
+    const [updateAreaManage, setUpdateAreaManage] = useState({
+        areaId: areaId,
+        dateStart: null,
+        dateEnd: "",
+        userId: areaManagement.userId,
     })
+    const [staffData, setStaffData] = useState([])
+    const [selectedStaff, setSelectedStaff] = useState({});
 
+    console.log(updateAreaManage);
     useEffect(() => {
-        axios.get(`http://localhost:8080/zoo-server/api/v1/animalCage/getAllAnimalCage`, { headers: authHeader() })
-            .then(response => setCageData(response.data.data))
+        axios.get(`http://localhost:8080/zoo-server/api/v1/user/getAllStaffs`, { headers: authHeader() })
+            .then(response => setStaffData(response.data.data))
             .catch(error => console.error(error));
-    }, [refresh]);
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setNewCage({
-            ...newCage,
-            [name]: value
-        });
-    }
+    }, []);
 
     const handleSelectedChange = (event) => {
-        setSelectedCage(event.value);
-        setNewCage({
-            ...newCage,
-            animalCageId: event.target.value.animalCageId
+        setSelectedStaff(event.value);
+        setUpdateAreaManage({
+            ...updateAreaManage,
+            userId: event.target.value.userId
         });
     }
 
     const handleUpdateInputChange = (event, name) => {
         if (name !== 'dateStart' && name !== 'dateEnd') {
             const { name, value } = event.target;
-            console.log(value);
 
-            setNewCage({ ...newCage, [name]: value });
+            setUpdateAreaManage({ ...updateAreaManage, [name]: value });
         } else {
             // Convert the selected date to a valid Date object or null
             const dateValue = event ? new Date(event) : null;
 
             // Use the formatted date value in the state
-            setNewCage({ ...newCage, [name]: dateValue });
+            setUpdateAreaManage({ ...updateAreaManage, [name]: dateValue });
         }
     };
 
-    const handleAddCage = () => {
-        axios
-            .post("http://localhost:8080/zoo-server/api/v1/AnimalCageDetail/createNewAnimalCageDetail", newCage, { headers: authHeader() })
+    const handleUpdateArea = async () => {
+        var requestData = {
+            areaId: areaId,
+            dateStart: updateAreaManage.dateStart ? updateAreaManage.dateStart : areaManagement.dateStart,
+            dateEnd: updateAreaManage.dateEnd ? updateAreaManage.dateEnd : areaManagement.dateEnd,
+            userId: updateAreaManage.userId ? updateAreaManage.userId : areaManagement.userId,
+        }
+        await axios
+            .put(`http://localhost:8080/zoo-server/api/v1/area-management/updateAreaManagement/${areaManagement.areaManagementId}`, requestData, { headers: authHeader() })
             .then((response) => {
                 show(response.data.message, 'green');
                 setTimeout(handleClose, 2000);
             })
             .catch((error) => {
-                show(error.response.data.message, 'red');
-                console.error(error);
+                if (updateAreaManage.userId === null) {
+                    show("Please, choose trainer", 'red');
+                }
+                else if (updateAreaManage.dateStart === "") {
+                    show("Please, choose date start", 'red');
+                }
+                else {
+                    show(error.response.data.message, 'red');
+                }
             });
     }
 
+
+
+    const toast = useRef(null);
 
     const show = (message, color) => {
         toast.current.show({
@@ -82,24 +85,25 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
     return (
         <div>
             <Dialog
-                header="Add Cage For Animal"
+                header="Update Assign Staff"
                 visible={isModalOpen}
                 style={{ width: '800px' }}
                 modal
                 onHide={() => handleClose()}
             >
                 <Toast ref={toast} />
-                <div className="formgrid grid">
+                <div class="formgrid grid">
+
                     <div className="field col-12">
-                        <label htmlFor="animalDietManagementName">Cage</label>
+                        <label htmlFor="updateCatalogue">Staff</label>
                         <br />
                         <Dropdown
-                            value={selectedCage}
+                            value={selectedStaff}
                             onChange={handleSelectedChange}
-                            options={cageData}
-                            name='dietId'
-                            optionLabel='animalCageName'
-                            placeholder="Select a Cage"
+                            options={staffData}
+                            name='userId'
+                            optionLabel='fullName'
+                            placeholder="Select a Staff"
                         />
                     </div>
                     <div className="field col-12">
@@ -109,7 +113,7 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
                             id="dateStart"
                             className='w-full'
                             name="dateStart"
-                            value={newCage.dateStart}
+                            value={updateAreaManage.dateStart ? updateAreaManage.dateStart : areaManagement.dateStart}
                             onChange={(e) => handleUpdateInputChange(e.value, "dateStart")}
                         />
 
@@ -121,26 +125,15 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
                             id="dateEnd"
                             className='w-full'
                             name="dateEnd"
-                            value={newCage.dateEnd}
+                            value={updateAreaManage.dateEnd ? updateAreaManage.dateEnd : areaManagement.dateEnd}
                             onChange={(e) => handleUpdateInputChange(e.value, "dateEnd")}
                         />
                     </div>
-                    <div className="field col-12 ">
-                        <label htmlFor="animalCageDetailName">Description</label>
-                        <br />
-                        <InputTextarea
-                            id="animalCageDetailName"
-                            className='w-full min-h-full'
-                            name="animalCageDetailName"
-                            value={newCage.description}
-                            onChange={handleInputChange}
-                        />
-                    </div>
                     <Button
-                        label="Add Cage"
-                        icon="pi pi-pencil"
-                        onClick={handleAddCage}
                         className="p-button-primary mt-5 "
+                        label="Update Area manage"
+                        icon="pi pi-pencil"
+                        onClick={handleUpdateArea}
                     />
                 </div>
             </Dialog >

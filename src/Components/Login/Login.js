@@ -63,9 +63,8 @@ const Login = () => {
     axios
       .post("http://localhost:8080/zoo-server/api/v1/auth/signIn", dataLogin)
       .then((response) => {
-
         setTimeout(() => {
-          show(response.data.message, 'green');
+          show(response.data.message, "green");
           localStorage.setItem("user", JSON.stringify(response));
           switch (response.data.role) {
             case "ROLE_ADMIN":
@@ -74,23 +73,21 @@ const Login = () => {
               // navigate("/user-history");
               break;
             case "ROLE_CUSTOMER":
-              navigate("/home");
+              navigate("/");
               break;
             case "ROLE_TRAINER":
               navigate("/trainer");
               break;
             default:
               navigate("/home");
-
           }
         }, 1000);
       })
       .catch((error) => {
-        show(error.response.data.message, 'red');
+        show(error.response.data.message, "red");
         // Handle any errors that occur during the POST request
       });
   };
-
 
   const isFormFieldValid = (meta) => !!(meta.touched && meta.error);
   const getFormErrorMessage = (meta) => {
@@ -113,8 +110,14 @@ const Login = () => {
   const toast = useRef(null);
   const show = (message, color) => {
     toast.current.show({
-      summary: 'Notifications', detail: message, life: 3000,
-      style: { backgroundColor: color, color: 'white', border: '2px solid yellow' },
+      summary: "Notifications",
+      detail: message,
+      life: 3000,
+      style: {
+        backgroundColor: color,
+        color: "white",
+        border: "2px solid yellow",
+      },
     });
   };
 
@@ -171,17 +174,11 @@ const Login = () => {
                               <i className="pi pi-envelope" />
                               <InputText
                                 id="email"
-
                                 name="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                               />
-                              <label
-                                htmlFor="email"
-
-                              >
-                                Email*
-                              </label>
+                              <label htmlFor="email">Email*</label>
                             </span>
                             {getFormErrorMessage(meta)}
                           </div>

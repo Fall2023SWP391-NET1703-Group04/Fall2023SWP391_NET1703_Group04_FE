@@ -2,27 +2,22 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
 import { Dropdown } from 'primereact/dropdown'
-import { InputSwitch } from 'primereact/inputswitch'
-import { InputText } from 'primereact/inputtext'
 import axios from 'axios'
 import authHeader from '../../AuthHeader/AuthHeader'
 import { Calendar } from 'primereact/calendar'
 import { Toast } from 'primereact/toast'
 import { InputTextarea } from 'primereact/inputtextarea';
-import { isBuffer } from 'lodash'
 
 export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
     const [newTraining, setNewTraining] = useState({
         "animalId": animalId,
-        "animalTrainingName": "",
         "dateEnd": "",
         "dateStart": "",
         "description": "",
-        "userId": 0
+        "userId": null
     })
     const [trainerData, setTrainerData] = useState([])
-    const [message, setMessage] = useState('')
-    const [SelectedTrainer, setSelectedTrainer] = useState({});
+    const [selectedTrainer, setSelectedTrainer] = useState({});
 
 
     useEffect(() => {
@@ -71,7 +66,16 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
 
             })
             .catch((error) => {
-                show(error.response.data.message, 'red');
+                if (newTraining.userId === null) {
+                    show("Please, choose trainer", 'red');
+                }
+                else if (newTraining.dateStart === "") {
+                    show("Please, choose date start", 'red');
+                }
+                else {
+                    show(error.response.data.message, 'red');
+                }
+                // show(error.response.data.message, 'red');
             });
     }
 
@@ -94,22 +98,12 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
             >
                 <Toast ref={toast} />
                 <div class="formgrid grid">
-                    <div className="field col-12 ">
-                        <label htmlFor="animalTrainingName">Training Name</label>
-                        <br />
-                        <InputText
-                            id="animalTrainingName"
-                            name="animalTrainingName"
-                            value={newTraining.animalTrainingName}
-                            onChange={handleInputChange}
-                        />
-                    </div>
 
                     <div className="field col-12">
                         <label htmlFor="updateCatalogue">Trainer</label>
                         <br />
                         <Dropdown
-                            value={SelectedTrainer}
+                            value={selectedTrainer}
                             onChange={handleSelectedChange}
                             options={trainerData}
                             name='userId'
@@ -145,7 +139,7 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
                         <br />
                         <InputTextarea
                             id="description"
-                            className='w-full -min-h-full'
+                            className='w-full min-h-full'
                             name="description"
                             value={newTraining.description}
                             onChange={handleInputChange}

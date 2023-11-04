@@ -5,8 +5,9 @@ import { Button } from "primereact/button";
 const SideBar = () => {
   const navigate = useNavigate();
   return (
-    <Sidebar >
-      <Menu style={{ position: "fixed", width: "250px" }}>
+    <Sidebar className="w-full">
+      <Menu >
+
         <MenuItem component={<Link to="/admins" />}> DashBoard</MenuItem>
         <SubMenu label="Task">
           <MenuItem component={<Link to="manage-users" />}>
@@ -24,31 +25,25 @@ const SideBar = () => {
           <MenuItem component={<Link to="manage-areas" />}>
             Manage Areas
           </MenuItem>
+          <MenuItem component={<Link to="manage-cages" />}>
+            Manage Cages
+          </MenuItem>
           <MenuItem component={<Link to="manage-catalogues" />}>
             Manage Catalogues
           </MenuItem>
           <MenuItem component={<Link to="manage-diets" />}>
             Manage Diet
           </MenuItem>
-          <MenuItem component={<Link to="manage-news" />}>
-            Manage News
+          <MenuItem component={<Link to="manage-news" />}>Manage News</MenuItem>
+          <MenuItem component={<Link to="manage-roles" />}>
+            Manage Roles
           </MenuItem>
           <MenuItem component={<Link to="product" />}>
             Product
           </MenuItem>
         </SubMenu>
-        <MenuItem>
-          <Button
-            onClick={() => {
-              localStorage.removeItem("user");
-              navigate("/");
-            }}
-          >
-            Logout
-          </Button>
-        </MenuItem>
       </Menu>
-    </Sidebar >
+    </Sidebar>
   );
 };
 
