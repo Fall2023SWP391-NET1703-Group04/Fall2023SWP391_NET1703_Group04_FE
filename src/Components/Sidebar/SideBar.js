@@ -33,6 +33,9 @@ const SideBar = () => {
           <MenuItem component={<Link to="manage-news" />}>
             Manage News
           </MenuItem>
+          <MenuItem component={<Link to="product" />}>
+            Product
+          </MenuItem>
         </SubMenu>
         <MenuItem>
           <Button

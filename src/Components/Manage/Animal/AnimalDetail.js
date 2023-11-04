@@ -123,7 +123,7 @@ export default function AnimalDetail() {
 
     const handleUpdateAnimal = async () => {
         await axios
-            .put(`http://localhost:8080/zoo-server/api/v1/animal/updateAnimal/${updateAnimal.animalId}`, updateAnimal, { headers: authHeader() })
+            .put(`http://localhost:8080/zoo-server/api/v1/animal/updateAnimal/${animalId}`, updateAnimal, { headers: authHeader() })
             .then((response) => {
                 setRefresh(true)
                 setIsUpdateModalOpen(false);
