@@ -10,7 +10,7 @@ import "./Footer";
 const Footer = () => {
   return (
     <Container>
-      <Row>
+      <Row className="mt-4">
         <Col sm={8}>
           <h5>About Zoo Management System</h5>
           <p>

@@ -29,9 +29,9 @@ import DashBoard from "./Components/DashBoard/DashBoard";
 import Animal from "./Components/AnimalUser/Animal";
 import History from "./Components/User/History";
 import AnimalDetailUser from "./Components/AnimalUser/AnimalDetailUser";
-import ProductUser from "./Components/ProductUser/ProductUser";
+
 import UpdateProfileUser from "./Components/UpdateProfileUser/UpdateProfileUser";
-import Product from "./Components/User/Product";
+
 import ProductDetail from "./Components/Manage/Product/ProductDetail";
 import ManageNews from "./Components/Manage/News/ManageNews";
 import ProductDetailUser from "./Components/User/ProductDetailUser";
@@ -41,6 +41,7 @@ import AnimalListUser from "./Components/AnimalUser/AnimalListUser";
 import ManageRole from "./Components/Manage/Role/ManageRole";
 import ManageCage from "./Components/Manage/Cage/ManageCage";
 import CageDetail from "./Components/Manage/Area/CageDetail";
+import Product from "./Components/User/Product";
 function App() {
   return (
     <div className="App">
@@ -57,7 +58,7 @@ function App() {
               element={<AnimalDetailUser />}
             />
           </Route>
-          <Route path="/products" element={<Products />} />
+
           <Route path="/update-profile-user" element={<UpdateProfileUser />} />
           <Route path="/trainer" element={<Trainer />} />
           <Route path="product" element={<Product />} />
