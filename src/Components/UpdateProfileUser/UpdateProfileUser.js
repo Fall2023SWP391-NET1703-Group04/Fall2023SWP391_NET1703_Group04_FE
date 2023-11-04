@@ -260,7 +260,8 @@ const ProFileUser = (props) => {
       <Header />
       <div className="container-xl px-4 mt-4">
         <hr className="mt-0 mb-4" />
-        <div className="grid">
+        <Link to="/user-history">Go to Order History</Link>
+        <div className="grid mt-3">
           <div className="col-6">
             <div className="w-full">
               <div className="card ">

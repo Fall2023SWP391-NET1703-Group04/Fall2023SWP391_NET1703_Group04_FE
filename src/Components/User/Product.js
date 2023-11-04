@@ -238,10 +238,10 @@ export default function Product() {
         return (
             <div className="grid grid-nogutter">
                 <div class="col-4">
-                    <span className="p-input-icon-left">
+                    {/* <span className="p-input-icon-left">
                         <i className="pi pi-search" />
                         <InputText type="search" value={value || ''} onChange={(e) => onGlobalFilterChange(e, filtersKey)} placeholder="Product Name Search" />
-                    </span>
+                    </span> */}
                 </div>
                 <div className="col-4" style={{ textAlign: 'left' }}>
                     <Dropdown options={sortOptions} value={sortKey} optionLabel="label" placeholder="Sort By Price" onChange={onSortChange} />

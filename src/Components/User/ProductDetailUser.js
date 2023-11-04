@@ -13,7 +13,8 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { InputNumber } from 'primereact/inputnumber';
 import { isBuffer } from 'lodash';
 import { Link, useNavigate } from "react-router-dom";
-
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 export default function ProductDetailUser() {
     const { productId } = useParams();
     const [editedProduct, setEditedProduct] = useState({});
@@ -173,183 +174,188 @@ export default function ProductDetailUser() {
 
 
     return (
-        <div className="container-xl px-4 mt-4">
-            <Toast ref={toastBC} position="bottom-center" />
-            <div className="grid">
-                <div>
-                    <Link to="/cart">Go to Cart</Link>
-                </div>
-                <div className="col-12">
+        <>  <Header />
+            <div className="container-xl px-4 mt-4">
 
-                    <div className="row">
-                        <div className="card col-5">
-                            <div className="card-header">Product Image</div>
-                            <div className="card-body text-center">
-                                <div>
-                                    <img alt="Card" style={{ width: '200px', height: '200px' }} src={`http://localhost:3000/img/${editedProduct.image}`} />
+                <Toast ref={toastBC} position="bottom-center" />
+                <div className="grid">
+                    <div className='mt-3'>
+                        <Link to="/cart">Go to Cart</Link>
+                    </div>
+                    <div className="col-12">
+
+                        <div className="row">
+                            <div className="card col-5">
+                                <div className="card-header">Product Image</div>
+                                <div className="card-body text-center">
+                                    <div>
+                                        <img alt="Card" style={{ width: '200px', height: '200px' }} src={`http://localhost:3000/img/${editedProduct.image}`} />
+                                    </div>
+                                </div>
+
+                                <div className="small font-italic text-muted mb-4">
+                                    {editedProduct.productName ? `${editedProduct.productName} ` : 'Name Not Provided'}
                                 </div>
                             </div>
+                            <div className="col-1"></div>
+                            <div className="card col-6">
+                                <div className="card-header">Information Product</div>
+                                <div className="card-body">
+                                    <div className="field flex align-items-stretch flex-wrap card-container">
+                                        <label className="mb-1 mr-2 font-bold" htmlFor="inputProductName">
+                                            Product name:
+                                        </label>
+                                        <span>{editedProduct.productName || 'Not Provided'}</span>
+                                    </div>
+                                    <div className="field flex">
+                                        <label className="mb-1 mr-2 font-bold" htmlFor="inputDescription">
+                                            Description:
+                                        </label>
+                                        <span>{editedProduct.description || 'Not Provided'}</span>
+                                    </div>
+                                    <div className="field flex">
+                                        <label className="mb-1 mr-2 font-bold" htmlFor="inputPrice">
+                                            Price:
+                                        </label>
+                                        <span>{editedProduct.price || 'Not Provided'}$</span>
+                                    </div>
 
-                            <div className="small font-italic text-muted mb-4">
-                                {editedProduct.productName ? `${editedProduct.productName} ` : 'Name Not Provided'}
-                            </div>
-                        </div>
-                        <div className="col-1"></div>
-                        <div className="card col-6">
-                            <div className="card-header">Information Product</div>
-                            <div className="card-body">
-                                <div className="field flex align-items-stretch flex-wrap card-container">
-                                    <label className="mb-1 mr-2 font-bold" htmlFor="inputProductName">
-                                        Product name:
-                                    </label>
-                                    <span>{editedProduct.productName || 'Not Provided'}</span>
+                                    <div className="field flex">
+                                        <label className="mb-1 mr-2 font-bold" htmlFor="inputEmailRating">
+                                            Rating:
+                                        </label>
+                                        {/* {editedProduct.rating || '0'} */}
+                                        <Rating value={editedProduct.rating} readOnly cancel={false}></Rating>
+                                    </div>
                                 </div>
-                                <div className="field flex">
-                                    <label className="mb-1 mr-2 font-bold" htmlFor="inputDescription">
-                                        Description:
-                                    </label>
-                                    <span>{editedProduct.description || 'Not Provided'}</span>
-                                </div>
-                                <div className="field flex">
-                                    <label className="mb-1 mr-2 font-bold" htmlFor="inputPrice">
-                                        Price:
-                                    </label>
-                                    <span>{editedProduct.price || 'Not Provided'}$</span>
-                                </div>
+                                <div className="flex align-items-center justify-content-between">
+                                    <InputNumber inputId="horizontal-buttons" value={value3} onValueChange={(e) => setValue3(e.value)} mode="decimal"
+                                        buttonLayout="horizontal" showButtons min={1} max={editedProduct.quantity}
+                                        decrementButtonClassName="p-button-danger" incrementButtonClassName="p-button-success"
+                                        incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                                        onChange={handleInputQuantityChange}
+                                    />
 
-                                <div className="field flex">
-                                    <label className="mb-1 mr-2 font-bold" htmlFor="inputEmailRating">
-                                        Rating:
-                                    </label>
-                                    {/* {editedProduct.rating || '0'} */}
-                                    <Rating value={editedProduct.rating} readOnly cancel={false}></Rating>
-                                </div>
-                            </div>
-                            <div className="flex align-items-center justify-content-between">
-                                <InputNumber inputId="horizontal-buttons" value={value3} onValueChange={(e) => setValue3(e.value)} mode="decimal"
-                                    buttonLayout="horizontal" showButtons min={1} max={editedProduct.quantity}
-                                    decrementButtonClassName="p-button-danger" incrementButtonClassName="p-button-success"
-                                    incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
-                                    onChange={handleInputQuantityChange}
-                                />
+                                    <Button
+                                        icon="pi pi-shopping-cart"
+                                        label="Add to Cart"
+                                        onClick={() => {
+                                            if (JSON.parse(localStorage.getItem("user"))) {
+                                                const currentUserId = JSON.parse(localStorage.getItem("user")).data.userId;
+                                                let cart = localStorage.getItem(`CART_${currentUserId}`) ? JSON.parse(localStorage.getItem(`CART_${currentUserId}`)) : [];
 
-                                <Button
-                                    icon="pi pi-shopping-cart"
-                                    label="Add to Cart"
-                                    onClick={() => {
-                                        if (JSON.parse(localStorage.getItem("user"))) {
-                                            const currentUserId = JSON.parse(localStorage.getItem("user")).data.userId;
-                                            let cart = localStorage.getItem(`CART_${currentUserId}`) ? JSON.parse(localStorage.getItem(`CART_${currentUserId}`)) : [];
+                                                const existingItemIndex = cart.findIndex(item => item.productId === productId);
 
-                                            const existingItemIndex = cart.findIndex(item => item.productId === productId);
+                                                if (existingItemIndex !== -1) {
+                                                    const newQuantity = cart[existingItemIndex].quantity + value3;
 
-                                            if (existingItemIndex !== -1) {
-                                                const newQuantity = cart[existingItemIndex].quantity + value3;
-
-                                                if (newQuantity <= editedProduct.quantity) {
-                                                    cart[existingItemIndex].quantity = newQuantity;
-                                                    show('Added to cart successfully!', 'green'); // Hiển thị thông báo thành công
+                                                    if (newQuantity <= editedProduct.quantity) {
+                                                        cart[existingItemIndex].quantity = newQuantity;
+                                                        show('Added to cart successfully!', 'green'); // Hiển thị thông báo thành công
+                                                    } else {
+                                                        show('Quantity exceeds the maximum limit!', 'red'); // Hiển thị thông báo vượt quá giới hạn
+                                                    }
                                                 } else {
-                                                    show('Quantity exceeds the maximum limit!', 'red'); // Hiển thị thông báo vượt quá giới hạn
+                                                    if (value3 <= editedProduct.quantity) {
+                                                        cart.push({
+                                                            productId: productId,
+                                                            productName: editedProduct.productName,
+                                                            image: editedProduct.image,
+                                                            price: editedProduct.price,
+                                                            maxQuantity: editedProduct.quantity,
+                                                            quantity: value3
+                                                        });
+                                                        show('Added to cart successfully!', 'green');
+                                                    } else {
+                                                        show('Quantity exceeds the maximum limit!', 'red');
+                                                    }
                                                 }
+
+                                                localStorage.setItem(`CART_${currentUserId}`, JSON.stringify(cart));
+                                                setRefresh(true);
                                             } else {
-                                                if (value3 <= editedProduct.quantity) {
-                                                    cart.push({
-                                                        productId: productId,
-                                                        productName: editedProduct.productName,
-                                                        image: editedProduct.image,
-                                                        price: editedProduct.price,
-                                                        maxQuantity: editedProduct.quantity,
-                                                        quantity: value3
-                                                    });
-                                                    show('Added to cart successfully!', 'green');
-                                                } else {
-                                                    show('Quantity exceeds the maximum limit!', 'red');
-                                                }
+                                                showConfirm();
                                             }
 
-                                            localStorage.setItem(`CART_${currentUserId}`, JSON.stringify(cart));
-                                            setRefresh(true);
-                                        } else {
-                                            showConfirm();
-                                        }
+
+                                        }}
+                                    ></Button>
 
 
-                                    }}
-                                ></Button>
-
-
+                                </div>
                             </div>
+
                         </div>
-
                     </div>
-                </div>
-                <div className="col-12">
-                    <div className="card-body">
-                        <div className="datatable-editing-demo">
-                            <Toast ref={toast} />
-                            <div className="card p-fluid">
-                                <div className="card-header">Feedback Product</div>
-                                <DataTable
-                                    value={feedback}
-                                    header={header3}
-                                    paginator
-                                    rows={5}
-                                >
-                                    <Column field="fullName" header="Customer Name" style={{ width: '30%' }}></Column>
-                                    <Column field="content" header="Content" style={{ width: '50%' }}></Column>
-                                    <Column field="rating" header="Rating" style={{ width: '20%' }} body={(rowData) => (
-                                        <Rating value={rowData.rating} readOnly cancel={false}></Rating>
-                                    )}></Column>
+                    <div className="col-12">
+                        <div className="card-body">
+                            <div className="datatable-editing-demo">
+                                <Toast ref={toast} />
+                                <div className="card p-fluid">
+                                    <div className="card-header">Feedback Product</div>
+                                    <DataTable
+                                        value={feedback}
+                                        header={header3}
+                                        paginator
+                                        rows={5}
+                                    >
+                                        <Column field="fullName" header="Customer Name" style={{ width: '30%' }}></Column>
+                                        <Column field="content" header="Content" style={{ width: '50%' }}></Column>
+                                        <Column field="rating" header="Rating" style={{ width: '20%' }} body={(rowData) => (
+                                            <Rating value={rowData.rating} readOnly cancel={false}></Rating>
+                                        )}></Column>
 
-                                </DataTable>
-                                {/* create feedback */}
-                                <Dialog
-                                    header="Feedback Product"
-                                    visible={isModalOpen}
-                                    style={{ width: '800px' }}
-                                    modal
-                                    onHide={() => setIsModalOpen(false)}
-                                >
-                                    <div class="formgrid grid">
-
+                                    </DataTable>
+                                    {/* create feedback */}
+                                    <Dialog
+                                        header="Feedback Product"
+                                        visible={isModalOpen}
+                                        style={{ width: '800px' }}
+                                        modal
+                                        onHide={() => setIsModalOpen(false)}
+                                    >
+                                        <div class="formgrid grid">
 
 
-                                        <div className="field col-12  ">
-                                            <label htmlFor="content">Content</label>
-                                            <br />
-                                            <InputTextarea
-                                                id="content"
-                                                name="content"
-                                                value={NewFeedback.content}
-                                                onChange={handleInputChange}
-                                                className='w-full  '
 
+                                            <div className="field col-12  ">
+                                                <label htmlFor="content">Content</label>
+                                                <br />
+                                                <InputTextarea
+                                                    id="content"
+                                                    name="content"
+                                                    value={NewFeedback.content}
+                                                    onChange={handleInputChange}
+                                                    className='w-full  '
+
+                                                />
+                                            </div>
+                                            <div className="field col-12 ">
+                                                <label htmlFor="productId">Rating Product</label>
+                                                <br />
+                                                <Rating
+                                                    id="rating"
+                                                    name="rating"
+                                                    value={NewFeedback.rating}
+                                                    onChange={(handleInputChange)} />
+                                            </div>
+
+                                            <Button
+                                                label="Upload Feedback Product"
+                                                icon="pi pi-pencil"
+                                                onClick={handlecreateFeedBack}
+                                                className="p-button-primary  flex align-items-center justify-content-center "
                                             />
                                         </div>
-                                        <div className="field col-12 ">
-                                            <label htmlFor="productId">Rating Product</label>
-                                            <br />
-                                            <Rating
-                                                id="rating"
-                                                name="rating"
-                                                value={NewFeedback.rating}
-                                                onChange={(handleInputChange)} />
-                                        </div>
-
-                                        <Button
-                                            label="Upload Feedback Product"
-                                            icon="pi pi-pencil"
-                                            onClick={handlecreateFeedBack}
-                                            className="p-button-primary  flex align-items-center justify-content-center "
-                                        />
-                                    </div>
-                                </Dialog >
+                                    </Dialog >
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <Footer />
+
+        </>
     );
 }

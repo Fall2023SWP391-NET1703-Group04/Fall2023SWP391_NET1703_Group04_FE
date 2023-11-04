@@ -1,15 +1,16 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { Rating } from 'primereact/rating';
+import axios from 'axios';
 import { Button } from 'primereact/button';
+import { Rating } from 'primereact/rating';
 import { Toast } from 'primereact/toast';
 import authHeader from '../AuthHeader/AuthHeader';
-import axios from 'axios';
 import './History.css';
-
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 export default function History() {
     const [products, setProducts] = useState([]);
     const [expandedRows, setExpandedRows] = useState(null);
@@ -122,6 +123,7 @@ export default function History() {
     );
     return (
         <div className="datatable-rowexpansion-demo">
+            <Header />
             <Toast ref={toast} />
 
             <div className="card">
@@ -135,6 +137,7 @@ export default function History() {
                     <Column field="status" header="Status" sortable />
                 </DataTable>
             </div>
+            <Footer />
         </div>
     );
 }
