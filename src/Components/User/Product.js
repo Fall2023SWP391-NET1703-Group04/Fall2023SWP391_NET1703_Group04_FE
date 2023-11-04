@@ -11,6 +11,8 @@ import authHeader from '../AuthHeader/AuthHeader';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 export default function Product() {
 
     const [products, setProducts] = useState(null);
@@ -72,7 +74,7 @@ export default function Product() {
     }
     const [visible, setVisible] = useState(false);
     const handleConfirmation = () => {
-        navigate("/");
+        navigate("/login    ");
         setVisible(true);
     };
 
@@ -151,8 +153,8 @@ export default function Product() {
             localStorage.setItem(`CART_${currentUserId}`, JSON.stringify(cart));
             setRefresh(true);
         } else {
-            // navigate("/login");
-            navigate("/");
+            showConfirm();
+
         }
 
     }
@@ -275,16 +277,20 @@ export default function Product() {
 
     const header = renderHeader('filters');
     return (
-        <div className="dataview-demo container">
-            <Toast ref={toast} />
-            <Toast ref={toastBC} position="bottom-center" />
-            <div className="card">
-                <DataView value={products} layout={layout} header={header3} filters={filters} onFilter={(e) => setFilters(e.filters)}
-                    itemTemplate={itemTemplate} paginator rows={9}
-                    sortOrder={sortOrder} sortField={sortField}
-                    selection={selectedCustomer3} onSelectionChange={e => setSelectedCustomer3(e.value)} selectionMode="single" dataKey="id" responsiveLayout="scroll"
-                    stateStorage="custom" customSaveState={onCustomSaveState} customRestoreState={onCustomRestoreState} emptyMessage="No Product name found." />
+        <>
+            <Header />
+            <div className="dataview-demo container mt-5">
+                <Toast ref={toast} />
+                <Toast ref={toastBC} position="bottom-center" />
+                <div className="card">
+                    <DataView value={products} layout={layout} header={header3} filters={filters} onFilter={(e) => setFilters(e.filters)}
+                        itemTemplate={itemTemplate} paginator rows={9}
+                        sortOrder={sortOrder} sortField={sortField}
+                        selection={selectedCustomer3} onSelectionChange={e => setSelectedCustomer3(e.value)} selectionMode="single" dataKey="id" responsiveLayout="scroll"
+                        stateStorage="custom" customSaveState={onCustomSaveState} customRestoreState={onCustomRestoreState} emptyMessage="No Product name found." />
+                </div>
             </div>
-        </div>
+            <Footer />
+        </>
     );
 }
