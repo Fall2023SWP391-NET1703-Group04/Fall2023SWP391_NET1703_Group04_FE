@@ -183,7 +183,7 @@ export default function Trainer() {
     {
       key: '1',
       label: 'Events',
-      data: 'events', // Thay đổi giá trị data để đại diện cho trang Events
+      data: 'events',
       icon: 'pi pi-fw pi-calendar',
       children: [
         {
