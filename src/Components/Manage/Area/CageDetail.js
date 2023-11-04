@@ -33,20 +33,24 @@ export default function CageDetail() {
             })
             .catch((error) => console.error(error));
 
-        axios.get(`http://localhost:8080/zoo-server/api/v1/area-management/getAreaManagementResponse/${areaId}`, { headers: authHeader() })
-            .then(response => {
-                setAreaManageData(response.data.data)
-            })
-            .catch(error => {
-                show(error.response.data.message, 'red');
-                console.error(error);
-            });
+        // axios.get(`http://localhost:8080/zoo-server/api/v1/area-management/getAreaManagementResponse/${areaId}`, { headers: authHeader() })
+        //     .then(response => {
+        //         setAreaManageData(response.data.data)
+        //     })
+        //     .catch(error => {
+        //         show(error.response.data.message, 'red');
+        //         console.error(error);
+        //     });
 
         //get area history data
         axios
             .get(`http://localhost:8080/zoo-server/api/v1/area-management/getAllByArea/${areaId}`, { headers: authHeader() })
             .then((response) => {
                 setHistoryManage(response.data.data);
+                var areaManagement = response.data.data.find(data => {
+                    return data.managing === true
+                });
+                setAreaManageData(areaManagement);
             })
             .catch((error) => console.error(error));
 
@@ -97,17 +101,19 @@ export default function CageDetail() {
     return (
         <div className='grid ' style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
             <Toast ref={toast} />
-            {ModalUpdateManageArea(areaId, areaManageData, isModalOpen, handleClose)}
-            {ModalAddManageArea(areaId, isAddModalOpen, handleClose)}
+
+            {
+                ModalUpdateManageArea(Number(areaId), areaManageData ? areaManageData : {}, isModalOpen, handleClose)}
+            {ModalAddManageArea(Number(areaId), isAddModalOpen, handleClose)}
             <div className="card col-4">
-                {areaManageData.managing ?
-                    <Fieldset legend={areaManageData.areaName}>
-                        <Card title="Manager" subTitle={areaManageData.fullName} footer={footer} header={header}>
+                {areaManageData?.managing ?
+                    <Fieldset legend={areaManageData?.areaName}>
+                        <Card title="Manager" subTitle={areaManageData?.fullName} footer={footer} header={header}>
                             <p className="m-0">
-                                Start date: {areaManageData.dateStart}
+                                Start date: {areaManageData?.dateStart}
                             </p>
                             <p className="m-0">
-                                End date: {areaManageData.dateEnd}
+                                End date: {areaManageData?.dateEnd}
                             </p>
 
                         </Card>
