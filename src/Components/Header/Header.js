@@ -12,6 +12,7 @@ function Header() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
+  console.log(user);
   return (
     <>
       <div style={{ backgroundColor: "#fab1a0" }}>
@@ -49,7 +50,7 @@ function Header() {
                   <NavDropdown
                     title={
                       <Image
-                        src="img/user-img.png"
+                        src={"http://localhost:3000/img/user-img.png"}
                         style={{ width: "2rem", height: "2rem" }}
                         thumbnail
                       />

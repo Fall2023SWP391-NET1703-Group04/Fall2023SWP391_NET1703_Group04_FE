@@ -124,8 +124,8 @@ const Register = () => {
               <i></i>
             </div>
             <div className="links">
-              <Link to="/home">Home</Link>
-              <a href="/">Sign in</a>
+              <Link to="/">Home</Link>
+              <a href="/login">Sign in</a>
             </div>
             <input type="submit" value="Sing Up" />
           </form>

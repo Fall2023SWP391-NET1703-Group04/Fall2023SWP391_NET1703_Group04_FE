@@ -128,7 +128,7 @@ export default function CageDetail() {
             </div>
             <div class="col-7">
                 <div className='card'>
-                    <Fieldset legend={areaData.areaName} >
+                    <Fieldset legend={areaData.areaName} toggleable collapsed>
                         <DataTable value={cageData} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
                             paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                             currentPageReportTemplate="{first} to {last} of {totalRecords}" stripedRows>
@@ -136,7 +136,7 @@ export default function CageDetail() {
                             <Column field="description" header="Description" />
                         </DataTable>
                     </Fieldset>
-                    <Fieldset legend="Manage History" >
+                    <Fieldset legend="Manage History" toggleable collapsed>
                         <DataTable value={historyManage} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
                             paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                             currentPageReportTemplate="{first} to {last} of {totalRecords}" stripedRows>

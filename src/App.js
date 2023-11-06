@@ -40,7 +40,7 @@ import NewUser from "./Components/NewsUser/NewsUser";
 import AnimalListUser from "./Components/AnimalUser/AnimalListUser";
 import ManageRole from "./Components/Manage/Role/ManageRole";
 import ManageCage from "./Components/Manage/Cage/ManageCage";
-import CageDetail from "./Components/Manage/Area/CageDetail";
+import CageDetail from "./Components/Manage/Area/AreaDetail";
 import Product from "./Components/User/Product";
 function App() {
   return (

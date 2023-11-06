@@ -194,7 +194,7 @@ const DashBoard = () => {
                             <Card title="Total User" className="h-20rem w-12rem">
                                 <h2 className="m-0">{userList.length}</h2>
                                 <img
-                                    src="http://localhost:3000/img/666201.png"
+                                    src="http://localhost:3000/img/user-img.png"
                                     alt="img"
                                     style={{ width: "70px", height: "100px" }}
                                     className="mt-5"
