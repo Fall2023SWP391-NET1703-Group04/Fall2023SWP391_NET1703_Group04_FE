@@ -90,6 +90,7 @@ export default function CageDetail() {
             <Button label="Assign Staff" onClick={() => { setIsAddModalOpen(true) }} icon="pi pi-pencil" />
         </>
     );
+    const paginatorRight = <Button type="button" onClick={() => setIsAddModalOpen(true)} icon="pi pi-plus" text label='Add new manager ' />;
 
 
     const handleClose = () => {
@@ -102,8 +103,7 @@ export default function CageDetail() {
         <div className='grid ' style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
             <Toast ref={toast} />
 
-            {
-                ModalUpdateManageArea(Number(areaId), areaManageData ? areaManageData : {}, isModalOpen, handleClose)}
+            {ModalUpdateManageArea(Number(areaId), areaManageData ? areaManageData : {}, isModalOpen, handleClose)}
             {ModalAddManageArea(Number(areaId), isAddModalOpen, handleClose)}
             <div className="card col-4">
                 {areaManageData?.managing ?
@@ -139,12 +139,12 @@ export default function CageDetail() {
                     <Fieldset legend="Manage History" toggleable collapsed>
                         <DataTable value={historyManage} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
                             paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                            currentPageReportTemplate="{first} to {last} of {totalRecords}" stripedRows>
+                            currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorRight={paginatorRight} stripedRows>
                             <Column field="areaName" header="Area Name" />
                             <Column field="fullName" header="Staff" />
                             <Column field="dateStart" header="Start Date" />
                             <Column field="dateEnd" header="End Date" />
-                            <Column field="managing" header="Work or not" />
+                            <Column field="managing" header="Managing" />
                         </DataTable>
                     </Fieldset>
                 </div>
