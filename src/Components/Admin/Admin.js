@@ -4,17 +4,14 @@ import Header from "../Header/Header";
 import { Button } from "primereact/button";
 import DashBoard from "../DashBoard/DashBoard";
 
-
 export default function Admin() {
   const navigate = useNavigate();
 
   return (
     <>
-
       <div className=" grid">
         <div className="col-2">
           <div className="col-5">
-
             <SideBar />
           </div>
           <div className="col-5">
@@ -33,7 +30,6 @@ export default function Admin() {
           <Outlet />
         </div>
       </div>
-
     </>
   );
-};
+}
