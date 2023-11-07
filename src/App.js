@@ -7,6 +7,7 @@ import {
   Routes,
   Switch,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.css";
@@ -42,7 +43,20 @@ import ManageRole from "./Components/Manage/Role/ManageRole";
 import ManageCage from "./Components/Manage/Cage/ManageCage";
 import CageDetail from "./Components/Manage/Area/AreaDetail";
 import Product from "./Components/User/Product";
+
 function App() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const role = user?.data?.role;
+  console.log(role);
+  const currentURL = window.location.href;
+  if (
+    role === "ROLE_CUSTOMER" &&
+    currentURL === "http://localhost:3000/admins"
+  ) {
+    alert("You don't admin");
+    window.location.assign("http://localhost:3000/");
+    return;
+  }
   return (
     <div className="App">
       <BrowserRouter>
@@ -65,7 +79,10 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/user-history" element={<History />} />
 
-          <Route path="/products-detail/:productId" element={<ProductDetailUser />} />
+          <Route
+            path="/products-detail/:productId"
+            element={<ProductDetailUser />}
+          />
           <Route path="/training" element={<Training />} />
           <Route path="/admins" element={<Admin />}>
             <Route index element={<DashBoard />} />
@@ -86,8 +103,6 @@ function App() {
               path="product-details/:productId"
               element={<ProductDetail />}
             />
-            {/* <Route path="products" element={<Products />} /> */}
-
           </Route>
         </Routes>
       </BrowserRouter>
