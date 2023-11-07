@@ -67,7 +67,8 @@ const ManageDiet = () => {
                     label="Add"
                     icon="pi pi-plus"
                     className="p-button-primary absolute"
-                    onClick={() => setDisplayDialog(true)}
+                    // onClick={() => setDisplayDialog(true)}
+                    onClick={() => window.location.href = `add-diet`}
                 />
                 <Button className='ml-auto' type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
                 <span className="p-input-icon-left">
@@ -217,9 +218,9 @@ const ManageDiet = () => {
                                 <Button
                                     icon="pi pi-eye"
                                     className="p-button-rounded p-button-info"
-                                    onClick={() => {
-                                        openUpdateModal(rowData);
-                                    }}
+                                // onClick={() => {
+                                //     openUpdateModal(rowData);
+                                // }}
                                 />
 
                             </div>
