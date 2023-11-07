@@ -189,9 +189,9 @@ export default function AnimalDetail() {
                 </Fieldset>
             </div>
             <div className='col-1'></div>
-            <div className="col-6  ml-3">
+            <div className="col-7">
                 <div className='card'>
-                    <Fieldset legend={training} toggleable collapsed>
+                    <Fieldset legend={training} toggleable >
                         {AnimalTrainingHistory(animalId)}
                     </Fieldset>
                 </div>
