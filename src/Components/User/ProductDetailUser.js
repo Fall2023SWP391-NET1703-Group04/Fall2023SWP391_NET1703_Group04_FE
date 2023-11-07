@@ -236,7 +236,7 @@ export default function ProductDetailUser() {
                                         onChange={handleInputQuantityChange}
                                     />
 
-                                    <Button
+                                    {/* <Button
                                         icon="pi pi-shopping-cart"
                                         label="Add to Cart"
                                         onClick={() => {
@@ -279,7 +279,55 @@ export default function ProductDetailUser() {
 
 
                                         }}
+                                    ></Button> */}
+                                    <Button
+                                        icon="pi pi-shopping-cart"
+                                        label="Add to Cart"
+                                        onClick={() => {
+                                            if (JSON.parse(localStorage.getItem("user"))) {
+                                                const currentUserId = JSON.parse(localStorage.getItem("user")).data.userId;
+                                                let cart = localStorage.getItem(`CART_${currentUserId}`) ? JSON.parse(localStorage.getItem(`CART_${currentUserId}`)) : [];
+
+                                                if (value3 === null || value3 < 1) {
+                                                    show('Please enter a valid quantity!', 'red'); // Hiển thị thông báo khi số lượng không hợp lệ
+                                                    return;
+                                                }
+
+                                                const existingItemIndex = cart.findIndex(item => item.productId === productId);
+
+                                                if (existingItemIndex !== -1) {
+                                                    const newQuantity = cart[existingItemIndex].quantity + value3;
+
+                                                    if (newQuantity <= editedProduct.quantity) {
+                                                        cart[existingItemIndex].quantity = newQuantity;
+                                                        show('Added to cart successfully!', 'green'); // Hiển thị thông báo thành công
+                                                    } else {
+                                                        show('Quantity exceeds the maximum limit!', 'red'); // Hiển thị thông báo vượt quá giới hạn
+                                                    }
+                                                } else {
+                                                    if (value3 <= editedProduct.quantity) {
+                                                        cart.push({
+                                                            productId: productId,
+                                                            productName: editedProduct.productName,
+                                                            image: editedProduct.image,
+                                                            price: editedProduct.price,
+                                                            maxQuantity: editedProduct.quantity,
+                                                            quantity: value3
+                                                        });
+                                                        show('Added to cart successfully!', 'green');
+                                                    } else {
+                                                        show('Quantity exceeds the maximum limit!', 'red');
+                                                    }
+                                                }
+
+                                                localStorage.setItem(`CART_${currentUserId}`, JSON.stringify(cart));
+                                                setRefresh(true);
+                                            } else {
+                                                showConfirm();
+                                            }
+                                        }}
                                     ></Button>
+
 
 
                                 </div>
