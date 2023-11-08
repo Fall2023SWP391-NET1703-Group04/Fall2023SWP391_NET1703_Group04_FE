@@ -13,7 +13,14 @@ import { Toast } from 'primereact/toast';
 import { InputText } from "primereact/inputtext";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { useNavigate } from "react-router-dom";
 export default function ProductDetail() {
+    const navigate = useNavigate();
+
+    if (!JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN') {
+        navigate("/notfound");
+    }
+
 
     const { productId } = useParams();
     const [editedProduct, setEditedProduct] = useState({});

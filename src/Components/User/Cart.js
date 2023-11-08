@@ -9,8 +9,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import authHeader from '../AuthHeader/AuthHeader';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
+import { Link, useNavigate } from "react-router-dom";
 import './Cart.css';
+
 export default function Cart() {
+
+
     const currentUserId = JSON.parse(localStorage.getItem("user"))?.data?.userId;
     const [listProduct, setListProduct] = useState([]);
     const [refresh, setRefresh] = useState(false); // Nếu cần refresh lại để lấy sản phẩm mới
@@ -19,7 +23,52 @@ export default function Cart() {
 
     const [visible, setVisible] = useState(false);
     const toast = useRef(null);
+    const navigate = useNavigate();
     const toastBC = useRef(null);
+
+    const handleConfirmation = () => {
+        navigate("/login");
+        setVisible(true);
+    };
+
+    const handleCancel = () => {
+        setVisible(false);
+        toastBC.current.clear();
+    };
+
+    const showConfirm = () => {
+        toastBC.current.show({
+            severity: 'warn',
+            sticky: true,
+            content: (
+                <div className="flex flex-column" style={{ flex: '1' }}>
+                    <div className="text-center">
+                        <i className="pi pi-exclamation-triangle" style={{ fontSize: '3rem' }}></i>
+                        <h4>You are not logged in</h4>
+                        <p>You need to log in to continue. Would you like to log in?</p>
+                    </div>
+                    <div className="grid p-fluid">
+                        <div className="col-6">
+                            <Button
+                                type="button"
+                                label="Yes"
+                                className="p-button-success"
+                                onClick={handleConfirmation} // removed ()
+                            />
+                        </div>
+                        <div className="col-6">
+                            <Button
+                                type="button"
+                                label="No"
+                                className="p-button-secondary"
+                                onClick={handleCancel}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )
+        });
+    };
 
     const clear = () => {
         toastBC.current.clear();
@@ -55,16 +104,55 @@ export default function Cart() {
     }, [refresh]); // Ensure to include the relevant dependencies for this useEffect
 
     const handleInputQuantityChange = (value, product) => {
-        const updatedCart = cartList.map(item => {
-            if (item.productId === product.productId) {
-                return { ...item, quantity: value };
+
+        if (JSON.parse(localStorage.getItem("user"))) {
+
+            const currentCart = JSON.parse(localStorage.getItem(`CART_${currentUserId}`)) || [];
+
+
+            const productIndex = currentCart.findIndex(item => item.productId === product.productId);
+
+            if (productIndex !== -1) {
+
+                currentCart[productIndex].quantity = value;
             }
-            return item;
-        });
-        setCartList(updatedCart);
-        localStorage.setItem(`CART_${currentUserId}`, JSON.stringify(updatedCart));
-        setRefresh(!refresh);
+
+            // Update the cart
+            localStorage.setItem(`CART_${currentUserId}`, JSON.stringify(currentCart));
+            setCartList(currentCart);
+            setRefresh(!refresh);
+        }
+        else {
+            showConfirm();
+        }
+
     }
+    // const handleInputQuantityChange = (value, product) => {
+    //     if (value === null || value < 1) {
+    //         if (value === null) {
+    //             show("Please enter a valid quantity.", "red");
+    //         } else {
+    //             show("Please enter a quantity greater than 0.", "red");
+    //         }
+    //         // Don't update the cart if the quantity is invalid
+    //     } else {
+    //         // Fetch the current cart from localStorage or state
+    //         const currentCart = JSON.parse(localStorage.getItem(`CART_${currentUserId}`)) || [];
+
+    //         // Find the index of the product in the cart
+    //         const productIndex = currentCart.findIndex(item => item.productId === product.productId);
+
+    //         if (productIndex !== -1) {
+    //             // Update the quantity for the existing product in the cart
+    //             currentCart[productIndex].quantity = value;
+    //         }
+
+    //         // Update the cart
+    //         localStorage.setItem(`CART_${currentUserId}`, JSON.stringify(currentCart));
+    //         setCartList(currentCart);
+    //         setRefresh(!refresh);
+    //     }
+    // }
 
 
 
@@ -118,32 +206,73 @@ export default function Cart() {
     ];
 
 
-    const handleAddOder = () => {
-        const newOder = ({
-            paymentMethod: selectedPayment.name,
-            productList: listProduct,
-            userId: currentUserId
-        })
-        if (newOder.productList.length == 0) {
-            return show('No  product to buy', 'red');
-        }
-        axios
-            .post("http://localhost:8080/zoo-server/api/v1/order/createNewBooking", newOder, { headers: authHeader() })
-            .then((response) => {
-                if (response.data.status === true) {
-                    localStorage.removeItem(`CART_${currentUserId}`);
-                    setRefresh(true);
-                    show('buy success', 'green');
-                }
+    // const handleAddOder = () => {
+    //     const productQuantity = listProduct.reduce((total, product) => total + product.quantity, 0);
+    //     if (productQuantity === 0) {
+    //         return show('No product to buy', 'red');
+    //     }
 
-            })
-            .catch((error) => {
-                show('build failed', 'red');
-                console.error(error);
+    //     const newOder = {
+    //         paymentMethod: selectedPayment.name,
+    //         productList: listProduct,
+    //         userId: currentUserId
+    //     };
+
+    //     axios
+    //         .post("http://localhost:8080/zoo-server/api/v1/order/createNewBooking", newOder, { headers: authHeader() })
+    //         .then((response) => {
+    //             if (response.data.status === true) {
+    //                 localStorage.removeItem(`CART_${currentUserId}`);
+    //                 setRefresh(true);
+    //                 show('Buy success', 'green');
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             show('Build failed', 'red');
+    //             console.error(error);
+    //         });
+    // }
+    const handleAddOrder = () => {
+        if (JSON.parse(localStorage.getItem("user"))) {
+            const hasInvalidQuantity = cartList.some(product => {
+                return product.quantity === null || product.quantity < 1 || (product.maxQuantity && product.quantity > product.maxQuantity);
             });
 
+            if (hasInvalidQuantity) {
+                return show('Please enter a valid quantity for all products', 'red');
+            } else {
+                const productQuantity = cartList.reduce((total, product) => total + product.quantity, 0);
 
+                if (productQuantity === 0) {
+                    return show('The quantity must be greater than or equal to 1', 'red');
+                }
+
+                const newOrder = {
+                    paymentMethod: selectedPayment.name,
+                    productList: cartList,
+                    userId: currentUserId
+                };
+
+                axios
+                    .post("http://localhost:8080/zoo-server/api/v1/order/createNewBooking", newOrder, { headers: authHeader() })
+                    .then((response) => {
+                        if (response.data.status === true) {
+                            localStorage.removeItem(`CART_${currentUserId}`);
+                            setRefresh(true);
+                            show('Buy success', 'green');
+                        }
+                    })
+                    .catch((error) => {
+                        show('Purchase failed', 'red');
+                        console.error(error);
+                    });
+            }
+        }
+        else {
+            showConfirm();
+        }
     }
+
 
 
     const itemTemplate = (data) => {
@@ -169,13 +298,12 @@ export default function Cart() {
                             inputId="horizontal-buttons"
                             value={data.quantity}
                             onValueChange={(e) => {
-                                const value = e.value || 1;
-                                handleInputQuantityChange(value, data);
+                                handleInputQuantityChange(e.value, data);
                             }}
                             min={1}
-                            max={data.maxQuantity}
                             showButtons
                             buttonLayout="vertical"
+                            input={false} // Loại bỏ ô input
                             style={{ width: '4rem' }}
                             decrementButtonClassName="p-button-secondary"
                             incrementButtonClassName="p-button-secondary"
@@ -268,7 +396,7 @@ export default function Cart() {
                                 </div>
                                 <Button label="buy" icon="pi pi-shopping-cart"
                                     iconPos="right"
-                                    onClick={handleAddOder}
+                                    onClick={handleAddOrder}
 
                                 />
                             </div>

@@ -17,6 +17,11 @@ import Header from "../Header/Header";
 export default function Trainer() {
   const navigate = useNavigate();
 
+  if (!JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_TRAINER') {
+    navigate("/notfound");
+  }
+
+
   const [editedUser, setEditedUser] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [security, setSecurity] = useState({});
@@ -125,7 +130,7 @@ export default function Trainer() {
   const displayWithDefault = (field, defaultValue = 'Not Provided') => {
     return isEditing ? (
       <input
-        className="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-8"
+        className="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
         name={field}
         type="text"
         placeholder={`Enter your ${field}`}
@@ -159,7 +164,7 @@ export default function Trainer() {
     if (isEditing) {
       return (
         <InputMask
-          className="form-control w-8"
+          className="form-control w-full"
           name={field}
           mask="(999) 999-9999"
           value={(phoneNumber !== null && typeof phoneNumber === 'string') ? phoneNumber : ''}
@@ -295,7 +300,7 @@ export default function Trainer() {
             </div>
           </div>
           <div className="col-6">
-            <div className="card mb-4">
+            {/* <div className="card mb-4">
               <div className="card-header">Account Details</div>
               <div className="card-body">
                 <form>
@@ -324,7 +329,7 @@ export default function Trainer() {
                     </label>
                     {isEditing ? (
                       <select
-                        className="form-control w-8"
+                        className="form-control w-full"
                         name="gender"
                         value={editedUser.gender || ''}
                         onChange={handleInputChange}
@@ -375,7 +380,115 @@ export default function Trainer() {
                   )}
                 </form>
               </div>
+            </div> */}
+            <div className="card mb-4">
+              <div className="card-header">Account Details</div>
+              <div className="card-body">
+                <form>
+                  <div className="field flex" style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputFirstName">
+                        First name:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }}>
+                      {displayWithDefault('firstName')}
+                    </div>
+                  </div>
+
+                  <div className="field flex" style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputLastName">
+                        Last name:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }}>
+                      {displayWithDefault('lastName')}
+                    </div>
+                  </div>
+
+                  <div className="field flex" style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputLocation">
+                        Location:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }}>
+                      {displayWithDefault('address')}
+                    </div>
+                  </div>
+
+                  <div className="field flex" style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputGender">
+                        Gender:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }}>
+                      {isEditing ? (
+                        <select
+                          className="form-control w-full"
+                          name="gender"
+                          value={editedUser.gender || ''}
+                          onChange={handleInputChange}
+                        >
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
+                      ) : (
+                        <span>{editedUser.gender || 'Not Provided'}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="field flex" style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputPhone">
+                        Phone number:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }}>
+                      {displayWithDefaultPhone('phoneNumber')}
+                    </div>
+                  </div>
+
+                  <div className="field flex" style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputEmailAddress">
+                        Email:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }}>
+                      {security.email || 'Not Provided'}
+                    </div>
+                  </div>
+
+                  {isEditing ? (
+                    <button
+                      className="btn btn-primary"
+                      type="button"
+                      onClick={handleSaveClick}
+                    >
+                      Save changes
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary"
+                      type="button"
+                      onClick={handleEditClick}
+                    >
+                      Edit Profile
+                    </button>
+                  )}
+                </form>
+              </div>
             </div>
+
+
+
+
+
+
 
 
 

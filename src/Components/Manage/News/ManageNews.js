@@ -11,7 +11,14 @@ import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { Calendar } from 'primereact/calendar';
 import authHeader from '../../AuthHeader/AuthHeader';
 import axios from 'axios';
+import { Link, useNavigate } from "react-router-dom";
 export default function ManageNews() {
+    const navigate = useNavigate();
+
+    if (!JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN') {
+        navigate("/notfound");
+    }
+
 
     const [news4, SetNews4] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -133,11 +140,12 @@ export default function ManageNews() {
     };
     const show = (message, color) => {
         toast.current.show({
-            summary: 'Notifications', detail: message, life: 3000,
+            summary: 'Notifications', detail: message, life: 2000,
             style: { backgroundColor: color, color: 'white', border: '2px solid yellow' },
         });
     };
-    console.log('check add', newNews);
+
+
     const handleAddNews = () => {
         axios
             .post("http://localhost:8080/zoo-server/api/v1/new/createNew", newNews, { headers: authHeader() })
@@ -164,19 +172,21 @@ export default function ManageNews() {
                 console.error('Error fetching user profile:', error);
             });
     };
-    console.log('check get news by id', editingNews)
-    console.log('check news id', newsId);
-
+    // console.log('check get news by id', editingNews)
+    console.log('check add', newNews)
     const handleUpdateNews = (newsId) => {
         axios
             .put(`http://localhost:8080/zoo-server/api/v1/new/updateNew/${newsId}`, editingNews, { headers: authHeader() })
-            .then((response) => {
-                setEditingNews(false);
-                alert('Product updated successfully');
+            .then(() => {
+
+                show('Product updated successfully', 'green');
+                setNewNews([])
+                setIsModalOpen(false);
+                setRefresh(true)
             })
             .catch((error) => {
                 console.error('Error updating product:', error);
-                alert('Failed to update product');
+                show(error.response.data.message, 'red');
             });
     };
 
@@ -188,13 +198,13 @@ export default function ManageNews() {
             [name]: value
         });
     }
-    const handleInputChangeUpdate = (event) => {
-        const { name, value } = event.target;
-        setEditingNews({
-            ...newNews,
-            [name]: value
-        });
-    }
+    const handleInputChangeUpdate = (field, value) => {
+
+        setEditingNews(prevState => ({
+            ...prevState,
+            [field]: value
+        }));
+    };
     const onUpload = (event) => {
         const name = event.target.name;
         setNewNews({
@@ -246,22 +256,22 @@ export default function ManageNews() {
                 name={field}
                 type="text"
                 placeholder={`Enter your ${field}`}
-                value={editingNews[field] || ''} x
-                onChange={handleInputChangeUpdate}
-
+                value={editingNews[field] || ''}
+                onChange={(e) => handleInputChangeUpdate(field, e.target.value)}
             />
         ) : (
             <span>{editingNews[field] || defaultValue}</span>
         );
     };
+
     const displayWithDefaultDate = (field, defaultValue = 'Not Provided') => {
         return isEditing ? (
             <Calendar
-                id="dateCreated"
-                name="dateCreated"
-                value={editingNews.dateCreated}
-                onChange={handleInputChangeUpdate}
-                className='w-full'
+                id={field}
+                name={field}
+                value={editingNews[field] || ''}
+                onChange={(e) => handleInputChangeUpdate(field, e.target.value)}
+                className="w-full"
             />
         ) : (
             <span>{editingNews[field] || defaultValue}</span>
@@ -277,12 +287,13 @@ export default function ManageNews() {
                 type="text"
                 placeholder={`Enter ${field}`}
                 value={editingNews[field] || ''}
-                onChange={handleInputChangeUpdate}
+                onChange={(e) => handleInputChangeUpdate(field, e.target.value)}
             />
         ) : (
             <span>{editingNews[field] || defaultValue}</span>
         );
     };
+
 
     return (
         <div className="datatable-editing-demo  w-full">
@@ -292,7 +303,7 @@ export default function ManageNews() {
                 <DataTable value={newsLists} paginator rows={10} header={header3} filters={filters} onFilter={(e) => setFilters(e.filters)}
                     selection={selectedCustomer3} onSelectionChange={e => setSelectedCustomer3(e.value)} selectionMode="single" dataKey="id" responsiveLayout="scroll"
                     stateStorage="custom" customSaveState={onCustomSaveState} customRestoreState={onCustomRestoreState} emptyMessage="No News title name found.">
-                    <Column field="newsId" header="ID" style={{ width: '10%' }}></Column>
+                    <Column field="newsId" header="ID" sortable style={{ width: '10%' }}></Column>
                     <Column field="title" header="Title" sortable style={{ width: '20%', textAlign: 'center' }}></Column>
                     <Column field="content" header="Content" sortable style={{ width: '25%' }}></Column>
                     <Column field="newsType" header="News Type" sortable style={{ width: '15%' }}></Column>
@@ -375,8 +386,8 @@ export default function ManageNews() {
                     modal
                     onHide={() => setIsModalOpen1(false)}
                 >
-                    <div class="formgrid grid">
-                        <div className="field col-12 ">
+                    <div className="formgrid grid">
+                        <div className="field col-12">
                             <label htmlFor="title">Title News</label>
                             <br />
                             {displayWithDefault('title')}
@@ -388,19 +399,18 @@ export default function ManageNews() {
                             {displayWithDefaultDescription('content')}
                         </div>
 
-                        <div className="field col-12 ">
+                        <div className="field col-12">
                             <label htmlFor="newsType">News Types</label>
                             <br />
-
                             {displayWithDefault('newsType')}
                         </div>
 
                         <div className="field col-12">
-                            <label htmlFor="dateStart">Date Created News (yyyy-MM-dd)</label>
+                            <label htmlFor="dateCreated">Date Created News (yyyy-MM-dd)</label>
                             <br />
-                            {displayWithDefaultDate('dateStart')}
-
+                            {displayWithDefaultDate('dateCreated')}
                         </div>
+
                         <Button
                             label="Update News"
                             icon="pi pi-pencil"
@@ -408,7 +418,7 @@ export default function ManageNews() {
                             onClick={() => handleUpdateNews(newsId)}
                         />
                     </div>
-                </Dialog >
+                </Dialog>
 
             </div>
         </div>

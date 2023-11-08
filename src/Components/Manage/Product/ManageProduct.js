@@ -10,6 +10,7 @@ import { Dialog } from 'primereact/dialog';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import authHeader from '../../AuthHeader/AuthHeader';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 export default function ManageProduct() {
 
   const [products4, setProducts4] = useState(null);
@@ -24,6 +25,11 @@ export default function ManageProduct() {
 
   // Rest of your code
 
+  const navigate = useNavigate();
+
+  if (!JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN') {
+    navigate("/notfound");
+  }
 
 
 
