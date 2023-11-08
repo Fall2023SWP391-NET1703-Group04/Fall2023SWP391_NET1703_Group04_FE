@@ -66,15 +66,6 @@ function ManageFood() {
     );
   };
 
-  // Alert
-  const showMessage = (severity, summary, detail) => {
-    toast.current.show({
-      severity,
-      summary,
-      detail,
-    });
-  };
-
   const dateTemplate = (rowData, column) => {
     const dateValue = rowData[column.field];
     return dateValue ? dayjs(dateValue).format("MM/DD/YYYY") : "";

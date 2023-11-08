@@ -7,6 +7,7 @@ import {
   Routes,
   Switch,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.css";
@@ -40,10 +41,26 @@ import NewUser from "./Components/NewsUser/NewsUser";
 import AnimalListUser from "./Components/AnimalUser/AnimalListUser";
 import ManageRole from "./Components/Manage/Role/ManageRole";
 import ManageCage from "./Components/Manage/Cage/ManageCage";
-import CageDetail from "./Components/Manage/Area/CageDetail";
+import CageDetail from "./Components/Manage/Area/AreaDetail";
 import Product from "./Components/User/Product";
+
 import PageNotFound from "./PageNotFound/PageNotFound";
+
+import AddDiet from "./Components/Manage/Diet/AddDiet";
+
 function App() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const role = user?.data?.role;
+  console.log(role);
+  const currentURL = window.location.href;
+  if (
+    role === "ROLE_CUSTOMER" &&
+    currentURL === "http://localhost:3000/admins"
+  ) {
+    alert("You don't admin");
+    window.location.assign("http://localhost:3000/");
+    return;
+  }
   return (
     <div className="App">
       <BrowserRouter>
@@ -68,7 +85,10 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/user-history" element={<History />} />
 
-          <Route path="/products-detail/:productId" element={<ProductDetailUser />} />
+          <Route
+            path="/products-detail/:productId"
+            element={<ProductDetailUser />}
+          />
           <Route path="/training" element={<Training />} />
           <Route path="/admins" element={<Admin />}>
             <Route index element={<DashBoard />} />
@@ -85,12 +105,11 @@ function App() {
             <Route path="manage-cages" element={<ManageCage />} />
             <Route path="animal-details/:animalId" element={<AnimalDetail />} />
             <Route path="cage-details/:areaId" element={<CageDetail />} />
+            <Route path="add-diet" element={<AddDiet />} />
             <Route
               path="product-details/:productId"
               element={<ProductDetail />}
             />
-            {/* <Route path="products" element={<Products />} /> */}
-
           </Route>
         </Routes>
       </BrowserRouter>

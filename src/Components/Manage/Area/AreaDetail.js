@@ -33,20 +33,24 @@ export default function CageDetail() {
             })
             .catch((error) => console.error(error));
 
-        axios.get(`http://localhost:8080/zoo-server/api/v1/area-management/getAreaManagementResponse/${areaId}`, { headers: authHeader() })
-            .then(response => {
-                setAreaManageData(response.data.data)
-            })
-            .catch(error => {
-                show(error.response.data.message, 'red');
-                console.error(error);
-            });
+        // axios.get(`http://localhost:8080/zoo-server/api/v1/area-management/getAreaManagementResponse/${areaId}`, { headers: authHeader() })
+        //     .then(response => {
+        //         setAreaManageData(response.data.data)
+        //     })
+        //     .catch(error => {
+        //         show(error.response.data.message, 'red');
+        //         console.error(error);
+        //     });
 
         //get area history data
         axios
             .get(`http://localhost:8080/zoo-server/api/v1/area-management/getAllByArea/${areaId}`, { headers: authHeader() })
             .then((response) => {
                 setHistoryManage(response.data.data);
+                var areaManagement = response.data.data.find(data => {
+                    return data.managing === true
+                });
+                setAreaManageData(areaManagement);
             })
             .catch((error) => console.error(error));
 
@@ -86,6 +90,7 @@ export default function CageDetail() {
             <Button label="Assign Staff" onClick={() => { setIsAddModalOpen(true) }} icon="pi pi-pencil" />
         </>
     );
+    const paginatorRight = <Button type="button" onClick={() => setIsAddModalOpen(true)} icon="pi pi-plus" text label='Add new manager ' />;
 
 
     const handleClose = () => {
@@ -97,17 +102,18 @@ export default function CageDetail() {
     return (
         <div className='grid ' style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
             <Toast ref={toast} />
-            {ModalUpdateManageArea(areaId, areaManageData, isModalOpen, handleClose)}
-            {ModalAddManageArea(areaId, isAddModalOpen, handleClose)}
+
+            {ModalUpdateManageArea(Number(areaId), areaManageData ? areaManageData : {}, isModalOpen, handleClose)}
+            {ModalAddManageArea(Number(areaId), isAddModalOpen, handleClose)}
             <div className="card col-4">
-                {areaManageData.managing ?
-                    <Fieldset legend={areaManageData.areaName}>
-                        <Card title="Manager" subTitle={areaManageData.fullName} footer={footer} header={header}>
+                {areaManageData?.managing ?
+                    <Fieldset legend={areaManageData?.areaName}>
+                        <Card title="Manager" subTitle={areaManageData?.fullName} footer={footer} header={header}>
                             <p className="m-0">
-                                Start date: {areaManageData.dateStart}
+                                Start date: {areaManageData?.dateStart}
                             </p>
                             <p className="m-0">
-                                End date: {areaManageData.dateEnd}
+                                End date: {areaManageData?.dateEnd}
                             </p>
 
                         </Card>
@@ -122,7 +128,7 @@ export default function CageDetail() {
             </div>
             <div class="col-7">
                 <div className='card'>
-                    <Fieldset legend={areaData.areaName} >
+                    <Fieldset legend={areaData.areaName} toggleable collapsed>
                         <DataTable value={cageData} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
                             paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                             currentPageReportTemplate="{first} to {last} of {totalRecords}" stripedRows>
@@ -130,15 +136,15 @@ export default function CageDetail() {
                             <Column field="description" header="Description" />
                         </DataTable>
                     </Fieldset>
-                    <Fieldset legend="Manage History" >
+                    <Fieldset legend="Manage History" toggleable collapsed>
                         <DataTable value={historyManage} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
                             paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                            currentPageReportTemplate="{first} to {last} of {totalRecords}" stripedRows>
+                            currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorRight={paginatorRight} stripedRows>
                             <Column field="areaName" header="Area Name" />
                             <Column field="fullName" header="Staff" />
                             <Column field="dateStart" header="Start Date" />
                             <Column field="dateEnd" header="End Date" />
-                            <Column field="managing" header="Work or not" />
+                            <Column field="managing" header="Managing" />
                         </DataTable>
                     </Fieldset>
                 </div>

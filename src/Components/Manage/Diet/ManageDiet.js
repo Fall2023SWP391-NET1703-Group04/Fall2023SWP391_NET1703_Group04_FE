@@ -21,7 +21,7 @@ const ManageDiet = () => {
     const [selectedFood, setSelectedFood] = useState([]);
     const [newDiet, setNewDiet] = useState([{
         dietName: "",
-        foodDTOS: []
+        dietFoodRequests: []
     }]);
     const [displayDialog, setDisplayDialog] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -67,7 +67,8 @@ const ManageDiet = () => {
                     label="Add"
                     icon="pi pi-plus"
                     className="p-button-primary absolute"
-                    onClick={() => setDisplayDialog(true)}
+                    // onClick={() => setDisplayDialog(true)}
+                    onClick={() => window.location.href = `add-diet`}
                 />
                 <Button className='ml-auto' type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
                 <span className="p-input-icon-left">
@@ -189,10 +190,10 @@ const ManageDiet = () => {
                     <Column field="dietName" header="Diet Name" />
                     <Column
                         header="Food"
-                        field="foodDTOS"
+                        field="dietFoodResponses"
                         body={(rowData) => (
                             <ul>
-                                {rowData.foodDTOS.map((food) => (
+                                {rowData.dietFoodResponses.map((food) => (
                                     <p key={food.foodId}>{food.foodName}</p>
                                 ))}
                             </ul>
@@ -204,15 +205,22 @@ const ManageDiet = () => {
                             <div>
                                 <Button
                                     icon="pi pi-trash"
-                                    className="p-button-rounded p-button-danger"
+                                    className="p-button-rounded p-button-danger mr-2"
                                     onClick={() => handleDeleteDiet(rowData.dietId)}
                                 />
                                 <Button
                                     icon="pi pi-pencil"
-                                    className="p-button-rounded p-button-info"
+                                    className="p-button-rounded p-button-info mr-2"
                                     onClick={() => {
                                         openUpdateModal(rowData);
                                     }}
+                                />
+                                <Button
+                                    icon="pi pi-eye"
+                                    className="p-button-rounded p-button-info"
+                                // onClick={() => {
+                                //     openUpdateModal(rowData);
+                                // }}
                                 />
 
                             </div>

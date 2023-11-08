@@ -12,8 +12,15 @@ export default function ModalUpdateManageArea(areaId, areaManagement, isModalOpe
         areaId: areaId,
         dateStart: null,
         dateEnd: "",
-        userId: areaManagement.userId,
+        userId: areaManagement?.userId ? areaManagement?.userId : 0,
     })
+    const areaManagementData = {
+        areaId: areaId,
+        dateStart: areaManagement?.dateStart,
+        dateEnd: areaManagement?.dateEnd,
+        userId: areaManagement?.userId,
+
+    }
     const [staffData, setStaffData] = useState([])
     const [selectedStaff, setSelectedStaff] = useState({});
 
@@ -49,12 +56,12 @@ export default function ModalUpdateManageArea(areaId, areaManagement, isModalOpe
     const handleUpdateArea = async () => {
         var requestData = {
             areaId: areaId,
-            dateStart: updateAreaManage.dateStart ? updateAreaManage.dateStart : areaManagement.dateStart,
-            dateEnd: updateAreaManage.dateEnd ? updateAreaManage.dateEnd : areaManagement.dateEnd,
-            userId: updateAreaManage.userId ? updateAreaManage.userId : areaManagement.userId,
+            dateStart: updateAreaManage.dateStart ? updateAreaManage.dateStart : areaManagementData.dateStart,
+            dateEnd: updateAreaManage.dateEnd ? updateAreaManage.dateEnd : areaManagementData.dateEnd,
+            userId: updateAreaManage.userId ? updateAreaManage.userId : areaManagementData.userId,
         }
         await axios
-            .put(`http://localhost:8080/zoo-server/api/v1/area-management/updateAreaManagement/${areaManagement.areaManagementId}`, requestData, { headers: authHeader() })
+            .put(`http://localhost:8080/zoo-server/api/v1/area-management/updateAreaManagement/${areaManagement?.areaManagementId}`, requestData, { headers: authHeader() })
             .then((response) => {
                 show(response.data.message, 'green');
                 setTimeout(handleClose, 2000);
@@ -113,7 +120,7 @@ export default function ModalUpdateManageArea(areaId, areaManagement, isModalOpe
                             id="dateStart"
                             className='w-full'
                             name="dateStart"
-                            value={updateAreaManage.dateStart ? updateAreaManage.dateStart : areaManagement.dateStart}
+                            value={updateAreaManage.dateStart ? updateAreaManage.dateStart : areaManagementData.dateStart}
                             onChange={(e) => handleUpdateInputChange(e.value, "dateStart")}
                         />
 
@@ -125,7 +132,7 @@ export default function ModalUpdateManageArea(areaId, areaManagement, isModalOpe
                             id="dateEnd"
                             className='w-full'
                             name="dateEnd"
-                            value={updateAreaManage.dateEnd ? updateAreaManage.dateEnd : areaManagement.dateEnd}
+                            value={updateAreaManage.dateEnd ? updateAreaManage.dateEnd : areaManagementData.dateEnd}
                             onChange={(e) => handleUpdateInputChange(e.value, "dateEnd")}
                         />
                     </div>
