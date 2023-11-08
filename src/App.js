@@ -42,6 +42,7 @@ import ManageRole from "./Components/Manage/Role/ManageRole";
 import ManageCage from "./Components/Manage/Cage/ManageCage";
 import CageDetail from "./Components/Manage/Area/CageDetail";
 import Product from "./Components/User/Product";
+import PageNotFound from "./PageNotFound/PageNotFound";
 function App() {
   return (
     <div className="App">
@@ -50,7 +51,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/news-user" element={<NewUser />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/notfound" element={<PageNotFound />} />
           <Route index element={<HomePage />} />
+
           <Route path="/animals" element={<Animal />}>
             <Route index element={<AnimalListUser />} />
             <Route

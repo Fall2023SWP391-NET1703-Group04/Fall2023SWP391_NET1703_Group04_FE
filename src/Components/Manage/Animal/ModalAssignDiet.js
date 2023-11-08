@@ -11,9 +11,18 @@ import { MultiSelect } from 'primereact/multiselect';
 import { useRef } from 'react'
 import { Toast } from 'primereact/toast'
 
-export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
+export default function ModalAssignDiet(animalId, isModalOpen, handleClose, data) {
     const [dietData, setNewDietData] = useState([])
+
     const [refresh, setRefresh] = useState(false);
+
+    const [updateDiet, setUpdateDiet] = useState([{}]);
+
+    const diet = {
+        dietId: data?.dietId,
+        dietName: data?.dietName,
+        foods: data?.foodDTOS,
+    }
     const [selectedDiet, setSelectedDiet] = useState({});
     const toast = useRef(null);
     const [isAddButtonDisabled, setIsAddButtonDisabled] = useState(true);
@@ -130,6 +139,51 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
             }
         });
     };
+    // update diet
+    const handleInputUpdateChange = (e) => {
+        const { name, value } = e.target;
+        setUpdateDiet((prevState) => {
+            if (name === "dietName") {
+                // If the input name is "dietName," update it directly
+                return {
+                    ...prevState["0"],
+                    [name]: value,
+                };
+            } else {
+                // For other input fields, update only the top-level state
+                return {
+                    ...prevState,
+                    [name]: value,
+                };
+            }
+        });
+    };
+
+    const handleInputFoodUpdateChange = (event) => {
+        setSelectedFood(event.value)
+        const foodItems = event.value
+        setUpdateDiet({
+            ...updateDiet,
+            foodDTOS: foodItems,
+        });
+    }
+    const handleUpdateDiet = () => {
+        var requestData = {
+            dietName: updateDiet.dietName ? updateDiet.dietName : diet.dietName,
+            foodDTOS: updateDiet.foodDTOS ? updateDiet.foodDTOS : diet.foodDTOS
+        }
+        axios
+            .put(`http://localhost:8080/zoo-server/api/v1/diet/updateDiet/${diet.dietId}`, requestData, { headers: authHeader() })
+            .then(() => {
+                handleClose()
+                setRefresh(true)
+            })
+            .catch((error) => {
+                show(error.response.data.message, 'red');
+                console.error(error);
+            });
+    };
+
 
 
     const handleInputFoodChange = (event) => {
@@ -277,6 +331,7 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose) {
                 />
 
             </Dialog>
+
         </div >
     )
 }
