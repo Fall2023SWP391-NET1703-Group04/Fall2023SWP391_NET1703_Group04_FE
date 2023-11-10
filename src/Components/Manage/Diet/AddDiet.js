@@ -189,9 +189,9 @@ export default function AddDiet() {
 
     const itemTemplate = (data) => {
         return (
-            <div className="col-12">
-                <div className="foodName">"Food id: "{data.foodId}</div>
-                <div className="foodName">"Quantity: "{data.quantity}</div>
+            <div className="grid w-full">
+                <div className="col-6 text-2xl font-semibold">Food id: {data.foodId}</div>
+                <div className="col-6 text-2xl font-semibold">Quantity: {data.quantity}</div>
             </div>
         );
     };
@@ -222,10 +222,10 @@ export default function AddDiet() {
                             />
                         </div> */}
 
-                        <div className="p-field">
+                        <div className="card">
                             <label htmlFor="Food">Food List Added</label>
                             <br />
-                            <DataView value={foodAdded} itemTemplate={itemTemplate} rows={5} inline />
+                            <DataView value={foodAdded} itemTemplate={itemTemplate} />
                         </div>
                     </Fieldset>
                 </Card>
@@ -243,7 +243,7 @@ export default function AddDiet() {
                                 <Column field="dateStart" header="Date Start" body={(rowData) => rowData.dateStart.toLocaleDateString()} />
                                 <Column field="dateEnd" header="Date End" body={(rowData) => rowData.dateEnd.toLocaleDateString()} />
                                 <Column field="unit" header="Unit" />
-                                <Column field="quantity" header="Quantity" />
+                                {/* <Column field="quantity" header="Quantity" /> */}
                                 <Column field="image" header="image" body={imageBody} />
                                 <Column header="Input quantity" body={quantityBody}></Column>
                                 <Column header="Action" body={(rowData) => (

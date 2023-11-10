@@ -174,7 +174,7 @@ const DashBoard = () => {
         setChartPieFoodOptions(foodOptions);
     }, [animalCageIsNotUseList.length, animalCageList.length, foodIsNotExpiredList.length, foodList.length]);
     return (
-        <div class="col-8 ml-6 w-10 ">
+        <div class="">
             <div class="flex justify-content-center grid mt-3">
                 <h1>DashBoard</h1>
                 <div class="col-12">
