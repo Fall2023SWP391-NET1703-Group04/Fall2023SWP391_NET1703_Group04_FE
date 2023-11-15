@@ -91,6 +91,7 @@ export default function AnimalCageHistory(animalId) {
                 setIsUpdateModalOpen(false)
             })
             .catch((error) => {
+                show(error.response.data.message, 'red');
                 console.error(error);
             });
     }
@@ -133,7 +134,7 @@ export default function AnimalCageHistory(animalId) {
 
             {/* Modal Update cage */}
             <Dialog
-                header="Update Training History"
+                header="Update Cage History"
                 visible={isUpdateModalOpen}
                 style={{ width: '800px' }}
                 modal

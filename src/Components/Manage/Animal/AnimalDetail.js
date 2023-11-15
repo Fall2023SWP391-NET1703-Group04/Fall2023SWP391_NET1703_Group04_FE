@@ -165,6 +165,7 @@ export default function AnimalDetail() {
             .then((response) => {
                 setRefresh(true)
                 setIsUpdateModalOpen(false);
+                show(response.data.message, 'green');
             })
             .catch((error) => {
                 show(error.response.data.message, 'red');

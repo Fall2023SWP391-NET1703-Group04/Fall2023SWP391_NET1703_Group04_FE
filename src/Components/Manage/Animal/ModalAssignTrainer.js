@@ -11,8 +11,8 @@ import { InputTextarea } from 'primereact/inputtextarea';
 export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
     const [newTraining, setNewTraining] = useState({
         "animalId": animalId,
-        "dateEnd": "",
-        "dateStart": "",
+        "dateEnd": null,
+        "dateStart": null,
         "description": "",
         "userId": null
     })
@@ -69,7 +69,7 @@ export default function ModalAssignTrainer(animalId, isModalOpen, handleClose) {
                 if (newTraining.userId === null) {
                     show("Please, choose trainer", 'red');
                 }
-                else if (newTraining.dateStart === "") {
+                else if (newTraining.dateStart === null) {
                     show("Please, choose date start", 'red');
                 }
                 else {
