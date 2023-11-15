@@ -18,15 +18,8 @@ const ManageDiet = () => {
     const [diets, setDiets] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [foodDTOS, setFoodDTOS] = useState([]);
-    const [selectedFood, setSelectedFood] = useState([]);
-    const [newDiet, setNewDiet] = useState([{
-        dietName: "",
-        dietFoodRequests: []
-    }]);
-    const [displayDialog, setDisplayDialog] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
-    const [isAddButtonDisabled, setIsAddButtonDisabled] = useState(false);
 
 
     const [data, setData] = useState({})
@@ -109,52 +102,6 @@ const ManageDiet = () => {
             });
     }, [refresh]);
 
-    //Add diet
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewDiet((prevState) => {
-            if (name === "dietName") {
-                // If the input name is "dietName," update it directly
-                return {
-
-                    ...prevState["0"],
-                    [name]: value,
-
-                };
-            } else {
-                // For other input fields, update only the top-level state
-                return {
-                    ...prevState,
-                    [name]: value,
-                };
-            }
-        });
-    };
-
-    const handleInputFoodChange = (event) => {
-        console.log(event.value);
-        setSelectedFood(event.value)
-        const foodItems = event.value
-        setNewDiet({
-            ...newDiet,
-            foodDTOS: foodItems,
-        });
-    }
-
-    const handleAddDiet = async () => {
-        await axios
-            .post('http://localhost:8080/zoo-server/api/v1/diet/createNewDiet', newDiet, { headers: authHeader() })
-            .then(() => {
-                setIsAddButtonDisabled(true);
-                setDisplayDialog(false);
-                setRefresh(true)
-                setSelectedFood([])
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    };
-
     const handleDeleteDiet = (dietId) => {
         axios
             .delete(`http://localhost:8080/zoo-server/api/v1/diet/deleteDiet/${dietId}`, { headers: authHeader() })
@@ -228,49 +175,6 @@ const ManageDiet = () => {
                     />
                 </DataTable>
             </div>
-
-            {/* Add dialog */}
-            <Dialog
-                refresh={false}
-                header="Add Diet Dialog"
-                visible={displayDialog}
-                style={{ width: '500px' }}
-                modal
-                onHide={() => setDisplayDialog(false)}
-            >
-
-                <div className="p-field">
-                    <label htmlFor="dietName">Diet Name</label>
-                    <br />
-                    <InputText
-                        id="dietName"
-                        name="dietName"
-                        className='w-100'
-                        value={newDiet.dietName}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div className="p-field">
-                    <label htmlFor="foodItems">Food</label>
-                    <br />
-                    <MultiSelect
-                        id="foodItems"
-                        optionLabel="foodName"
-                        value={selectedFood}
-                        options={foodDTOS}
-                        className='w-100'
-                        onChange={handleInputFoodChange} />
-                </div>
-                <br />
-                <Button
-                    label="Add Diet"
-                    icon="pi pi-plus"
-                    disabled={isAddButtonDisabled}
-                    onClick={() => handleAddDiet()}
-                    className="p-button-primary"
-                />
-
-            </Dialog>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Card } from 'primereact/card'
 import { Fieldset } from 'primereact/fieldset'
 import { InputText } from 'primereact/inputtext';
@@ -10,6 +10,7 @@ import authHeader from '../../AuthHeader/AuthHeader';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { InputNumber } from 'primereact/inputnumber';
 import { DataView } from 'primereact/dataview';
+import { Toast } from 'primereact/toast';
 
 export default function AddDiet() {
     const [newDiet, setNewDiet] = useState([{
@@ -17,12 +18,13 @@ export default function AddDiet() {
         dietFoodRequests: []
     }]);
     const [foodData, setFoodData] = useState([]);
-    // const foodItems = [];
-    const [dietFoodRequests, setDietFoodRequests] = useState([]);
     const [selectedFood, setSelectedFood] = useState([]);
     const [foodAdded, setFoodAdded] = useState([]);
     const [quantity, setQuantity] = useState(1);
+    const [foodQuantities, setFoodQuantities] = useState({});
     const [globalFilterValue, setGlobalFilterValue] = useState('');
+    const toast = useRef(null);
+    const [refresh, setRefresh] = useState(false);
     const defaultImage = "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg";
 
 
@@ -39,11 +41,12 @@ export default function AddDiet() {
                     dateEnd: new Date(food.dateEnd),
                 }));
                 setFoodData(foodsWithDateObjects);
+                setRefresh(false)
             })
             .catch((error) => {
                 console.error(error);
             });
-    }, []);
+    }, [refresh]);
 
 
     const imageBody = (rowData) => {
@@ -66,18 +69,21 @@ export default function AddDiet() {
     const quantityBody = (data) => {
         const handleQuantityChange = (e) => {
             const newValue = e.value;
-            console.log(data.foodId, "vs", foodAdded.foodId);
-            if (data.foodId !== dietFoodRequests.foodId) {
+            if (data.foodId !== foodAdded.foodId) {
                 // If the new value is different from the current quantity, set it.
                 setQuantity(newValue);
             } else {
                 // If the new value is the same as the current quantity, increment it.
                 setQuantity(quantity + 1);
             }
+            setFoodQuantities((prevQuantities) => ({
+                ...prevQuantities,
+                [data.foodId]: newValue,
+            }));
         }
 
         return (
-            <InputNumber value={quantity} onValueChange={handleQuantityChange} min={1} showButtons buttonLayout="vertical" style={{ width: '4rem' }}
+            <InputNumber value={foodQuantities[data.foodId] || 1} onValueChange={handleQuantityChange} min={1} showButtons buttonLayout="vertical" style={{ width: '4rem' }}
                 decrementButtonClassName="p-button-secondary" incrementButtonClassName="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
         )
     };
@@ -141,13 +147,19 @@ export default function AddDiet() {
 
     const handleInputFoodChange = (rowData) => {
         setSelectedFood(rowData);
+        const quantity = foodQuantities[rowData.foodId] || 1;
+
         var foodItem = {
             foodId: rowData.foodId,
             quantity: quantity
         }
-        const foodItems = dietFoodRequests ? dietFoodRequests : [];
+        const foodItems = foodAdded ? foodAdded : [];
         foodItems.push(foodItem);
-        setDietFoodRequests(foodItems);
+        // Update the quantity for the specific food item using foodId
+        setFoodQuantities((prevQuantities) => ({
+            ...prevQuantities,
+            [rowData.foodId]: quantity,
+        }));
         //test show added food
         setFoodAdded(foodItems)
         setNewDiet({
@@ -162,8 +174,20 @@ export default function AddDiet() {
     const handleAddDiet = async () => {
         await axios
             .post('http://localhost:8080/zoo-server/api/v1/diet/createNewDiet', newDiet, { headers: authHeader() })
-            .then(() => { })
+            .then((response) => {
+                show(response.data.message, 'green');
+                setRefresh(true);
+            })
             .catch((error) => {
+                if (newDiet.dietName === undefined) {
+                    show("Please input diet name", 'red');
+
+                }
+                else if (newDiet.dietFoodRequests === undefined) {
+                    show("Choose at least 1 food", 'red');
+                }
+                else
+                    show(error.response.data.message, 'red');
                 console.error(error);
             });
     };
@@ -187,17 +211,45 @@ export default function AddDiet() {
         </>
     );
 
+
     const itemTemplate = (data) => {
+        const handleRemoveFood = (foodId) => {
+            // Remove the food item with the given foodId
+            const updatedFoodItems = foodAdded.filter(item => item.foodId !== foodId);
+            setFoodAdded(updatedFoodItems);
+            console.log(foodAdded);
+            // Update the quantity for the specific food item using foodId
+            setFoodQuantities((prevQuantities) => ({
+                ...prevQuantities,
+                [foodId]: undefined, // Remove the quantity entry for the removed food item
+            }));
+        };
         return (
             <div className="grid w-full">
-                <div className="col-6 text-2xl font-semibold">Food id: {data.foodId}</div>
-                <div className="col-6 text-2xl font-semibold">Quantity: {data.quantity}</div>
+                <div className="col-5 text-2xl font-semibold">Food id: {data.foodId}</div>
+                <div className="col-5 text-2xl font-semibold">Quantity: {data.quantity}</div>
+                <div className="col-2">
+                    <Button
+                        icon="pi pi-trash"
+                        className="p-button-danger p-button-rounded"
+                        onClick={() => handleRemoveFood(data.foodId)}
+                    />
+                </div>
             </div>
         );
+    };
+
+    //notifications
+    const show = (message, color) => {
+        toast.current.show({
+            summary: 'Notifications', detail: message, life: 3000,
+            style: { backgroundColor: color, color: 'white', border: '2px solid yellow' },
+        });
     };
     return (
         <div className='grid ' style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center" }}>
             <div className="card col-4">
+                <Toast ref={toast} />
                 <Card footer={footer}>
                     <Fieldset legend={animalProfile} >
                         <div className="p-field mb-5">
@@ -211,17 +263,6 @@ export default function AddDiet() {
                                 onChange={handleInputChange}
                             />
                         </div>
-                        {/* <div className="p-field">
-                            <label htmlFor="dietName">Food list</label>
-                            <br />
-                            <InputTextarea
-                                id="dietName"
-                                name="dietName"
-                                className='w-100'
-                                value={selectedFood}
-                            />
-                        </div> */}
-
                         <div className="card">
                             <label htmlFor="Food">Food List Added</label>
                             <br />
@@ -243,7 +284,6 @@ export default function AddDiet() {
                                 <Column field="dateStart" header="Date Start" body={(rowData) => rowData.dateStart.toLocaleDateString()} />
                                 <Column field="dateEnd" header="Date End" body={(rowData) => rowData.dateEnd.toLocaleDateString()} />
                                 <Column field="unit" header="Unit" />
-                                {/* <Column field="quantity" header="Quantity" /> */}
                                 <Column field="image" header="image" body={imageBody} />
                                 <Column header="Input quantity" body={quantityBody}></Column>
                                 <Column header="Action" body={(rowData) => (

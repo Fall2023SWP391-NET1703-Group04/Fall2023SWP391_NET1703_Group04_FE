@@ -18,8 +18,8 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
         "animalCageDetailName": "",
         "animalCageId": 0,
         "animalId": animalId,
-        "dateEnd": "",
-        "dateStart": ""
+        "dateEnd": null,
+        "dateStart": null
     })
 
     useEffect(() => {
@@ -67,7 +67,15 @@ export default function ModalAssignCage(animalId, isModalOpen, handleClose) {
                 setTimeout(handleClose, 2000);
             })
             .catch((error) => {
-                show(error.response.data.message, 'red');
+                if (newCage.cageId === null) {
+                    show("Please, choose trainer", 'red');
+                }
+                else if (newCage.dateStart === null) {
+                    show("Please, choose date start", 'red');
+                }
+                else {
+                    show(error.response.data.message, 'red');
+                }
                 console.error(error);
             });
     }

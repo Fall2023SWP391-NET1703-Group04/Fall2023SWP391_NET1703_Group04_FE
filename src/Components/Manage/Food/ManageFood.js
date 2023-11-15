@@ -142,11 +142,24 @@ function ManageFood() {
   const handleAddFood = () => {
     axios
       .post("http://localhost:8080/zoo-server/api/v1/food/createNewFood", newFood, { headers: authHeader() })
-      .then(() => {
+      .then((response) => {
+        show(response.data.message, 'green');
         setRefresh(true)
         setIsModalOpen(false);
       })
       .catch((error) => {
+        if (newFood.foodName === undefined) {
+          show("Please input food name", 'red');
+        }
+        else if (newFood.dateStart === null) {
+          show("Please input date start", 'red');
+        }
+        else if (newFood.dateEnd === null) {
+          show("Please input date end", 'red');
+        }
+        else {
+          show(error.response.data.message, 'red');
+        }
         console.error(error);
       });
   };
@@ -155,10 +168,12 @@ function ManageFood() {
   const handleDeleteFood = (foodId) => {
     axios
       .delete(`http://localhost:8080/zoo-server/api/v1/food/deleteFood/${foodId}`, { headers: authHeader() })
-      .then(() => {
+      .then((response) => {
+        show(response.data.message, 'green');
         setRefresh(true)
       })
       .catch((error) => {
+        show(error.response.data.message, 'red');
         console.error(error);
       });
   };
@@ -208,20 +223,29 @@ function ManageFood() {
   const handleUpdateFood = () => {
     axios
       .put(`http://localhost:8080/zoo-server/api/v1/food/updateFood/${updateFood.foodId}`, updateFood, { headers: authHeader() })
-      .then(() => {
+      .then((response) => {
+        show(response.data.message, 'green');
         setRefresh(true)
         handleCloseUpdateModal();
       })
       .catch((error) => {
+        show(error.response.data.message, 'red');
         console.error(error);
       });
   };
 
   const header = renderHeader();
 
+  const show = (message, color) => {
+    toast.current.show({
+      summary: 'Notifications', detail: message, life: 3000,
+      style: { backgroundColor: color, color: 'white', border: '2px solid yellow' },
+    });
+  };
 
   return (
     <div className="flex w-full justify-content-center align-items-center">
+      <Toast ref={toast} />
       <div className="justify-self-center w-11">
         <h1>Food Management</h1>
         <DataTable value={foods} header={header} className="p-datatable-striped"

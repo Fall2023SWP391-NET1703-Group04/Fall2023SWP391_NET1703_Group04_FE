@@ -149,11 +149,11 @@ export default function ManageAnimal() {
                     show("Please, choose catalogue", 'red');
                 }
                 else if (newAnimal.image === "") {
-                    show("Please, choose image", 'red');
+                    show(error.response.data.message, 'red');
                 }
                 else {
-                    // show("All field empty", 'red');
                     show(error.response.data.message, 'red');
+                    // show("All empty :(", 'red');
                 }
                 console.error(error);
             });
@@ -198,10 +198,12 @@ export default function ManageAnimal() {
     const handleDeleteAnimal = (animalId) => {
         axios
             .delete(`http://localhost:8080/zoo-server/api/v1/animal/deleteAnimal/${animalId}`, { headers: authHeader() })
-            .then(() => {
+            .then((response) => {
+                show(response.data.message, 'green');
                 setRefresh(true)
             })
             .catch((error) => {
+                show(error.response.data.message, 'red');
                 console.error(error);
             });
     }
