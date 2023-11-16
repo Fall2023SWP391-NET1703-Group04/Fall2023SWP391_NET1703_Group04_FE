@@ -69,13 +69,12 @@ function App() {
           <Route path="/news-user" element={<NewUser />} />
           <Route path="/register" element={<Register />} />
           <Route path="/notfound" element={<PageNotFound />} />
+          <Route path="managediet" element={<ManageDiet />} />
           <Route index element={<HomePage />} />
 
           <Route path="/animals" element={<Animal />}>
             <Route index element={<AnimalListUser />} />
-            <Route
-              path="animals-detail-user/:animalId"
-              element={<AnimalDetailUser />}
+            <Route path="animals-detail-user/:animalId" element={<AnimalDetailUser />}
             />
           </Route>
 
@@ -85,10 +84,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/user-history" element={<History />} />
 
-          <Route
-            path="/products-detail/:productId"
-            element={<ProductDetailUser />}
-          />
+          <Route path="/products-detail/:productId" element={<ProductDetailUser />} />
           <Route path="/training" element={<Training />} />
           <Route path="/admins" element={<Admin />}>
             <Route index element={<DashBoard />} />

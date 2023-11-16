@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import authHeader from "../AuthHeader/AuthHeader";
 import { Toast } from "primereact/toast";
+
 const Register = () => {
   const toast = useRef(null);
   const navigate = useNavigate();

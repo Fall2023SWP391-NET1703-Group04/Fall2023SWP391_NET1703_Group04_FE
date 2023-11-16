@@ -33,7 +33,7 @@ export default function Training() {
 
     const [filters3, setFilters3] = useState({
         'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
-        'animalTrainingName': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+        'animalName': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
         'representative': { value: null, matchMode: FilterMatchMode.IN },
         // 'status': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] }
     });
@@ -66,7 +66,7 @@ export default function Training() {
         return (
             <span className="p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" value={value || ''} onChange={(e) => onGlobalFilterChange(e, filtersKey)} placeholder="Traing Name Search" />
+                <InputText type="search" value={value || ''} onChange={(e) => onGlobalFilterChange(e, filtersKey)} placeholder="Animal Name Search" />
             </span>
         );
     }
@@ -95,12 +95,11 @@ export default function Training() {
                         selection={selectedCustomer3} onSelectionChange={e => setSelectedCustomer3(e.value)} selectionMode="single" dataKey="id" responsiveLayout="scroll"
                         stateStorage="custom" customSaveState={onCustomSaveState} customRestoreState={onCustomRestoreState} emptyMessage="No training name found.">
 
-                        <Column key="trainingId" field="animalTrainingId" header="Training ID" sortable></Column>
-                        <Column field="animalTrainingName" header="Training Name" sortable filter filterPlaceholder="Search by animalTrainingName"></Column>
-                        {/* <Column field="userId" header="User ID" sortable></Column> */}
+                        <Column key="trainingId" field="animalTrainingId" header="Training ID" ></Column>
+
                         <Column field="fullName" header="Trainer Name" sortable></Column>
                         <Column field="animalId" header="Animal ID" sortable></Column>
-                        <Column field="animalName" header="Animal Name" sortable></Column>
+                        <Column field="animalName" header="Animal Name" sortable filter filterPlaceholder="Search by animalName"></Column>
 
                         <Column field="dateStart" header="Date Start" sortable></Column>
                         <Column field="dateEnd" header="Date End" sortable></Column>
