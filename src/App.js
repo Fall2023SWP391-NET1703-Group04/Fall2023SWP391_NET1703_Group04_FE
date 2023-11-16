@@ -48,6 +48,7 @@ import PageNotFound from "./PageNotFound/PageNotFound";
 
 import AddDiet from "./Components/Manage/Diet/AddDiet";
 import ForGotPassword from "./Components/ForgotPassword/ForgotPassword";
+import ChangePassword from "./Components/UpdateProfileUser/ChangePassword";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -67,6 +68,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/forgotpassword" element={<ForGotPassword />} />
           <Route path="/news-user" element={<NewUser />} />
           <Route path="/register" element={<Register />} />
