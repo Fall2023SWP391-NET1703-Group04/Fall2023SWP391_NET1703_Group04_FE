@@ -5,7 +5,7 @@ import axios from "axios";
 const ForGotPassword = () => {
   const [email, setEmail] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   console.log(email);
   async function sendMail(e) {
     e.preventDefault();
@@ -16,9 +16,11 @@ const ForGotPassword = () => {
       );
       // Assuming your API returns a success message
       setSuccessMessage(response.data.message);
+      setError("");
     } catch (error) {
       // Handle error, display error message, etc.
       setError("An error occurred while sending the email.");
+      setSuccessMessage("");
     }
   }
   return (
@@ -42,7 +44,7 @@ const ForGotPassword = () => {
               </label>
             </div>
             <button className="submit-forgot">Send Email</button>
-            {error && (
+            {error != "" && (
               <p className="error-message" style={{ color: "red" }}>
                 {error}
               </p>

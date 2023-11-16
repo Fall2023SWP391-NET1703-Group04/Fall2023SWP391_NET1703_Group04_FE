@@ -218,15 +218,19 @@ const Login = () => {
                         )}
                       />
                       <Button type="submit" label="Submit" className="mt-2" />
-                      Don't have account?
-                      <Link to="/register" className="link-register">
-                        Register
-                      </Link>
+                      <div>
+                        <span>Don't have account?</span>
+                        <Link to="/register" className="link-register">
+                          Register
+                        </Link>
+                      </div>
                       <br></br>
-                      Don't you forgot password?
-                      <Link to="/forgotpassword" className="link-register">
-                        Click here
-                      </Link>
+                      <div>
+                        <span> Don't you forgot password?</span>
+                        <Link to="/forgotpassword" className="link-register">
+                          Click here
+                        </Link>
+                      </div>
                     </form>
                   )}
                 />
