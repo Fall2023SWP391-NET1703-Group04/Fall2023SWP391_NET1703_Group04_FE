@@ -47,6 +47,7 @@ import Product from "./Components/User/Product";
 import PageNotFound from "./PageNotFound/PageNotFound";
 import NewsDetail from "./Components/NewsUser/NewsDetail";
 import AddDiet from "./Components/Manage/Diet/AddDiet";
+import UpdateDiet from "./Components/Manage/Diet/UpdateDiet";
 import ForGotPassword from "./Components/ForgotPassword/ForgotPassword";
 
 function App() {
@@ -110,6 +111,7 @@ function App() {
             <Route path="animal-details/:animalId" element={<AnimalDetail />} />
             <Route path="cage-details/:areaId" element={<CageDetail />} />
             <Route path="add-diet" element={<AddDiet />} />
+            <Route path="update-diet/:dietId" element={<UpdateDiet />} />
             <Route
               path="product-details/:productId"
               element={<ProductDetail />}
