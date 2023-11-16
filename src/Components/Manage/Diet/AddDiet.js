@@ -151,6 +151,7 @@ export default function AddDiet() {
 
         var foodItem = {
             foodId: rowData.foodId,
+            foodName: rowData.foodName,
             quantity: quantity
         }
         const foodItems = foodAdded ? foodAdded : [];
@@ -213,18 +214,6 @@ export default function AddDiet() {
 
 
     const itemTemplate = (data) => {
-        //remove food here
-        // const handleRemoveFood = (foodId) => {
-        //     // Remove the food item with the given foodId
-        //     const updatedFoodItems = foodAdded.filter(item => item.foodId !== foodId);
-        //     setFoodAdded(updatedFoodItems);
-        //     console.log(foodAdded);
-        //     // Update the quantity for the specific food item using foodId
-        //     setFoodQuantities((prevQuantities) => ({
-        //         ...prevQuantities,
-        //         [foodId]: undefined, // Remove the quantity entry for the removed food item
-        //     }));
-        // };
         const handleRemoveFood = (foodId) => {
             // Update the foodAdded state asynchronously using a state updater function
             setFoodAdded((prevFoodItems) => prevFoodItems.filter((item) => item.foodId !== foodId));
@@ -238,7 +227,7 @@ export default function AddDiet() {
 
         return (
             <div className="grid w-full">
-                <div className="col-5 text-2xl font-semibold">Food id: {data.foodId}</div>
+                <div className="col-5 text-2xl font-semibold">Name: {data.foodName}</div>
                 <div className="col-5 text-2xl font-semibold">Quantity: {data.quantity}</div>
                 <div className="col-2">
                     <Button

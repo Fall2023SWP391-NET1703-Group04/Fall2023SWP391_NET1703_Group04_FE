@@ -206,32 +206,6 @@ export default function Cart() {
     ];
 
 
-    // const handleAddOder = () => {
-    //     const productQuantity = listProduct.reduce((total, product) => total + product.quantity, 0);
-    //     if (productQuantity === 0) {
-    //         return show('No product to buy', 'red');
-    //     }
-
-    //     const newOder = {
-    //         paymentMethod: selectedPayment.name,
-    //         productList: listProduct,
-    //         userId: currentUserId
-    //     };
-
-    //     axios
-    //         .post("http://localhost:8080/zoo-server/api/v1/order/createNewBooking", newOder, { headers: authHeader() })
-    //         .then((response) => {
-    //             if (response.data.status === true) {
-    //                 localStorage.removeItem(`CART_${currentUserId}`);
-    //                 setRefresh(true);
-    //                 show('Buy success', 'green');
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             show('Build failed', 'red');
-    //             console.error(error);
-    //         });
-    // }
     const handleAddOrder = () => {
         if (JSON.parse(localStorage.getItem("user"))) {
             const hasInvalidQuantity = cartList.some(product => {
@@ -258,6 +232,7 @@ export default function Cart() {
                     .then((response) => {
                         if (response.data.status === true) {
                             localStorage.removeItem(`CART_${currentUserId}`);
+                            setCartList([]);
                             setRefresh(true);
                             show('Buy success', 'green');
                         }

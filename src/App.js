@@ -96,7 +96,7 @@ function App() {
             path="/products-detail/:productId"
             element={<ProductDetailUser />}
           />
-          <Route path="/training" element={<Training />} />
+          <Route path="/training-animal" element={<Training />} />
           <Route path="/admins" element={<Admin />}>
             <Route index element={<DashBoard />} />
             <Route path="manage-users" element={<ManageUser />} />

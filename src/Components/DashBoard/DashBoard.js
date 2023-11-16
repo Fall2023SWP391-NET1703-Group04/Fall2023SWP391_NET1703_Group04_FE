@@ -181,7 +181,7 @@ const DashBoard = () => {
                     <div class="flex flex-wrap column-gap-4 row-gap-6 ml-6">
                         <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
                             <Card title="Total Animal" className="h-20rem w-12rem">
-                                <h2 className="m-0">{animalList.length}</h2>
+                                <h2 className="m-0 text-black-alpha-90">{animalList.length}</h2>
                                 <img
                                     src="http://localhost:3000/img/images.png"
                                     alt="img"
@@ -192,7 +192,7 @@ const DashBoard = () => {
                         </div>
                         <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
                             <Card title="Total User" className="h-20rem w-12rem">
-                                <h2 className="m-0">{userList.length}</h2>
+                                <h2 className="m-0 text-black-alpha-90">{userList.length}</h2>
                                 <img
                                     src="http://localhost:3000/img/user-img.png"
                                     alt="img"
@@ -203,7 +203,7 @@ const DashBoard = () => {
                         </div>
                         <div class="border-round w-12rem h-20rem  font-bold flex align-items-center justify-content-center">
                             <Card title="Total Trainer" className="h-20rem w-12rem">
-                                <h2 className="m-0">{trainerList.length}</h2>
+                                <h2 className="m-0 text-black-alpha-90">{trainerList.length}</h2>
                                 <img
                                     src="http://localhost:3000/img/trainer.png"
                                     alt="img"
@@ -214,7 +214,7 @@ const DashBoard = () => {
                         </div>
                         <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
                             <Card title="Total Diet" className="h-20rem w-12rem">
-                                <h2 className="m-0">{dietList.length}</h2>
+                                <h2 className="m-0 text-black-alpha-90">{dietList.length}</h2>
                                 <img
                                     src="http://localhost:3000/img/6774898.png"
                                     alt="img"
@@ -225,7 +225,7 @@ const DashBoard = () => {
                         </div>
                         <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
                             <Card title="Total Food" className="h-20rem w-12rem">
-                                <h2 className="m-0">{foodList.length}</h2>
+                                <h2 className="m-0 text-black-alpha-90">{foodList.length}</h2>
                                 <img
                                     src="http://localhost:3000/img/food.png"
                                     alt="img"
@@ -236,7 +236,7 @@ const DashBoard = () => {
                         </div>
                         <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
                             <Card title="Products" className="h-20rem w-12rem">
-                                <h2 className="m-0">{productList.length}</h2>
+                                <h2 className="m-0 text-black-alpha-90">{productList.length}</h2>
                                 <img
                                     src="http://localhost:3000/img/zoo_gift.jpg"
                                     alt="img"
@@ -247,7 +247,7 @@ const DashBoard = () => {
                         </div>
                         <div class="border-round w-12rem h-20rem  font-bold flex align-items-center justify-content-center">
                             <Card title="Total Cage" className="h-20rem w-12rem">
-                                <h2 className="m-0">{animalCageList.length}</h2>
+                                <h2 className="m-0 text-black-alpha-90">{animalCageList.length}</h2>
                                 <img
                                     src="http://localhost:3000/img/animal_cage_icon.png"
                                     alt="img"
