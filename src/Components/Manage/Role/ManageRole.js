@@ -11,8 +11,20 @@ import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { InputMask } from "primereact/inputmask";
 import _ from "lodash";
+import { useNavigate } from "react-router-dom";
 import { fetchUsers } from "../../services/userServices";
 const ManageRole = () => {
+  const navigate = useNavigate();
+
+  if (
+    !JSON.parse(localStorage.getItem("user")) ||
+    (
+      JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN'
+
+    )
+  ) {
+    navigate("/notfound");
+  }
   //Modal add
   const [visible, setVisible] = useState(false);
   const [visibleUpdateUser, setVisibleUpdateUser] = useState(false);
@@ -35,11 +47,12 @@ const ManageRole = () => {
   const footerContentUpdateUser = (
     <div>
       <Button
-        label="No"
+        label="Canel"
         icon="pi pi-times"
         onClick={() => setVisibleUpdateUser(false)}
-        className="p-button-text"
+        className="mr-2 p-button p-button-danger"
       />
+
       <Button
         label="Update"
         icon="pi pi-check"
@@ -184,14 +197,20 @@ const ManageRole = () => {
 
   return (
     <>
-      <div className="table-user">
+      <div className="table-user ml-4">
         <h1>Role List</h1>
-        <div className="card flex justify-content-center">
+        <div class="flex flex-row-reverse flex-wrap mb-4 ">
           <Button
+            className="mr-2"
             label="Add"
             icon="pi pi-plus"
             onClick={() => setVisible(true)}
           />
+        </div>
+
+
+        <div className="card flex justify-content-center">
+
           <Dialog
             header="Add Role"
             visible={visible}
@@ -240,6 +259,11 @@ const ManageRole = () => {
               tableStyle={{ minWidth: "50rem" }}
             >
               <Column
+
+                style={{ width: "25%" }}
+              ></Column>
+
+              <Column
                 field="roleId"
                 header="Role Id"
                 sortable
@@ -252,16 +276,16 @@ const ManageRole = () => {
                   return roles.roleName === "ROLE_ADMIN"
                     ? "ADMIN"
                     : roles.roleName === "ROLE_CUSTOMER"
-                    ? "CUSTOMER"
-                    : roles.roleName === "ROLE_STAFF"
-                    ? "STAFF"
-                    : roles.roleName === "ROLE_FOODMANAGER"
-                    ? "FOODMANAGER"
-                    : roles.roleName === "ROLE_TRAINER"
-                    ? "TRAINER"
-                    : roles.roleName === ""
-                    ? "none"
-                    : roles.roleName;
+                      ? "CUSTOMER"
+                      : roles.roleName === "ROLE_STAFF"
+                        ? "STAFF"
+                        : roles.roleName === "ROLE_FOODMANAGER"
+                          ? "FOODMANAGER"
+                          : roles.roleName === "ROLE_TRAINER"
+                            ? "TRAINER"
+                            : roles.roleName === ""
+                              ? "none"
+                              : roles.roleName;
                 }}
                 sortable
                 style={{ width: "25%" }}
@@ -272,18 +296,20 @@ const ManageRole = () => {
                   return (
                     <div style={{ display: "flex" }}>
                       <Button
-                        label="Delete"
+                        icon="pi pi-trash"
+                        className="p-button-danger"
                         field="userId"
                         onClick={() => deleteUser(role.roleId)}
                         severity="danger"
                         rounded
                       />
                       <Button
-                        label="Update"
+                        icon="pi pi-pencil"
+                        className="p-button-pencil"
                         onClick={() => {
                           handleClickBtnUpdate(role);
                         }}
-                        severity="secondary"
+                        severity="success"
                         rounded
                       />
                     </div>

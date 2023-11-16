@@ -122,19 +122,21 @@ export default function History() {
         </div>
     );
     return (
-        <div className="datatable-rowexpansion-demo">
+        <div className="datatable-rowexpansion-demo mt-5">
             <Header />
             <Toast ref={toast} />
 
-            <div className="card">
+            <div className="card container">
                 <DataTable value={products} expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)}
                     onRowExpand={onRowExpand} onRowCollapse={onRowCollapse} responsiveLayout="scroll"
                     rowExpansionTemplate={rowExpansionTemplate} dataKey="id" header={header}>
+                    <Column style={{ width: '10%' }} />
                     <Column expander={allowExpansion} style={{ width: '3em' }} />
+
                     <Column field="fullName" header="Name" />expander={allowExpansion}
                     <Column field="totalPrice" header="total price" sortable />
                     <Column field="bookingDate" header="date order" sortable />
-                    <Column field="status" header="Status" sortable />
+
                 </DataTable>
             </div>
             <Footer />

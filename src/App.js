@@ -45,8 +45,9 @@ import CageDetail from "./Components/Manage/Area/AreaDetail";
 import Product from "./Components/User/Product";
 
 import PageNotFound from "./PageNotFound/PageNotFound";
-
+import NewsDetail from "./Components/NewsUser/NewsDetail";
 import AddDiet from "./Components/Manage/Diet/AddDiet";
+import UpdateDiet from "./Components/Manage/Diet/UpdateDiet";
 import ForGotPassword from "./Components/ForgotPassword/ForgotPassword";
 import ChangePassword from "./Components/UpdateProfileUser/ChangePassword";
 
@@ -71,6 +72,7 @@ function App() {
           <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/forgotpassword" element={<ForGotPassword />} />
           <Route path="/news-user" element={<NewUser />} />
+          <Route path="/news-detail/:newsId" element={<NewsDetail />} />
           <Route path="/register" element={<Register />} />
           <Route path="/notfound" element={<PageNotFound />} />
           <Route path="managediet" element={<ManageDiet />} />
@@ -111,6 +113,7 @@ function App() {
             <Route path="animal-details/:animalId" element={<AnimalDetail />} />
             <Route path="cage-details/:areaId" element={<CageDetail />} />
             <Route path="add-diet" element={<AddDiet />} />
+            <Route path="update-diet/:dietId" element={<UpdateDiet />} />
             <Route
               path="product-details/:productId"
               element={<ProductDetail />}

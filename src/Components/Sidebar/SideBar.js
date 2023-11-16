@@ -4,15 +4,24 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 const SideBar = () => {
   const navigate = useNavigate();
+  const userRole = JSON.parse(localStorage.getItem("user"))?.data?.role;
   return (
+
     <Sidebar className="w-full">
       <Menu >
 
         <MenuItem component={<Link to="/admins" />}> DashBoard</MenuItem>
         <SubMenu label="Task">
-          <MenuItem component={<Link to="manage-users" />}>
-            Manage User
-          </MenuItem>
+          {userRole === 'ROLE_ADMIN' && (
+            <>
+              <MenuItem component={<Link to="manage-users" />}>
+                Manage User
+              </MenuItem>
+              <MenuItem component={<Link to="manage-roles" />}>
+                Manage Roles
+              </MenuItem>
+            </>
+          )}
           <MenuItem component={<Link to="manage-products" />}>
             Manage Product
           </MenuItem>
@@ -35,9 +44,7 @@ const SideBar = () => {
             Manage Diet
           </MenuItem>
           <MenuItem component={<Link to="manage-news" />}>Manage News</MenuItem>
-          <MenuItem component={<Link to="manage-roles" />}>
-            Manage Roles
-          </MenuItem>
+
         </SubMenu>
       </Menu>
     </Sidebar>

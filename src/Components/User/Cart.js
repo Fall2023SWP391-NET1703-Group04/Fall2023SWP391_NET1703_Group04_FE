@@ -283,7 +283,8 @@ export default function Cart() {
                 <div className="product-item">
 
 
-                    <img src={`http://localhost:3000/img/${data.image}`} onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={data.image} />
+                    <img src={`http://localhost:3000/img/${data.image}`} onError={(e) => e.target.src = 'https://thumbs.dreamstime.com/z/flat-isolated-vector-eps-illustration-icon-minimal-design-long-shadow-find-product-web-store-118523703.jpg'} alt={data.image} />
+
                     <div className="product-detail">
 
                         <div className="product-name">{data.productName}</div>
@@ -321,8 +322,7 @@ export default function Cart() {
                     </div>
                     <Dialog
                         visible={visible}
-                        style={{ width: '50vw' }}
-
+                        style={{ width: '50vw', backgroundColor: '#ffebee' }}
                         modal
                         onHide={handleCancelDelete}
                         footer={
@@ -345,11 +345,12 @@ export default function Cart() {
                         }
                     >
                         <div className="text-center">
-                            <i className="pi pi-exclamation-triangle" style={{ fontSize: '3rem' }}></i>
-                            <h4>Are you sure to remove product from the cart?</h4>
+                            <i className="pi pi-exclamation-triangle" style={{ fontSize: '3rem', color: '#d32f2f' }}></i>
+                            <h4>Are you sure to remove the product from the cart?</h4>
                             <p>Confirm to proceed</p>
                         </div>
                     </Dialog>
+
                 </div>
             </>
 
@@ -361,51 +362,65 @@ export default function Cart() {
             <Header />
             <Toast ref={toast} />
             <Toast ref={toastBC} />
-            <div className='container grid' style={{ margin: '20px' }} >
+            <div className="card container mt-5">
+                <div className='container grid' >
+                    <div className="col-6">
+                        <div class="flex flex-row flex-wrap">
+                            <Button
 
-                <div className="datascroller-demo col-8">
-                    <div>
+                                icon="pi pi-arrow-left"
+                                label="Back to Shop"
+                                onClick={() => navigate('/product')}
+                                className="p-button-success p-button-sm"
 
-                        <div className="card">
-                            <div className='header'> your product </div>
-                            <DataView value={cartList} itemTemplate={itemTemplate} rows={5} inline />
-                        </div>
-                    </div>
-                </div>
-                <div className='col-4'>
-
-                    <div className="card grid">
-                        <div className='header'> summary </div>
-                        <div className="card flex justify-content-center">
-                            <Dropdown
-                                value={selectedPayment}
-                                onChange={(e) => setSelectedPayment(e.value)}
-                                options={cities}
-                                optionLabel="name"
-                                className="w-full"
                             />
                         </div>
+                    </div>
 
-                        <div className='body-content-paymen' >
+                    <div className="datascroller-demo col-8">
+                        <div>
 
-                            <div className="col-6 col-offset-3" style={{ display: 'flex', flexDirection: 'column' }}>
+                            <div className="card">
+                                <div className='header'> your product </div>
+                                <DataView value={cartList} itemTemplate={itemTemplate} rows={5} inline />
+                            </div>
+                        </div>
+                    </div>
+                    <div className='col-4'>
 
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <div className="product-name">Total:</div>
-                                    <div className="product-value">{totalPrice}$</div>
-                                </div>
-                                <Button label="buy" icon="pi pi-shopping-cart"
-                                    iconPos="right"
-                                    onClick={handleAddOrder}
-
+                        <div className="card grid">
+                            <div className='header'> summary </div>
+                            <div className="card flex justify-content-center">
+                                <Dropdown
+                                    value={selectedPayment}
+                                    onChange={(e) => setSelectedPayment(e.value)}
+                                    options={cities}
+                                    optionLabel="name"
+                                    className="w-full"
                                 />
                             </div>
 
-                            <div className='address'></div>
+                            <div className='body-content-paymen' >
+
+                                <div className="col-6 col-offset-3" style={{ display: 'flex', flexDirection: 'column' }}>
+
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <div className="product-name">Total:</div>
+                                        <div className="product-value">{totalPrice}$</div>
+                                    </div>
+                                    <Button label="buy" icon="pi pi-shopping-cart"
+                                        iconPos="right"
+                                        onClick={handleAddOrder}
+
+                                    />
+                                </div>
+
+                                <div className='address'></div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
             <Footer />
         </>
