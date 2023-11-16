@@ -62,15 +62,15 @@ export default function ManageNews() {
 
         axios.get(apiUrl, { headers: authHeader() })
             .then(response => {
-
                 setNewsLists(response.data.data);
                 SetNews4(response.data.data);
+                setRefresh(false)
             })
             .catch(error => {
                 console.error('Lỗi khi gửi yêu cầu:', error);
             });
 
-    }, [!refresh]);
+    }, [refresh]);
 
 
 
@@ -136,7 +136,7 @@ export default function ManageNews() {
                 // Xóa thành công, cập nhật danh sách sản phẩm ở phía client
                 const updatedNewsList = newsLists.filter((item) => item.newsId !== news.newsId);
                 setNewsLists(updatedNewsList);
-
+                setRefresh(true)
                 show('delete news successfully!', 'green');
             })
             .catch((error) => {
@@ -164,9 +164,7 @@ export default function ManageNews() {
                 show(response.data.message, 'green');
                 setNewNews([]);
                 setIsModalOpen(false);
-                setTimeout(() => {
-                    setRefresh(true);
-                }, 3000);
+                setRefresh(true);
             })
             .catch((error) => {
                 show(error.response.data.message, 'red');
@@ -199,9 +197,7 @@ export default function ManageNews() {
                 show(' updated successfully', 'green');
                 setNewNews([])
                 setIsModalOpen1(false);
-
                 setRefresh(true);
-
             })
             .catch((error) => {
                 console.error('Error updating:', error);

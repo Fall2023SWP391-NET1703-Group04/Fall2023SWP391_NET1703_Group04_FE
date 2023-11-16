@@ -16,11 +16,16 @@ function Header() {
   return (
     <>
       <div style={{ backgroundColor: "#fab1a0" }}>
-        <Navbar expand="lg" >
+        <Navbar expand="lg">
           <Container fluid>
             <div className="col-2">
               <Navbar.Brand href="/">
-                <img className="logo" alt="Card" style={{ width: '100px', height: '50px' }} src={`http://localhost:3000/img/logo.png`} />
+                <img
+                  className="logo"
+                  alt="Card"
+                  style={{ width: "100px", height: "50px" }}
+                  src={`http://localhost:3000/img/logo.png`}
+                />
               </Navbar.Brand>
               <Navbar.Toggle aria-controls="navbarScroll" />
             </div>
@@ -31,10 +36,7 @@ function Header() {
                 style={{ maxHeight: "100px" }}
                 navbarScroll
               >
-                <NavLink
-                  to={`/`}
-                  className="nav-link"
-                >
+                <NavLink to={`/`} className="nav-link">
                   Home
                 </NavLink>
                 <NavLink to={`/animals`} className="nav-link">
@@ -59,19 +61,25 @@ function Header() {
                   >
                     <NavDropdown.Item>
                       {user.data.role === "ROLE_TRAINER" ? (
-                        <Link to="/trainer" className="nav-link">
-                          Profile
-                        </Link>
+                        <>
+                          <Link to="/trainer" className="nav-link">
+                            Profile
+                          </Link>
+                        </>
                       ) : (
-                        <Link to="/update-profile-user" className="nav-link">
-                          Profile
-                        </Link>
+                        <>
+                          <Link to="/update-profile-user" className="nav-link">
+                            Update Profile
+                          </Link>
+                          <Link to="/changepassword" className="nav-link">
+                            Change Password
+                          </Link>
+                        </>
                       )}
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       href="#action4"
                       onClick={() => {
-
                         navigate("/cart");
                       }}
                     >
@@ -81,7 +89,6 @@ function Header() {
                     <NavDropdown.Item
                       href="#action4"
                       onClick={() => {
-
                         navigate("/user-history");
                       }}
                     >

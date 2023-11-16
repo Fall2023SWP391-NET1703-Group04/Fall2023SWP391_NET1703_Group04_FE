@@ -66,7 +66,7 @@ const NewUser = () => {
       <Header />
       <div className="timeline-demo">
         <div className="card container mt-4 ">
-          <h5>news The Zoo</h5>
+          <h5>The Zoo News</h5>
           <Timeline value={newsData} align="alternate" className="customized-timeline" marker={customizedMarker} content={customizedContent} />
         </div>
       </div>

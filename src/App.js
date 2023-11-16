@@ -47,7 +47,9 @@ import Product from "./Components/User/Product";
 import PageNotFound from "./PageNotFound/PageNotFound";
 import NewsDetail from "./Components/NewsUser/NewsDetail";
 import AddDiet from "./Components/Manage/Diet/AddDiet";
+import UpdateDiet from "./Components/Manage/Diet/UpdateDiet";
 import ForGotPassword from "./Components/ForgotPassword/ForgotPassword";
+import ChangePassword from "./Components/UpdateProfileUser/ChangePassword";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -67,6 +69,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/forgotpassword" element={<ForGotPassword />} />
           <Route path="/news-user" element={<NewUser />} />
           <Route path="/news-detail/:newsId" element={<NewsDetail />} />
@@ -89,7 +92,9 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/user-history" element={<History />} />
 
+
           <Route path="/products-detail/:productId" element={<ProductDetailUser />} />
+
           <Route path="/training-animal" element={<Training />} />
           <Route path="/admins" element={<Admin />}>
             <Route index element={<DashBoard />} />
@@ -107,6 +112,7 @@ function App() {
             <Route path="animal-details/:animalId" element={<AnimalDetail />} />
             <Route path="cage-details/:areaId" element={<CageDetail />} />
             <Route path="add-diet" element={<AddDiet />} />
+            <Route path="update-diet/:dietId" element={<UpdateDiet />} />
             <Route
               path="product-details/:productId"
               element={<ProductDetail />}

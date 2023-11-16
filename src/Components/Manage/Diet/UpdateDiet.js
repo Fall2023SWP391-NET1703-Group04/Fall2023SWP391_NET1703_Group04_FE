@@ -1,19 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { Button } from 'primereact/button'
+import { Dialog } from 'primereact/dialog'
+import axios from 'axios'
+import authHeader from '../../AuthHeader/AuthHeader'
+import { Toast } from 'primereact/toast'
+import { InputText } from 'primereact/inputtext'
+import { MultiSelect } from 'primereact/multiselect'
 import { Card } from 'primereact/card'
 import { Fieldset } from 'primereact/fieldset'
-import { InputText } from 'primereact/inputtext';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import axios from 'axios';
-import authHeader from '../../AuthHeader/AuthHeader';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
-import { InputNumber } from 'primereact/inputnumber';
-import { DataView } from 'primereact/dataview';
-import { Toast } from 'primereact/toast';
+import { DataView } from 'primereact/dataview'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
+import { InputNumber } from 'primereact/inputnumber'
+import { FilterMatchMode, FilterOperator } from 'primereact/api'
+import { useParams } from 'react-router-dom'
 
-export default function AddDiet() {
-    const [newDiet, setNewDiet] = useState([{
+export default function UpdateDiet() {
+    const { dietId } = useParams();
+    const [updateDiet, setUpdateDiet] = useState([{
         dietName: "",
         dietFoodRequests: []
     }]);
@@ -32,6 +36,14 @@ export default function AddDiet() {
     const paginatorRight = <Button type="button" icon="pi pi-plus" text label='Add' />;
 
     useEffect(() => {
+        axios
+            .get(`http://localhost:8080/zoo-server/api/v1/diet/getDietById/${dietId}`, { headers: authHeader() })
+            .then((response) => {
+                setUpdateDiet(response.data.data);
+                // setFoodAdded(response.data.data.dietFoodResponses && response.data.data.dietFoodResponses.map((food) => ({
+                //     ...food,
+                // })));
+            })
         axios
             .get('http://localhost:8080/zoo-server/api/v1/food/getAllFoods', { headers: authHeader() })
             .then((response) => {
@@ -132,14 +144,8 @@ export default function AddDiet() {
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         console.log(event.target.name);
-        // setNewDiet((prevState) => {
-        //     return {
-        //         ...prevState[0],
-        //         [name]: value
-        //     }
-        // });
-        setNewDiet({
-            ...newDiet,
+        setUpdateDiet({
+            ...updateDiet,
             [name]: value
         })
     }
@@ -151,7 +157,6 @@ export default function AddDiet() {
 
         var foodItem = {
             foodId: rowData.foodId,
-            foodName: rowData.foodName,
             quantity: quantity
         }
         const foodItems = foodAdded ? foodAdded : [];
@@ -163,28 +168,27 @@ export default function AddDiet() {
         }));
         //test show added food
         setFoodAdded(foodItems)
-        setNewDiet({
-            ...newDiet,
+        setUpdateDiet({
+            ...updateDiet,
             dietFoodRequests: foodItems,
         });
 
         console.log(foodItems);
-
     }
 
-    const handleAddDiet = async () => {
+    const handleUpdateDiet = async () => {
         await axios
-            .post('http://localhost:8080/zoo-server/api/v1/diet/createNewDiet', newDiet, { headers: authHeader() })
+            .put(`http://localhost:8080/zoo-server/api/v1/diet/updateDiet/${dietId}`, updateDiet, { headers: authHeader() })
             .then((response) => {
                 show(response.data.message, 'green');
                 setRefresh(true);
             })
             .catch((error) => {
-                if (newDiet.dietName === undefined) {
+                if (updateDiet.dietName === undefined) {
                     show("Please input diet name", 'red');
 
                 }
-                else if (newDiet.dietFoodRequests === undefined) {
+                else if (updateDiet.dietFoodRequests === undefined) {
                     show("Choose at least 1 food", 'red');
                 }
                 else
@@ -195,7 +199,7 @@ export default function AddDiet() {
     //some css
     const animalProfile = (
         <div className="flex align-items-center text-primary" >
-            <span className="font-bold text-lg">New Diet Here</span>
+            <span className="font-bold text-lg">Update Diet Here</span>
         </div>
     );
     const training = (
@@ -208,26 +212,26 @@ export default function AddDiet() {
 
     const footer = (
         <>
-            <Button label="Add" icon="pi pi-pencil" onClick={handleAddDiet} />
+            <Button label="Update" icon="pi pi-pencil" onClick={handleUpdateDiet} />
         </>
     );
 
 
     const itemTemplate = (data) => {
         const handleRemoveFood = (foodId) => {
-            // Update the foodAdded state asynchronously using a state updater function
-            setFoodAdded((prevFoodItems) => prevFoodItems.filter((item) => item.foodId !== foodId));
-
-            // Update the foodQuantities state asynchronously using a state updater function
+            // Remove the food item with the given foodId
+            const updatedFoodItems = foodAdded.filter(item => item.foodId !== foodId);
+            setFoodAdded(updatedFoodItems);
+            console.log(foodAdded);
+            // Update the quantity for the specific food item using foodId
             setFoodQuantities((prevQuantities) => ({
                 ...prevQuantities,
                 [foodId]: undefined, // Remove the quantity entry for the removed food item
             }));
         };
-
         return (
             <div className="grid w-full">
-                <div className="col-5 text-2xl font-semibold">Name: {data.foodName}</div>
+                <div className="col-5 text-2xl font-semibold">Food id: {data.foodId}</div>
                 <div className="col-5 text-2xl font-semibold">Quantity: {data.quantity}</div>
                 <div className="col-2">
                     <Button
@@ -260,7 +264,7 @@ export default function AddDiet() {
                                 id="dietName"
                                 name="dietName"
                                 className='w-100'
-                                value={newDiet.dietName}
+                                value={updateDiet.dietName}
                                 onChange={handleInputChange}
                             />
                         </div>
