@@ -28,18 +28,18 @@
 }
 
 .wrapper-2 {
-  background-color: purple;
+  background-color: rgb(255, 255, 255);
   color: #fff;
   padding: 3rem;
   border-radius: 0.5rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(20px);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  color: #fff;
+  color: #080000;
 }
 
 .link-register {
-  color: #fff;
+  color: blue;
   font-weight: bold;
   text-decoration: none;
 }

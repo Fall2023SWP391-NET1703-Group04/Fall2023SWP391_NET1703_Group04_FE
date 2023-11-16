@@ -8,9 +8,21 @@ import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
 import { Toast } from "primereact/toast";
 import dayjs from "dayjs";
+import { useNavigate } from 'react-router-dom';
 import authHeader from "../../AuthHeader/AuthHeader";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 function ManageFood() {
+  const navigate = useNavigate();
+
+  if (
+    !JSON.parse(localStorage.getItem("user")) ||
+    (
+      JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
+      JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
+    )
+  ) {
+    navigate("/notfound");
+  }
   const [foods, setFoods] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);

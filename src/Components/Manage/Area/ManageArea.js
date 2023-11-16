@@ -10,7 +10,20 @@ import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import _ from "lodash";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { useNavigate } from "react-router-dom";
 const ManageArea = () => {
+
+  const navigate = useNavigate();
+
+  if (
+    !JSON.parse(localStorage.getItem("user")) ||
+    (
+      JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
+      JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
+    )
+  ) {
+    navigate("/notfound");
+  }
   //----------------------------------------------------------------
   //Get
   const [areas, setAreas] = useState([]);
@@ -305,36 +318,38 @@ const ManageArea = () => {
           style={{ width: "25%" }}
         ></Column>
         <Column
-          header="Action"
+          // header="Action"
           body={(area) => (
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
               <Button
-                severity="danger"
-                className="mr-1"
+                icon="pi pi-trash"
+                className="p-button-danger"
                 onClick={() => {
                   handleClickBtnDelete(area.areaId);
                 }}
                 rounded
-              >
-                Delete
-              </Button>
+
+              />
+
+              <span style={{ margin: '0 2px' }} />
               <Button
-                rounded
-                className="mr-1"
+                icon="pi pi-pencil"
+                className="p-button-pencil"
                 onClick={() => handleClickBtnUpdate(area)}
-              >
-                Update
-              </Button>
+              />
+              <span style={{ margin: '0 2px' }} />
               <Button
-                rounded
+                icon="pi pi-eye"
+                className="p-button-info"
                 onClick={() => window.location.href = `cage-details/${area.areaId}`}
-              >
-                View
-              </Button>
+              />
             </div>
           )}
           style={{ width: "25%" }}
-        ></Column>
+        />
+
+
+
       </DataTable>
     </div>
   );

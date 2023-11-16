@@ -60,13 +60,32 @@ function Header() {
                     <NavDropdown.Item>
                       {user.data.role === "ROLE_TRAINER" ? (
                         <Link to="/trainer" className="nav-link">
-                          Trainer Profile
+                          Profile
                         </Link>
                       ) : (
                         <Link to="/update-profile-user" className="nav-link">
-                          Update Profile
+                          Profile
                         </Link>
                       )}
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      href="#action4"
+                      onClick={() => {
+
+                        navigate("/cart");
+                      }}
+                    >
+                      Your Cart
+                    </NavDropdown.Item>
+
+                    <NavDropdown.Item
+                      href="#action4"
+                      onClick={() => {
+
+                        navigate("/user-history");
+                      }}
+                    >
+                      Oder History
                     </NavDropdown.Item>
 
                     <NavDropdown.Item

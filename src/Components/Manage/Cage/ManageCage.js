@@ -16,8 +16,20 @@ import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
 import { InputTextarea } from 'primereact/inputtextarea';
 import ModalUpdateCage from './ModalUpdateCage';
+import { useNavigate } from 'react-router-dom';
 
 const ManageCage = () => {
+    const navigate = useNavigate();
+
+    if (
+        !JSON.parse(localStorage.getItem("user")) ||
+        (
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
+        )
+    ) {
+        navigate("/notfound");
+    }
     const [cages, setCages] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [areas, setAreas] = useState([]);

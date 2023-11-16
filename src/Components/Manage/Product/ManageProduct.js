@@ -27,10 +27,15 @@ export default function ManageProduct() {
 
   const navigate = useNavigate();
 
-  if (!JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN') {
+  if (
+    !JSON.parse(localStorage.getItem("user")) ||
+    (
+      JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
+      JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
+    )
+  ) {
     navigate("/notfound");
   }
-
 
 
   const toast = useRef(null);
@@ -274,7 +279,7 @@ export default function ManageProduct() {
           selection={selectedCustomer3} onSelectionChange={e => setSelectedCustomer3(e.value)} selectionMode="single" dataKey="id" responsiveLayout="scroll"
           stateStorage="custom" customSaveState={onCustomSaveState} customRestoreState={onCustomRestoreState} emptyMessage="No Product name found.">
           <Column field="productId" header="ID" style={{ width: '10%' }}></Column>
-          <Column field="productName" header="Product Name" sortable style={{ width: '20%', textAlign: 'center' }}></Column>
+          <Column field="productName" header="Product Name" sortable style={{ width: '20%' }}></Column>
           <Column field="description" header="Description" sortable style={{ width: '25%' }}></Column>
           <Column field="price" header="Price" sortable style={{ width: '15%' }}></Column>
           <Column field="quantity" header="Quantity" sortable style={{ width: '10%', textAlign: 'center' }}></Column>

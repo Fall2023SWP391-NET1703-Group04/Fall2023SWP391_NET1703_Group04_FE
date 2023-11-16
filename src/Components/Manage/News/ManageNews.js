@@ -10,15 +10,21 @@ import { Dialog } from 'primereact/dialog';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { Calendar } from 'primereact/calendar';
 import authHeader from '../../AuthHeader/AuthHeader';
+
 import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom";
 export default function ManageNews() {
     const navigate = useNavigate();
 
-    if (!JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN') {
+    if (
+        !JSON.parse(localStorage.getItem("user")) ||
+        (
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
+        )
+    ) {
         navigate("/notfound");
     }
-
 
     const [news4, SetNews4] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -35,7 +41,7 @@ export default function ManageNews() {
     const [isModalOpen1, setIsModalOpen1] = useState(false);
     const [selectedCustomer3, setSelectedCustomer3] = useState(null);
     const [refresh, setRefresh] = useState(false);
-    // Rest of your code
+
 
 
 
@@ -74,7 +80,7 @@ export default function ManageNews() {
                 <Button
                     icon="pi pi-trash"
                     className="p-button-danger"
-                    onClick={() => deleteNews(rowData)}
+                    onClick={() => showConfirm(rowData)}
                 />
 
                 <Button
@@ -85,7 +91,6 @@ export default function ManageNews() {
                         setIsEditing(true);
                         getNewsByID(rowData.newsId);
                         setNewsId(rowData.newsId);
-
                     }}
                 />
 
@@ -132,7 +137,7 @@ export default function ManageNews() {
                 const updatedNewsList = newsLists.filter((item) => item.newsId !== news.newsId);
                 setNewsLists(updatedNewsList);
 
-                alert(response.data.message);
+                show('delete news successfully!', 'green');
             })
             .catch((error) => {
                 console.error('Lỗi khi xóa sản phẩm:', error);
@@ -147,20 +152,28 @@ export default function ManageNews() {
 
 
     const handleAddNews = () => {
+        // Check if any required field is empty
+        if (!newNews.title || !newNews.content || !newNews.newsType || !newNews.dateCreated) {
+            show('Please fill in all required fields.', 'red');
+            return;
+        }
+
         axios
             .post("http://localhost:8080/zoo-server/api/v1/new/createNew", newNews, { headers: authHeader() })
             .then((response) => {
                 show(response.data.message, 'green');
-                setNewNews([])
+                setNewNews([]);
                 setIsModalOpen(false);
-                setRefresh(true)
-
+                setTimeout(() => {
+                    setRefresh(true);
+                }, 3000);
             })
             .catch((error) => {
                 show(error.response.data.message, 'red');
                 console.error(error);
             });
     }
+
 
     const getNewsByID = (id) => {
 
@@ -169,23 +182,29 @@ export default function ManageNews() {
                 setEditingNews(response.data.data); // Make sure response.data.data is an array
             })
             .catch((error) => {
-                console.error('Error fetching user profile:', error);
+                console.error('Error fetching ', error);
             });
     };
-    // console.log('check get news by id', editingNews)
-    console.log('check add', newNews)
+
+
     const handleUpdateNews = (newsId) => {
+        if (!editingNews.title || !editingNews.content || !editingNews.newsType || !editingNews.dateCreated) {
+            show('Please fill in all required fields.', 'red');
+            return;
+        }
         axios
             .put(`http://localhost:8080/zoo-server/api/v1/new/updateNew/${newsId}`, editingNews, { headers: authHeader() })
             .then(() => {
 
-                show('Product updated successfully', 'green');
+                show(' updated successfully', 'green');
                 setNewNews([])
-                setIsModalOpen(false);
-                setRefresh(true)
+                setIsModalOpen1(false);
+
+                setRefresh(true);
+
             })
             .catch((error) => {
-                console.error('Error updating product:', error);
+                console.error('Error updating:', error);
                 show(error.response.data.message, 'red');
             });
     };
@@ -212,6 +231,7 @@ export default function ManageNews() {
             [name]: event.target.files[0].name
         });
     }
+
     const handleInputChangequantity = (event) => {
         const { name, value } = event.target;
 
@@ -230,7 +250,54 @@ export default function ManageNews() {
         'filters': { value: filters, callback: setFilters },
     };
 
+    const [visible, setVisible] = useState(false);
+    const handleDeleteConfirmation = (rowData) => {
+        deleteNews(rowData);
+        handleCancel();
+    };
 
+    const handleConfirmation = (rowData) => {
+        showConfirm(rowData);
+    };
+
+    const handleCancel = () => {
+        setVisible(false);
+        toastBC.current.clear();
+    };
+
+    const toastBC = useRef(null);
+    const showConfirm = (rowData) => {
+        toastBC.current.show({
+            severity: 'warn',
+            sticky: true,
+            content: (
+                <div className="flex flex-column" style={{ flex: '1' }}>
+                    <div className="text-center">
+                        <i className="pi pi-exclamation-triangle" style={{ fontSize: '3rem' }}></i>
+                        <h4>You want to delete this news?</h4>
+                    </div>
+                    <div className="grid p-fluid">
+                        <div className="col-6">
+                            <Button
+                                type="button"
+                                label="Yes"
+                                className="p-button-success"
+                                onClick={() => handleDeleteConfirmation(rowData)}
+                            />
+                        </div>
+                        <div className="col-6">
+                            <Button
+                                type="button"
+                                label="No"
+                                className="p-button-secondary"
+                                onClick={handleCancel}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )
+        });
+    };
 
 
     const onGlobalFilterChange = (event, filtersKey) => {
@@ -265,6 +332,7 @@ export default function ManageNews() {
     };
 
     const displayWithDefaultDate = (field, defaultValue = 'Not Provided') => {
+        console.log('date view', editingNews[field])
         return isEditing ? (
             <Calendar
                 id={field}
@@ -294,20 +362,56 @@ export default function ManageNews() {
         );
     };
 
+    const onUploadUpdate = (event) => {
+        const selectedImage = event.target.files[0];
+        setEditingNews({
+            ...editingNews,
+            image: selectedImage ? selectedImage.name : '',
+        });
+    };
+    const displayImage = (field, defaultValue = "Not Provided") => {
+        return isEditing ? (
+            <input
+                type="file"
+                accept="image/*"
+                name="image"
+                id="image"
+                onChange={onUploadUpdate}
+            />
+        ) : (
+            ""
+        );
+    };
+
+
 
     return (
         <div className="datatable-editing-demo  w-full">
             <Toast ref={toast} />
+            <Toast ref={toastBC} position="bottom-center" />
             <div className="card container">
                 <h5>List News</h5>
                 <DataTable value={newsLists} paginator rows={10} header={header3} filters={filters} onFilter={(e) => setFilters(e.filters)}
                     selection={selectedCustomer3} onSelectionChange={e => setSelectedCustomer3(e.value)} selectionMode="single" dataKey="id" responsiveLayout="scroll"
                     stateStorage="custom" customSaveState={onCustomSaveState} customRestoreState={onCustomRestoreState} emptyMessage="No News title name found.">
-                    <Column field="newsId" header="ID" sortable style={{ width: '10%' }}></Column>
-                    <Column field="title" header="Title" sortable style={{ width: '20%', textAlign: 'center' }}></Column>
-                    <Column field="content" header="Content" sortable style={{ width: '25%' }}></Column>
+                    <Column field="newsId" header="ID" sortable style={{ width: '5%' }}></Column>
+                    <Column
+                        field="image"
+                        header="Image"
+                        body={(rowData) => (
+                            <img
+                                src={`http://localhost:3000/img/${rowData.image}`}
+                                onError={(e) => (e.target.src = 'https://cdn-icons-png.flaticon.com/512/4520/4520862.png')}
+                                alt={rowData.image}
+                                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                            />
+                        )}
+                        style={{ width: '10%' }}
+                    ></Column>
+                    <Column field="title" header="Title" sortable style={{ width: '20%' }}></Column>
+                    <Column field="content" header="Content" sortable style={{ width: '20%' }}></Column>
                     <Column field="newsType" header="News Type" sortable style={{ width: '15%' }}></Column>
-                    <Column field="createdDate" header="Created   Date" sortable style={{ width: '10%', textAlign: 'center' }}></Column>
+                    <Column field="createdDate" header="Created Date" sortable style={{ width: '10%', textAlign: 'center' }}></Column>
                     <Column field="Actions" header="Actions" style={{ width: '15%' }} body={actionBodyTemplate}></Column>
                 </DataTable>
 
@@ -369,6 +473,21 @@ export default function ManageNews() {
                             <br />
 
                         </div>
+                        <div className="field col-12 ">
+                            <div className="field col-12">
+                                <label htmlFor="image">News Image</label>
+                                <br />
+                                <input
+                                    className="w-full"
+                                    type="file"
+                                    accept="image/*"
+                                    name="image"
+                                    id="image"
+                                    onChange={onUpload}
+                                />
+                                {/* <FileUpload mode="basic" name="image" accept="image/*" maxFileSize={1000000} onUpload={onUpload} /> */}
+                            </div>
+                        </div>
                         <Button
                             label="Add News"
                             icon="pi pi-pencil"
@@ -406,9 +525,14 @@ export default function ManageNews() {
                         </div>
 
                         <div className="field col-12">
-                            <label htmlFor="dateCreated">Date Created News (yyyy-MM-dd)</label>
+                            <label htmlFor="dateCreated ">Date Created News (yyyy-MM-dd)</label>
                             <br />
                             {displayWithDefaultDate('dateCreated')}
+                        </div>
+                        <div className="field col-12">
+                            <label htmlFor="image">Image</label>
+                            <br />
+                            {displayImage('image')}
                         </div>
 
                         <Button

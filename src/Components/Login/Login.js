@@ -71,6 +71,9 @@ const Login = () => {
             case "ROLE_ADMIN":
               navigate("/admins");
               break;
+            case "ROLE_STAFF":
+              navigate("/admins");
+              break;
             case "ROLE_CUSTOMER":
               navigate("/");
               break;
@@ -78,7 +81,7 @@ const Login = () => {
               navigate("/trainer");
               break;
             default:
-              navigate("/home");
+              navigate("/");
           }
         }, 1000);
       })

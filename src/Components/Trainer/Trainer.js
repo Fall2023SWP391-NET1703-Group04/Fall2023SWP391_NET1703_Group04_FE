@@ -75,10 +75,7 @@ export default function Trainer() {
 
   const apiUrl = `http://localhost:8080/zoo-server/api/v1/user/getUserById/${userId}`;
   useEffect(() => {
-    // if (userId === null || userId === undefined) {
-    //     window.location.href = '/signin';
-    //     return;
-    // }
+
 
     axios.get(apiUrl, { headers: authHeader() })
       .then((response) => {
@@ -255,6 +252,7 @@ export default function Trainer() {
       <Header />
       <Sidebar visible={visibleLeft} onHide={() => setVisibleLeft(false)}>
         <Tree
+
           value={treeData}
           expandedKeys={expandedKeys}
           onToggle={(e) => setExpandedKeys(e.value)}

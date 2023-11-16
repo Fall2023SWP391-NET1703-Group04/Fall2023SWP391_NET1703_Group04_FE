@@ -17,10 +17,15 @@ import { useNavigate } from "react-router-dom";
 export default function ProductDetail() {
     const navigate = useNavigate();
 
-    if (!JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN') {
+    if (
+        !JSON.parse(localStorage.getItem("user")) ||
+        (
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
+        )
+    ) {
         navigate("/notfound");
     }
-
 
     const { productId } = useParams();
     const [editedProduct, setEditedProduct] = useState({});

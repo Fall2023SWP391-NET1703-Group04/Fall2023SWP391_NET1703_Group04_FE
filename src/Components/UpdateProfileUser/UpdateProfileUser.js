@@ -123,8 +123,11 @@ const ProFileUser = (props) => {
       });
   }, []);
 
+  const [originalUserData, setOriginalUserData] = React.useState({});
   const handleEditClick = () => {
+    setOriginalUserData(editedUser);
     setIsEditing(true);
+
   };
 
   const handleSaveClick = () => {
@@ -157,22 +160,25 @@ const ProFileUser = (props) => {
   };
 
   const onUpload = (event) => {
-    console.log(event.target.files[0].name);
     const name = event.target.name;
     setEditedUser({
       ...editedUser,
       avatar: event.target.files[0].name,
     });
   };
-
-  const displayWithDefault = (field, defaultValue = "Not Provided") => {
+  const handleCancelClick = () => {
+    // Khôi phục dữ liệu về trạng thái ban đầu
+    setEditedUser(originalUserData);
+    setIsEditing(false);
+  };
+  const displayWithDefault = (field, defaultValue = 'Not Provided') => {
     return isEditing ? (
       <input
-        className="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-8"
+        className="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
         name={field}
         type="text"
         placeholder={`Enter your ${field}`}
-        value={editedUser[field] || ""}
+        value={editedUser[field] || ''}
         onChange={handleInputChange}
       />
     ) : (
@@ -258,117 +264,155 @@ const ProFileUser = (props) => {
   return (
     <div>
       <Header />
+
       <div className="container-xl px-4 mt-4">
+
         <hr className="mt-0 mb-4" />
-        <Link to="/user-history">Go to Order History</Link>
-        <div className="grid mt-3">
+        <div className="grid">
           <div className="col-6">
             <div className="w-full">
               <div className="card ">
                 <div className="card-header">Profile Picture</div>
                 <div className="card-body text-center">
                   <div>
+
                     <img
-                      alt="Card"
-                      style={{ width: "200px", height: "200px" }}
                       src={`http://localhost:3000/img/${editedUser.avatar}`}
+                      onError={(e) => (e.target.src = 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-1024.png')}
+                      alt={editedUser.avatar}
+                      style={{ width: '200px', height: '200px%', objectFit: 'cover' }}
                     />
+
                     <br />
                     <label htmlFor="updateAnimalImage">Avatar</label>
                     <br />
-                    {displayWithAvatar("avatar")}
+                    {displayWithAvatar('avatar')}
                   </div>
+
+
+
                 </div>
 
+
                 <div className="small font-italic text-muted mb-4">
-                  {editedUser.firstName && editedUser.lastName
-                    ? `${editedUser.firstName} ${editedUser.lastName}`
-                    : "Name Not Provided"}
+                  {editedUser.firstName && editedUser.lastName ? `${editedUser.firstName} ${editedUser.lastName}` : 'Name Not Provided'}
                 </div>
               </div>
             </div>
+            {/* <div className="mt-2">
+      <Tree
+        value={treeData}
+        expandedKeys={expandedKeys}
+        onToggle={(e) => setExpandedKeys(e.value)}
+        selectionMode="single"
+        selectionKeys={selectedNodeKey}
+        onSelectionChange={(e) => setSelectedNodeKey(e.value)}
+        contextMenuSelectionKey={selectedNodeKey}
+        onContextMenuSelectionChange={(e) => setSelectedNodeKey(e.value)}
+        onContextMenu={menu}
+      />
+    </div> */}
           </div>
           <div className="col-6">
+
             <div className="card mb-4">
               <div className="card-header">Account Details</div>
               <div className="card-body">
                 <form>
-                  <div className="field flex align-items-stretch flex-wrap card-container">
-                    <label
-                      className="mb-1 mr-2 font-bold"
-                      htmlFor="inputFirstName"
-                    >
-                      First name:
-                    </label>
-                    {displayWithDefault("firstName")}
-                  </div>
-                  <div className="field flex">
-                    <label
-                      className="mb-1 mr-2 font-bold"
-                      htmlFor="inputLastName"
-                    >
-                      Last name:
-                    </label>
-                    {displayWithDefault("lastName")}
-                  </div>
-                  <div className="field flex">
-                    <label
-                      className="mb-1 mr-2 font-bold"
-                      htmlFor="inputLocation"
-                    >
-                      Location:
-                    </label>
-                    {displayWithDefault("address")}
+                  <div className="field flex" style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputFirstName">
+                        First name:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
+                      {displayWithDefault('firstName')}
+                    </div>
                   </div>
 
-                  <div className="field flex">
-                    <label
-                      className="mb-1 mr-2 font-bold"
-                      htmlFor="inputGender"
-                    >
-                      Gender:
-                    </label>
-                    {isEditing ? (
-                      <select
-                        className="form-control w-8"
-                        name="gender"
-                        value={editedUser.gender || ""}
-                        onChange={handleInputChange}
-                      >
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                      </select>
-                    ) : (
-                      <span>{editedUser.gender || "Not Provided"}</span>
-                    )}
+                  <div className="field flex" style={{ display: 'flex' }} >
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputLastName">
+                        Last name:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
+                      {displayWithDefault('lastName')}
+                    </div>
                   </div>
 
-                  <div className="field flex">
-                    <label className="mb-1 mr-2 font-bold" htmlFor="inputPhone">
-                      Phone number:
-                    </label>
-
-                    {displayWithDefaultPhone("phoneNumber")}
+                  <div className="field flex" style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputLocation">
+                        Location:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
+                      {displayWithDefault('address')}
+                    </div>
                   </div>
 
-                  <div className="field flex">
-                    <label
-                      className="mb-1 mr-2 font-bold"
-                      htmlFor="inputEmailAddress"
-                    >
-                      Email:
-                    </label>
-                    {security.email || "Not Provided"}
+                  <div className="field flex" style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputGender">
+                        Gender:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
+                      {isEditing ? (
+                        <select
+                          className="form-control w-full"
+                          name="gender"
+                          value={editedUser.gender || ''}
+                          onChange={handleInputChange}
+                        >
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
+                      ) : (
+                        <span>{editedUser.gender || 'Not Provided'}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="field flex" style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputPhone">
+                        Phone number:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
+                      {displayWithDefaultPhone('phoneNumber')}
+                    </div>
+                  </div>
+
+                  <div className="field flex" style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <label className="mb-1 mr-2 font-bold" htmlFor="inputEmailAddress">
+                        Email:
+                      </label>
+                    </div>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
+                      {security.email || 'Not Provided'}
+                    </div>
                   </div>
 
                   {isEditing ? (
-                    <button
-                      className="btn btn-primary"
-                      type="button"
-                      onClick={handleSaveClick}
-                    >
-                      Save changes
-                    </button>
+                    <div class="flex justify-content-center flex-wrap">
+                      <button
+                        className="btn btn-secondary mr-2 flex align-items-center justify-content-center"
+                        onClick={handleCancelClick}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="btn btn-primary ml-2 flex align-items-center justify-content-center"
+                        type="button"
+                        onClick={handleSaveClick}
+                      >
+                        Save changes
+                      </button>
+                    </div>
                   ) : (
                     <button
                       className="btn btn-primary"
@@ -378,9 +422,20 @@ const ProFileUser = (props) => {
                       Edit Profile
                     </button>
                   )}
+
+
                 </form>
               </div>
             </div>
+
+
+
+
+
+
+
+
+
           </div>
         </div>
       </div>
