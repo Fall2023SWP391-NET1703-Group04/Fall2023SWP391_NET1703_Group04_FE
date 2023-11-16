@@ -57,10 +57,17 @@ function Header() {
                     id="navbarScrollingDropdown"
                   >
                     <NavDropdown.Item>
-                      <Link to={`/update-profile-user`} className="nav-link">
-                        Update Profile
-                      </Link>
+                      {user.data.role === "ROLE_TRAINER" ? (
+                        <Link to="/trainer" className="nav-link">
+                          Trainer Profile
+                        </Link>
+                      ) : (
+                        <Link to="/update-profile-user" className="nav-link">
+                          Update Profile
+                        </Link>
+                      )}
                     </NavDropdown.Item>
+
                     <NavDropdown.Item
                       href="#action4"
                       onClick={() => {

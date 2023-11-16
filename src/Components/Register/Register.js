@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import authHeader from "../AuthHeader/AuthHeader";
 import { Toast } from "primereact/toast";
+
 const Register = () => {
   const toast = useRef(null);
   const navigate = useNavigate();
@@ -124,8 +125,8 @@ const Register = () => {
               <i></i>
             </div>
             <div className="links">
-              <Link to="/home">Home</Link>
-              <a href="/">Sign in</a>
+              <Link to="/">Home</Link>
+              <a href="/login">Sign in</a>
             </div>
             <input type="submit" value="Sing Up" />
           </form>

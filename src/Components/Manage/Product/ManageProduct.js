@@ -44,10 +44,8 @@ export default function ManageProduct() {
 
 
 
-  const [productLists, setProductLists] = useState([
+  const [productLists, setProductLists] = useState([]);
 
-
-  ]);
   const apiUrl = `http://localhost:8080/zoo-server/api/v1/product/getAllProduct`;
   useEffect(() => {
 
@@ -56,13 +54,62 @@ export default function ManageProduct() {
 
         setProductLists(response.data.data);
         setProducts4(response.data.data);
+        setRefresh(false)
       })
       .catch(error => {
         console.error('Lỗi khi gửi yêu cầu:', error);
       });
 
-  }, []);
+  }, [refresh]);
 
+  const [visible, setVisible] = useState(false);
+  const handleDeleteConfirmation = (rowData) => {
+    deleteProduct(rowData);
+    handleCancel();
+  };
+
+  const handleConfirmation = (rowData) => {
+    showConfirm(rowData);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+    toastBC.current.clear();
+  };
+
+  const toastBC = useRef(null);
+  const showConfirm = (rowData) => {
+    toastBC.current.show({
+      severity: 'warn',
+      sticky: true,
+      content: (
+        <div className="flex flex-column" style={{ flex: '1' }}>
+          <div className="text-center">
+            <i className="pi pi-exclamation-triangle" style={{ fontSize: '3rem' }}></i>
+            <h4>You want to delete this Product?</h4>
+          </div>
+          <div className="grid p-fluid">
+            <div className="col-6">
+              <Button
+                type="button"
+                label="Yes"
+                className="p-button-success"
+                onClick={() => handleDeleteConfirmation(rowData)}
+              />
+            </div>
+            <div className="col-6">
+              <Button
+                type="button"
+                label="No"
+                className="p-button-secondary"
+                onClick={handleCancel}
+              />
+            </div>
+          </div>
+        </div>
+      )
+    });
+  };
 
   const actionBodyTemplate = (rowData) => {
     return (
@@ -71,7 +118,7 @@ export default function ManageProduct() {
         <Button
           icon="pi pi-trash"
           className="p-button-danger"
-          onClick={() => deleteProduct(rowData)}
+          onClick={() => showConfirm(rowData)}
         />
         <Button
           icon="pi pi-eye"
@@ -89,16 +136,19 @@ export default function ManageProduct() {
     axios
       .delete(`http://localhost:8080/zoo-server/api/v1/product/deleteProduct/${product.productId}`, { headers: authHeader() })
       .then((response) => {
-        // Xóa thành công, cập nhật danh sách sản phẩm ở phía client
-        const updatedProductList = productLists.filter((item) => item.productId !== product.productId);
-        setProductLists(updatedProductList);
 
-        alert(response.data.message);
+        // const updatedProductList = productLists.filter((item) => item.productId !== product.productId);
+        // setProductLists(updatedProductList);
+        setRefresh(true);
+
+        show('delete product successfully!', 'green');
       })
       .catch((error) => {
         console.error('Lỗi khi xóa sản phẩm:', error);
+        show('delete failed!', 'red');
       });
   };
+
   const show = (message, color) => {
     toast.current.show({
       summary: 'Notifications', detail: message, life: 3000,
@@ -107,13 +157,18 @@ export default function ManageProduct() {
   };
 
   const handleAddProduct = () => {
+    if (!newProduct.productName || newProduct.productName.trim() === '') {
+      show('Product Name cannot be empty!', 'red');
+      return;
+    }
     axios
       .post("http://localhost:8080/zoo-server/api/v1/product/createProduct", newProduct, { headers: authHeader() })
       .then((response) => {
+        setRefresh(true);
         show(response.data.message, 'green');
         setNewProduct([])
         setIsModalOpen(false);
-        setRefresh(true)
+
       })
       .catch((error) => {
         show(error.response.data.message, 'red');
@@ -212,6 +267,7 @@ export default function ManageProduct() {
   return (
     <div className="datatable-editing-demo w-full">
       <Toast ref={toast} />
+      <Toast ref={toastBC} position="bottom-center" />
       <div className="card container ">
         <h5>List Product</h5>
         <DataTable value={productLists} paginator rows={10} header={header3} filters={filters} onFilter={(e) => setFilters(e.filters)}
@@ -228,6 +284,7 @@ export default function ManageProduct() {
 
 
         <Dialog
+
           header="Add Product"
           visible={isModalOpen}
           style={{ width: '800px' }}
@@ -239,6 +296,7 @@ export default function ManageProduct() {
               <label htmlFor="productName">Product Name</label>
               <br />
               <InputText
+                className="w-full"
                 id="productName"
                 name="productName"
                 value={newProduct.productName}
@@ -250,6 +308,7 @@ export default function ManageProduct() {
               <label htmlFor="updateDescription">Description</label>
               <br />
               <InputTextarea
+                className="w-full"
                 id="description"
                 name="description"
                 value={newProduct.description}
@@ -260,6 +319,7 @@ export default function ManageProduct() {
               <label htmlFor="price">Price</label>
               <br />
               <InputText
+                className="w-full"
                 id="price"
                 name="price"
                 value={newProduct.price}
@@ -271,6 +331,7 @@ export default function ManageProduct() {
               <label htmlFor="quantity">Quantity</label>
               <br />
               <InputText
+                className="w-full"
                 id="quantity"
                 name="quantity"
                 value={newProduct.quantity}
@@ -282,6 +343,7 @@ export default function ManageProduct() {
                 <label htmlFor="image">Product Image</label>
                 <br />
                 <input
+                  className="w-full"
                   type="file"
                   accept="image/*"
                   name="image"

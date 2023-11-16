@@ -25,6 +25,7 @@ export default function Product() {
     const navigate = useNavigate();
     const toast = useRef(null);
     const [refresh, setRefresh] = useState(false);
+    const [globalFilter, setGlobalFilter] = useState('');
     const sortOptions = [
         { label: 'Price High to Low', value: '!price' },
         { label: 'Price Low to High', value: 'price' },
@@ -177,7 +178,9 @@ export default function Product() {
                     </div>
                     <div className="product-list-action">
                         <span className="product-price">${data.price}</span>
-                        <Button icon="pi pi-shopping-cart" label="Add to Cart" onClick={() => handleAddProduct(data)} />
+                        <Button icon="pi pi-shopping-cart" label="Add to Cart"
+                            disabled={data.quantity <= 0}
+                            onClick={() => handleAddProduct(data)} />
 
                         <span className={`product-badge status`}>quantity {data.quantity}</span>
                     </div>
@@ -213,7 +216,9 @@ export default function Product() {
                     </div>
                     <div className="flex align-items-center justify-content-between">
                         <span className="text-2xl font-semibold">${data.price}</span>
-                        <Button icon="pi pi-shopping-cart" label="Add to Cart" onClick={() => handleAddProduct(data)} />
+                        <Button icon="pi pi-shopping-cart" label="Add to Cart"
+                            disabled={data.quantity <= 0}
+                            onClick={() => handleAddProduct(data)} />
 
                     </div>
                 </div>
@@ -222,6 +227,9 @@ export default function Product() {
     };
 
     const itemTemplate = (product, layout) => {
+        if (!product || (globalFilter && !product.productName.toLowerCase().includes(globalFilter.toLowerCase()))) {
+            return null;
+        }
         if (!product) {
             return;
         }
@@ -233,15 +241,13 @@ export default function Product() {
     }
 
     const renderHeader = (filtersKey) => {
-        const filters = filtersMap[`${filtersKey}`].value;
-        const value = filters['global'] ? filters['global'].value : '';
         return (
             <div className="grid grid-nogutter">
-                <div class="col-4">
-                    {/* <span className="p-input-icon-left">
+                <div className="col-4">
+                    <span className="p-input-icon-left">
                         <i className="pi pi-search" />
-                        <InputText type="search" value={value || ''} onChange={(e) => onGlobalFilterChange(e, filtersKey)} placeholder="Product Name Search" />
-                    </span> */}
+                        <InputText type="search" value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} placeholder="Product Name Search" />
+                    </span>
                 </div>
                 <div className="col-4" style={{ textAlign: 'left' }}>
                     <Dropdown options={sortOptions} value={sortKey} optionLabel="label" placeholder="Sort By Price" onChange={onSortChange} />
@@ -260,11 +266,11 @@ export default function Product() {
 
 
     const onGlobalFilterChange = (event, filtersKey) => {
-        const value = event.target.value;
-        let filters = { ...filtersMap[filtersKey].value };
-        filters['global'].value = value;
-        filtersMap[filtersKey].callback(filters);
-    }
+        setGlobalFilter(event.target.value);
+        console.log('Global Filter:', event.target.value);
+    };
+
+
 
     const header3 = renderHeader('filters');
     const onCustomSaveState = (state) => {
@@ -283,11 +289,29 @@ export default function Product() {
                 <Toast ref={toast} />
                 <Toast ref={toastBC} position="bottom-center" />
                 <div className="card">
-                    <DataView value={products} layout={layout} header={header3} filters={filters} onFilter={(e) => setFilters(e.filters)}
-                        itemTemplate={itemTemplate} paginator rows={9}
-                        sortOrder={sortOrder} sortField={sortField}
-                        selection={selectedCustomer3} onSelectionChange={e => setSelectedCustomer3(e.value)} selectionMode="single" dataKey="id" responsiveLayout="scroll"
-                        stateStorage="custom" customSaveState={onCustomSaveState} customRestoreState={onCustomRestoreState} emptyMessage="No Product name found." />
+                    <DataView
+                        value={products}
+                        layout={layout}
+                        header={header3}
+                        globalFilter={globalFilter}
+                        onFilter={(e) => setFilters(e.filters)}
+                        itemTemplate={itemTemplate}
+                        paginator
+                        rows={9}
+                        sortOrder={sortOrder}
+                        sortField={sortField}
+                        selection={selectedCustomer3}
+                        onSelectionChange={e => setSelectedCustomer3(e.value)}
+                        selectionMode="single"
+                        dataKey="id"
+                        responsiveLayout="scroll"
+                        stateStorage="custom"
+                        customSaveState={onCustomSaveState}
+                        customRestoreState={onCustomRestoreState}
+                        emptyMessage="No Product name found."
+                    />
+
+
                 </div>
             </div>
             <Footer />

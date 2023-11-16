@@ -1,14 +1,14 @@
 .wrapper-register {
   width: 100vw;
   height: 100vh;
-  background-color: #23242a;
+  background-color: #fff; 
 }
 
 .box {
   position: relative;
   width: 25rem;
   height: 35rem;
-  background-color: #1c1c1c;
+  background-color: #a77272;
   border-radius: 8px;
   top: 50%;
   left: 50%;
@@ -90,7 +90,7 @@
 .box form {
   position: absolute;
   inset: 4px;
-  background: #222;
+  background: #FFC0CB;
   padding: 3rem;
   border-radius: 8px;
   z-index: 2;

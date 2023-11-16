@@ -300,7 +300,7 @@ export default function Cart() {
                             onValueChange={(e) => {
                                 handleInputQuantityChange(e.value, data);
                             }}
-                            min={1}
+                            min={0}
                             showButtons
                             buttonLayout="vertical"
                             input={false} // Loại bỏ ô input

@@ -57,6 +57,7 @@ const Login = () => {
   //     .then(response => setCatalogues(response.data))
   //     .catch(error => console.error(error));
   // }, [refresh]);
+  console.log('heck data login', dataLogin)
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
     // Make a POST request when the form is submitted
@@ -177,7 +178,7 @@ const Login = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                               />
-                              <label htmlFor="email">Email*</label>
+                              <label htmlFor="email">Email</label>
                             </span>
                             {getFormErrorMessage(meta)}
                           </div>
@@ -188,16 +189,21 @@ const Login = () => {
                         render={({ input, meta }) => (
                           <div className="field">
                             <span className="p-float-label">
-                              <Password
+                              <input
                                 id="password"
+                                type="password"
                                 {...input}
-                                toggleMask
-                                className={classNames({
-                                  "p-invalid": isFormFieldValid(meta),
-                                })}
-                                name="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                className={classNames(
+                                  "p-inputtext", // Add the class for PrimeReact styling
+                                  "w-full", // Make the input full width
+                                  {
+                                    "p-invalid": isFormFieldValid(meta),
+                                  }
+                                )}
+                                onChange={(e) => {
+                                  setPassword(e.target.value); // Update the password state
+                                  input.onChange(e); // Preserve the original behavior of react-final-form
+                                }}
                               />
                               <label
                                 htmlFor="password"
@@ -205,13 +211,15 @@ const Login = () => {
                                   "p-error": isFormFieldValid(meta),
                                 })}
                               >
-                                Password*
+                                Password
                               </label>
                             </span>
                             {getFormErrorMessage(meta)}
                           </div>
                         )}
                       />
+
+
                       <Button type="submit" label="Submit" className="mt-2" />
                       Don't have account?
                       <Link to="/register" className="link-register">
