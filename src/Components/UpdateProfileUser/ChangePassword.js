@@ -5,6 +5,7 @@ import "./ChangePassword.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import authHeader from "../AuthHeader/AuthHeader";
+import { ToastContainer, toast } from "react-toastify";
 const ChangePassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -21,7 +22,11 @@ const ChangePassword = () => {
   const validateSignupForm = async (e) => {
     e.preventDefault();
 
-    // You may want to perform additional validation before making the API call
+    // Validate the new password (add your custom validation logic)
+    if (newPassword.length < 8) {
+      toast.error("New password must be at least 8 characters long");
+      return;
+    }
 
     setLoading(true);
 
@@ -38,9 +43,13 @@ const ChangePassword = () => {
 
       // Handle the response as needed
       console.log("Response:", response.data);
+      // Show success toast message
+      toast.success("Password changed successfully!");
     } catch (error) {
       // Handle errors
       console.error("Error:", error);
+      // Show error toast message
+      toast.error("Error changing password. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -93,13 +102,16 @@ const ChangePassword = () => {
                 class="submitButton pure-button pure-button-primary"
               >
                 <span>Continue</span>
-                <span id="loader"></span>
+                <span id="loader">
+                  {loading && <span id="loader">Loading...</span>}
+                </span>
               </button>
             </div>
           </form>
         </div>
       </div>
       <Footer />
+      <ToastContainer />
     </>
   );
 };
