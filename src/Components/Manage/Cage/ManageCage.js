@@ -109,7 +109,6 @@ const ManageCage = () => {
             ...newCage,
             [name]: value
         });
-        console.log(newCage);
     }
 
     const handleSelectedChange = (event, name) => {
@@ -180,9 +179,10 @@ const ManageCage = () => {
                     paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} header={header} tableStyle={{ minWidth: '50rem' }}
                     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                     currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}>
-                    <Column field="animalCageName" header="Cage Name" style={{ width: '25%' }}></Column>
-                    <Column field="areaName" header="Area" style={{ width: '25%' }}></Column>
-                    <Column field="description" header="Description" style={{ width: '25%' }}></Column>
+                    <Column field="animalCageName" header="Cage Name" />
+                    <Column field="areaName" header="Area" />
+                    <Column field="description" header="Description" />
+                    <Column field="maxQuantity" header="Max Quantity" />
                     <Column
                         style={{ width: '25%' }}
                         header="Actions"
@@ -235,6 +235,19 @@ const ManageCage = () => {
                             name='areaId'
                             optionLabel='areaName'
                             placeholder="Select a Area"
+                        />
+                    </div>
+
+                    <div className="field col-12 ">
+                        <label htmlFor="maxQuantity">Max Quantity</label>
+                        <br />
+                        <InputText
+                            id="maxQuantity"
+                            className='w-full'
+                            name="maxQuantity"
+                            keyfilter="int"
+                            value={newCage.maxQuantity}
+                            onChange={handleInputChange}
                         />
                     </div>
 

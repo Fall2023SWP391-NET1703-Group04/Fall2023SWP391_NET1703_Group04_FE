@@ -18,7 +18,7 @@ export default function ModalAddManageArea(areaId, isModalOpen, handleClose) {
     const [staffData, setStaffData] = useState([])
     const [selectedStaff, setSelectedStaff] = useState({});
 
-
+    console.log(areaId);
     useEffect(() => {
         axios.get(`http://localhost:8080/zoo-server/api/v1/user/getAllStaffs`, { headers: authHeader() })
             .then(response => setStaffData(response.data.data))

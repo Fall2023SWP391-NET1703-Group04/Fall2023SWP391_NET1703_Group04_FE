@@ -18,6 +18,7 @@ export default function ModalUpdateCage(data, isModalOpen, handleClose) {
         animalCageName: data.animalCageName,
         areaId: data.areaId,
         areaName: data.areaName,
+        maxQuantity: data.maxQuantity,
         description: data.description,
     }
 
@@ -53,6 +54,7 @@ export default function ModalUpdateCage(data, isModalOpen, handleClose) {
         var requestData = {
             animalCageName: updateCage.animalCageName ? updateCage.animalCageName : data.animalCageName,
             areaId: updateCage.areaId ? updateCage.areaId : data.areaId,
+            maxQuantity: updateCage.maxQuantity ? updateCage.maxQuantity : data.maxQuantity,
             description: updateCage.description ? updateCage.description : data.description
         }
         axios
@@ -112,6 +114,18 @@ export default function ModalUpdateCage(data, isModalOpen, handleClose) {
                     />
                 </div>
 
+                <div className="field col-12 ">
+                    <label htmlFor="maxQuantity">Max Quantity</label>
+                    <br />
+                    <InputText
+                        id="maxQuantity"
+                        className='w-full'
+                        name="maxQuantity"
+                        keyfilter="int"
+                        value={updateCage.maxQuantity ? updateCage.maxQuantity : cage.maxQuantity}
+                        onChange={handleInputChange}
+                    />
+                </div>
                 <div className="field col-12 ">
                     <label htmlFor="description">Description</label>
                     <br />

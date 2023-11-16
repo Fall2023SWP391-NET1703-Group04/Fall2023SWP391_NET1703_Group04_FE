@@ -189,7 +189,6 @@ const ManageArea = () => {
     description: newDescription,
     status: true,
   };
-  console.log(data);
   const handleUpdateUser = async (e, areaUpdate) => {
     axios
       .put(`/zoo-server/api/v1/area/updateArea/${areaUpdate.areaId}`, data, {
