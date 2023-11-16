@@ -68,6 +68,8 @@ export default function AnimalDietHistory(animalId) {
             animalDietManagementName: rowData.animalDietManagementName,
             dietId: rowData.dietId
         })
+        var diet = dietData.find((diet) => diet.dietId === rowData.dietId)
+        setSelectedDiet(diet.dietName);
         setIsUpdateModalOpen(true)
     }
 
@@ -157,14 +159,12 @@ export default function AnimalDietHistory(animalId) {
                         <div className="field col-12">
                             <label htmlFor="diet">Diet Name</label>
                             <br />
-                            <Dropdown
+                            <p
                                 name='dietId'
-                                className='w-full'
-                                optionLabel="dietName"
-                                value={selectedDiet}
-                                options={diets}
-                                onChange={handleUpdateDietChange}
-                            />
+                                className='w-full border-1 border-400 border-round p-3'
+                            >
+                                {selectedDiet}
+                            </p>
                         </div>
 
                         <div className="field col-12">

@@ -10,9 +10,7 @@ import ModalAssignCage from './ModalAssignCage';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 import { useRef } from 'react';
-import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
-import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import dayjs from 'dayjs';
 
@@ -71,6 +69,8 @@ export default function AnimalCageHistory(animalId) {
             animalCageDetailName: rowData.animalCageDetailName,
             animalCageId: rowData.animalCageId
         })
+        var cage = cageData.find((cage) => cage.animalCageId === rowData.animalCageId)
+        setSelectedCage(cage.animalCageName);
         setIsUpdateModalOpen(true)
     }
 
@@ -86,11 +86,11 @@ export default function AnimalCageHistory(animalId) {
         }
     };
 
-    const handleUpdateTrainerChange = (event) => {
-        console.log(event);
-        setSelectedCage(event.value)
-        setCageUpdate({ ...cageUpdate, animalCageId: event.value.animalCageId });
-    };
+    // const handleUpdateTrainerChange = (event) => {
+    //     console.log(event);
+    //     setSelectedCage(event.value)
+    //     setCageUpdate({ ...cageUpdate, animalCageId: event.value.animalCageId });
+    // };
 
     const handleUpdateTraining = () => {
         axios
@@ -153,16 +153,15 @@ export default function AnimalCageHistory(animalId) {
                 <Toast ref={toast} />
                 <div className="formgrid grid">
                     <div className="field col-12">
-                        <label htmlFor="trainer">Cage Name</label>
+                        <label htmlFor="cage">Cage Name</label>
                         <br />
-                        <Dropdown
+                        <p
                             name='animalCageId'
-                            className='w-full'
-                            optionLabel="animalCageName"
-                            value={selectedCage}
-                            options={cages}
-                            onChange={handleUpdateTrainerChange}
-                        />
+                            className='w-full border-1 border-400 border-round p-3'
+
+                        >
+                            {selectedCage}
+                        </p>
                     </div>
 
                     <div className="field col-12">

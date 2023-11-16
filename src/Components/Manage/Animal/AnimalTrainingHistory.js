@@ -7,9 +7,7 @@ import authHeader from '../../AuthHeader/AuthHeader';
 import ModalAssignTrainer from './ModalAssignTrainer';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
-import { InputText } from 'primereact/inputtext';
 import { Calendar } from 'primereact/calendar';
-import { Dropdown } from 'primereact/dropdown';
 import dayjs from 'dayjs';
 import { InputTextarea } from 'primereact/inputtextarea';
 
@@ -42,7 +40,9 @@ export default function AnimalTrainingHistory(animalId) {
             .catch(error => console.error(error));
 
         axios.get(`http://localhost:8080/zoo-server/api/v1/user/getAllTrainers`, { headers: authHeader() })
-            .then(response => setTrainers(response.data.data))
+            .then(response => {
+                setTrainers(response.data.data)
+            })
             .catch(error => console.error(error));
     }, [refresh, animalId]);
 
@@ -70,6 +70,9 @@ export default function AnimalTrainingHistory(animalId) {
             description: rowData.description,
             userId: rowData.userId
         })
+
+        var trainer = trainers.find((trainer) => trainer.userId === rowData.userId)
+        setSelectedTrainer(trainer.fullName);
         setIsUpdateModalOpen(true)
     }
 
@@ -85,11 +88,11 @@ export default function AnimalTrainingHistory(animalId) {
         }
     };
 
-    const handleUpdateTrainerChange = (event) => {
-        console.log(event);
-        setSelectedTrainer(event.value)
-        setTrainingUpdate({ ...trainingUpdate, userId: event.value.userId });
-    };
+    // const handleUpdateTrainerChange = (event) => {
+    //     console.log(event);
+    //     setSelectedTrainer(event.value)
+    //     setTrainingUpdate({ ...trainingUpdate, userId: event.value.userId });
+    // };
 
     const handleUpdateTraining = () => {
         axios
@@ -153,14 +156,12 @@ export default function AnimalTrainingHistory(animalId) {
                 <div className="field col-12">
                     <label htmlFor="trainer">Trainer</label>
                     <br />
-                    <Dropdown
+                    <p
                         name='userId'
-                        className='w-full'
-                        optionLabel="fullName"
-                        value={selectedTrainer}
-                        options={trainers}
-                        onChange={handleUpdateTrainerChange}
-                    />
+                        className='w-full border-1 border-400 border-round p-3'
+                    >
+                        {selectedTrainer}
+                    </p>
                 </div>
 
                 <div className="field col-12">
