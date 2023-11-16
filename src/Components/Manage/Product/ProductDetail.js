@@ -17,10 +17,15 @@ import { useNavigate } from "react-router-dom";
 export default function ProductDetail() {
     const navigate = useNavigate();
 
-    if (!JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN') {
+    if (
+        !JSON.parse(localStorage.getItem("user")) ||
+        (
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
+        )
+    ) {
         navigate("/notfound");
     }
-
 
     const { productId } = useParams();
     const [editedProduct, setEditedProduct] = useState({});
@@ -96,22 +101,22 @@ export default function ProductDetail() {
     };
 
     const handleSaveClick = () => {
-        console.log(editedProduct)
-        axios
-            .put(`http://localhost:8080/zoo-server/api/v1/product/updateProduct/${productId}`, editedProduct, { headers: authHeader() })
-            .then((response) => {
-                // const updatedPro = response.data.data;
-                // if (updatedPro) {
-                //     setEditedProduct(updatedPro);
-                // }
-                setIsEditing(false);
-                alert('Product updated successfully');
-            })
-            .catch((error) => {
-                console.error('Error updating product:', error);
-                alert('Failed to update product');
-            });
+        if (editedProduct.quantity !== null && !isNaN(editedProduct.quantity) && editedProduct.quantity >= 0) {
+            axios
+                .put(`http://localhost:8080/zoo-server/api/v1/product/updateProduct/${productId}`, editedProduct, { headers: authHeader() })
+                .then((response) => {
+                    setIsEditing(false);
+                    alert('Product updated successfully');
+                })
+                .catch((error) => {
+                    console.error('Error updating product:', error);
+                    alert('Failed to update product');
+                });
+        } else {
+            alert('Please provide a valid quantity (should be a number greater than or equal to 0)');
+        }
     };
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -195,18 +200,19 @@ export default function ProductDetail() {
         return isEditing ? (
             <InputNumber
                 type="text"
-                value={editedProduct[field] || ''}
+                value={editedProduct[field] !== null ? editedProduct[field] : ''}
                 onValueChange={(e) => {
                     const newValue = e.value;
-                    if (!isNaN(newValue) && newValue >= 0) {
+                    if (newValue !== null && !isNaN(newValue) && newValue >= 0) {
                         handleInputChange({ target: { name: field, value: newValue } });
                     }
                 }}
             />
         ) : (
-            <span>{editedProduct[field] || defaultValue} </span>
+            <span>{editedProduct[field] !== null ? editedProduct[field] : defaultValue} </span>
         );
     };
+
 
     const displayWithDefaultDescription = (field, defaultValue = 'Not Provided') => {
         return isEditing ? (

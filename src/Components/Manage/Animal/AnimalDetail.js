@@ -17,8 +17,20 @@ import AnimalCageHistory from './AnimalCageHistory';
 import { Countries } from "../../Data/Countries"
 import { Gender } from '../../Data/Gender';
 import { Toast } from 'primereact/toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function AnimalDetail() {
+    const navigate = useNavigate();
+
+    if (
+        !JSON.parse(localStorage.getItem("user")) ||
+        (
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
+        )
+    ) {
+        navigate("/notfound");
+    }
     const { animalId } = useParams();
     const [animalData, setAnimalData] = useState({});
     const [updateAnimal, setUpdateAnimal] = useState({});

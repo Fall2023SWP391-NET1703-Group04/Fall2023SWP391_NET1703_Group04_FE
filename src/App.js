@@ -45,9 +45,10 @@ import CageDetail from "./Components/Manage/Area/AreaDetail";
 import Product from "./Components/User/Product";
 
 import PageNotFound from "./PageNotFound/PageNotFound";
-
+import NewsDetail from "./Components/NewsUser/NewsDetail";
 import AddDiet from "./Components/Manage/Diet/AddDiet";
 import UpdateDiet from "./Components/Manage/Diet/UpdateDiet";
+import ForGotPassword from "./Components/ForgotPassword/ForgotPassword";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -67,9 +68,12 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/forgotpassword" element={<ForGotPassword />} />
           <Route path="/news-user" element={<NewUser />} />
+          <Route path="/news-detail/:newsId" element={<NewsDetail />} />
           <Route path="/register" element={<Register />} />
           <Route path="/notfound" element={<PageNotFound />} />
+          <Route path="managediet" element={<ManageDiet />} />
           <Route index element={<HomePage />} />
 
           <Route path="/animals" element={<Animal />}>

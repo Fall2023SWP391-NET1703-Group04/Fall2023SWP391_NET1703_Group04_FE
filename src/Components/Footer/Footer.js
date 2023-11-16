@@ -5,11 +5,16 @@ import { RiFacebookBoxFill } from "react-icons/ri";
 import { RiGoogleFill } from "react-icons/ri";
 import { RiTwitterFill } from "react-icons/ri";
 import { RiMailLine } from "react-icons/ri";
+import { Divider } from "primereact/divider";
+
 
 import "./Footer";
 const Footer = () => {
   return (
+
     <Container>
+      <Divider />
+      <div style={{ height: '40px', width: '100%', backgroundColor: 'green' }}></div>
       <Row className="mt-4">
         <Col sm={8}>
           <h5>About Zoo Management System</h5>

@@ -6,8 +6,10 @@ import axios from "axios";
 import '/node_modules/primeflex/primeflex.css';
 import authHeader from "../AuthHeader/AuthHeader";
 import { InputMask } from 'primereact/inputmask';
-
+import { Button } from "primereact/button";
 import React, { useState, useEffect, useRef } from 'react';
+
+import { Sidebar } from 'primereact/sidebar';
 import { Tree } from 'primereact/tree';
 import Header from "../Header/Header";
 
@@ -16,6 +18,7 @@ import Header from "../Header/Header";
 
 export default function Trainer() {
   const navigate = useNavigate();
+  const [visibleLeft, setVisibleLeft] = useState(false);
 
   if (!JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_TRAINER') {
     navigate("/notfound");
@@ -64,14 +67,15 @@ export default function Trainer() {
       setShowSaveButton(false);
     }
   };
-
+  const handleCancelClick = () => {
+    // Khôi phục dữ liệu về trạng thái ban đầu
+    setEditedUser(originalUserData);
+    setIsEditing(false);
+  };
 
   const apiUrl = `http://localhost:8080/zoo-server/api/v1/user/getUserById/${userId}`;
   useEffect(() => {
-    // if (userId === null || userId === undefined) {
-    //     window.location.href = '/signin';
-    //     return;
-    // }
+
 
     axios.get(apiUrl, { headers: authHeader() })
       .then((response) => {
@@ -86,9 +90,11 @@ export default function Trainer() {
       });
   }, []);
 
-
+  const [originalUserData, setOriginalUserData] = React.useState({});
   const handleEditClick = () => {
+    setOriginalUserData(editedUser);
     setIsEditing(true);
+
   };
 
   const handleSaveClick = () => {
@@ -186,36 +192,21 @@ export default function Trainer() {
 
   const treeData = [
     {
-      key: '1',
-      label: 'Events',
-      data: 'events',
-      icon: 'pi pi-fw pi-calendar',
-      children: [
-        {
-          key: '1-0',
-          label: (
-            <Link to="/training">Manage Animal</Link>
-          ),
-          data: 'manage-animal',
-          icon: 'pi pi-fw pi-calendar-plus',
-        },
-        {
-          key: '1-1',
-          label: (
-            <Link to="/managediet">Manage Diet</Link>
-          ),
-          data: 'manage-diet',
-          icon: 'pi pi-fw pi-calendar-plus',
-        },
-        {
-          key: '1-2',
-          label: (
-            <Link to="/animals">View List Animal</Link>
-          ),
-          data: 'list-animal',
-          icon: 'pi pi-fw pi-calendar-plus',
-        },
-      ],
+      key: '1-0',
+      label: (
+        <Link to="/training-animal">Manage Animal</Link>
+      ),
+      data: 'manage-animal',
+      icon: 'pi pi-fw pi-calendar-plus',
+    },
+
+    {
+      key: '1-2',
+      label: (
+        <Link to="/animals">View List Animal</Link>
+      ),
+      data: 'list-animal',
+      icon: 'pi pi-fw pi-calendar-plus',
     },
   ];
 
@@ -259,6 +250,24 @@ export default function Trainer() {
 
     <div>
       <Header />
+      <Sidebar visible={visibleLeft} onHide={() => setVisibleLeft(false)}>
+        <Tree
+
+          value={treeData}
+          expandedKeys={expandedKeys}
+          onToggle={(e) => setExpandedKeys(e.value)}
+          selectionMode="single"
+          selectionKeys={selectedNodeKey}
+          onSelectionChange={(e) => setSelectedNodeKey(e.value)}
+          contextMenuSelectionKey={selectedNodeKey}
+          onContextMenuSelectionChange={(e) => setSelectedNodeKey(e.value)}
+          onContextMenu={menu}
+        />
+
+      </Sidebar>
+      <div className="flex justify-content-start flex-wrap">
+        <Button icon="pi pi-arrow-right" onClick={() => setVisibleLeft(true)} className="mr-2 border-round m-2 bg-primary" />
+      </div>
       <div className="container-xl px-4 mt-4">
 
         <hr className="mt-0 mb-4" />
@@ -269,12 +278,20 @@ export default function Trainer() {
                 <div className="card-header">Profile Picture</div>
                 <div className="card-body text-center">
                   <div>
-                    <img alt="Card" style={{ width: '200px', height: '200px' }} src={`http://localhost:3000/img/${editedUser.avatar}`} />
+
+                    <img
+                      src={`http://localhost:3000/img/${editedUser.avatar}`}
+                      onError={(e) => (e.target.src = 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-1024.png')}
+                      alt={editedUser.avatar}
+                      style={{ width: '200px', height: '200px%', objectFit: 'cover' }}
+                    />
+
                     <br />
                     <label htmlFor="updateAnimalImage">Avatar</label>
                     <br />
                     {displayWithAvatar('avatar')}
                   </div>
+
 
 
                 </div>
@@ -285,7 +302,7 @@ export default function Trainer() {
                 </div>
               </div>
             </div>
-            <div className="mt-2">
+            {/* <div className="mt-2">
               <Tree
                 value={treeData}
                 expandedKeys={expandedKeys}
@@ -297,90 +314,10 @@ export default function Trainer() {
                 onContextMenuSelectionChange={(e) => setSelectedNodeKey(e.value)}
                 onContextMenu={menu}
               />
-            </div>
+            </div> */}
           </div>
           <div className="col-6">
-            {/* <div className="card mb-4">
-              <div className="card-header">Account Details</div>
-              <div className="card-body">
-                <form>
-                  <div className="field flex align-items-stretch flex-wrap card-container">
-                    <label className="mb-1 mr-2 font-bold" htmlFor="inputFirstName">
-                      First name:
-                    </label>
-                    {displayWithDefault('firstName')}
-                  </div>
-                  <div className="field flex">
-                    <label className="mb-1 mr-2 font-bold" htmlFor="inputLastName">
-                      Last name:
-                    </label>
-                    {displayWithDefault('lastName')}
-                  </div>
-                  <div className="field flex">
-                    <label className="mb-1 mr-2 font-bold" htmlFor="inputLocation">
-                      Location:
-                    </label>
-                    {displayWithDefault('address')}
-                  </div>
 
-                  <div className="field flex">
-                    <label className="mb-1 mr-2 font-bold" htmlFor="inputGender">
-                      Gender:
-                    </label>
-                    {isEditing ? (
-                      <select
-                        className="form-control w-full"
-                        name="gender"
-                        value={editedUser.gender || ''}
-                        onChange={handleInputChange}
-                      >
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                      </select>
-                    ) : (
-                      <span>{editedUser.gender || 'Not Provided'}</span>
-                    )}
-                  </div>
-
-
-                  <div className="field flex">
-                    <label className="mb-1 mr-2 font-bold" htmlFor="inputPhone">
-                      Phone number:
-                    </label>
-
-                    {displayWithDefaultPhone('phoneNumber')}
-                  </div>
-
-                  <div className="field flex">
-                    <label
-                      className="mb-1 mr-2 font-bold"
-                      htmlFor="inputEmailAddress"
-                    >
-                      Email:
-                    </label>
-                    {security.email || 'Not Provided'}
-                  </div>
-
-                  {isEditing ? (
-                    <button
-                      className="btn btn-primary"
-                      type="button"
-                      onClick={handleSaveClick}
-                    >
-                      Save changes
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-primary"
-                      type="button"
-                      onClick={handleEditClick}
-                    >
-                      Edit Profile
-                    </button>
-                  )}
-                </form>
-              </div>
-            </div> */}
             <div className="card mb-4">
               <div className="card-header">Account Details</div>
               <div className="card-body">
@@ -391,18 +328,18 @@ export default function Trainer() {
                         First name:
                       </label>
                     </div>
-                    <div style={{ flex: 2 }}>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
                       {displayWithDefault('firstName')}
                     </div>
                   </div>
 
-                  <div className="field flex" style={{ display: 'flex' }}>
+                  <div className="field flex" style={{ display: 'flex' }} >
                     <div style={{ flex: 1, textAlign: 'left' }}>
                       <label className="mb-1 mr-2 font-bold" htmlFor="inputLastName">
                         Last name:
                       </label>
                     </div>
-                    <div style={{ flex: 2 }}>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
                       {displayWithDefault('lastName')}
                     </div>
                   </div>
@@ -413,7 +350,7 @@ export default function Trainer() {
                         Location:
                       </label>
                     </div>
-                    <div style={{ flex: 2 }}>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
                       {displayWithDefault('address')}
                     </div>
                   </div>
@@ -424,7 +361,7 @@ export default function Trainer() {
                         Gender:
                       </label>
                     </div>
-                    <div style={{ flex: 2 }}>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
                       {isEditing ? (
                         <select
                           className="form-control w-full"
@@ -447,7 +384,7 @@ export default function Trainer() {
                         Phone number:
                       </label>
                     </div>
-                    <div style={{ flex: 2 }}>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
                       {displayWithDefaultPhone('phoneNumber')}
                     </div>
                   </div>
@@ -458,19 +395,27 @@ export default function Trainer() {
                         Email:
                       </label>
                     </div>
-                    <div style={{ flex: 2 }}>
+                    <div style={{ flex: 2 }} className={isEditing ? '' : 'not-editing-text'}>
                       {security.email || 'Not Provided'}
                     </div>
                   </div>
 
                   {isEditing ? (
-                    <button
-                      className="btn btn-primary"
-                      type="button"
-                      onClick={handleSaveClick}
-                    >
-                      Save changes
-                    </button>
+                    <div class="flex justify-content-center flex-wrap">
+                      <button
+                        className="btn btn-secondary mr-2 flex align-items-center justify-content-center"
+                        onClick={handleCancelClick}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="btn btn-primary ml-2 flex align-items-center justify-content-center"
+                        type="button"
+                        onClick={handleSaveClick}
+                      >
+                        Save changes
+                      </button>
+                    </div>
                   ) : (
                     <button
                       className="btn btn-primary"
@@ -480,6 +425,8 @@ export default function Trainer() {
                       Edit Profile
                     </button>
                   )}
+
+
                 </form>
               </div>
             </div>

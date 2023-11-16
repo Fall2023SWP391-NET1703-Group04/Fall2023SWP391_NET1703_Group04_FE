@@ -13,8 +13,20 @@ import { InputMask } from "primereact/inputmask";
 import _ from "lodash";
 import { fetchUsers } from "../../services/userServices";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { useNavigate } from "react-router-dom";
 const ManageUser = () => {
   //Modal add
+  const navigate = useNavigate();
+
+  if (
+    !JSON.parse(localStorage.getItem("user")) ||
+    (
+      JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN'
+
+    )
+  ) {
+    navigate("/notfound");
+  }
   const [visible, setVisible] = useState(false);
   const [visibleUpdateUser, setVisibleUpdateUser] = useState(false);
   const [globalFilterValue, setGlobalFilterValue] = useState('');
@@ -230,16 +242,17 @@ const ManageUser = () => {
   const renderHeader = () => {
     return (
       <div className="flex justify-content-between">
-        <Button
-          label="Add"
-          icon="pi pi-plus"
-          onClick={() => setVisible(true)}
-        />
-        <Button className='ml-auto' type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
+        <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
           <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search by name" />
         </span>
+        <Button
+          className='ml-auto'
+          label="Add"
+          icon="pi pi-plus"
+          onClick={() => setVisible(true)}
+        />
       </div>
     );
   };
@@ -391,7 +404,7 @@ const ManageUser = () => {
                 field="userId"
                 header="UserId"
                 sortable
-                style={{ width: "25%" }}
+                style={{ width: "10%" }}
               ></Column>
               <Column
                 field="email"
@@ -408,7 +421,7 @@ const ManageUser = () => {
                     : "Don't have First Name";
                 }}
                 sortable
-                style={{ width: "25%" }}
+                style={{ width: "20 %" }}
               ></Column>
               <Column
                 field="profileDTO.lastName"
@@ -419,7 +432,7 @@ const ManageUser = () => {
                     : "Don't have Last Name";
                 }}
                 sortable
-                style={{ width: "25%" }}
+                style={{ width: "15%" }}
               ></Column>
               <Column
                 field="profileDTO.address"
@@ -430,7 +443,7 @@ const ManageUser = () => {
                     : "Don't have address";
                 }}
                 sortable
-                style={{ width: "25%" }}
+                style={{ width: "30%" }}
               ></Column>
               <Column
                 field="roleDTO.roleName"
@@ -451,7 +464,7 @@ const ManageUser = () => {
                               : "Dont' have anything";
                 }}
                 sortable
-                style={{ width: "25%" }}
+                style={{ width: "10%" }}
               ></Column>
               <Column
                 header="Interact"
@@ -459,18 +472,20 @@ const ManageUser = () => {
                   return (
                     <div style={{ display: "flex" }}>
                       <Button
-                        label="Delete"
+                        icon="pi pi-trash"
+                        className="p-button-danger"
                         field="userId"
                         onClick={() => deleteUser(user.userId)}
                         severity="danger"
                         rounded
                       />
                       <Button
-                        label="Update"
+                        icon="pi pi-pencil"
+                        className="p-button-pencil"
                         onClick={() => {
                           handleClickBtnUpdate(user);
                         }}
-                        severity="secondary"
+                        severity="success"
                         rounded
                       />
                     </div>
