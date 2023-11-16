@@ -57,7 +57,7 @@ const Login = () => {
   //     .then(response => setCatalogues(response.data))
   //     .catch(error => console.error(error));
   // }, [refresh]);
-  console.log('heck data login', dataLogin)
+  console.log("heck data login", dataLogin);
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
     // Make a POST request when the form is submitted
@@ -217,12 +217,15 @@ const Login = () => {
                           </div>
                         )}
                       />
-
-
                       <Button type="submit" label="Submit" className="mt-2" />
                       Don't have account?
                       <Link to="/register" className="link-register">
                         Register
+                      </Link>
+                      <br></br>
+                      Don't you forgot password?
+                      <Link to="/forgotpassword" className="link-register">
+                        Click here
                       </Link>
                     </form>
                   )}

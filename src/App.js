@@ -47,6 +47,7 @@ import Product from "./Components/User/Product";
 import PageNotFound from "./PageNotFound/PageNotFound";
 
 import AddDiet from "./Components/Manage/Diet/AddDiet";
+import ForGotPassword from "./Components/ForgotPassword/ForgotPassword";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -66,6 +67,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/forgotpassword" element={<ForGotPassword />} />
           <Route path="/news-user" element={<NewUser />} />
           <Route path="/register" element={<Register />} />
           <Route path="/notfound" element={<PageNotFound />} />
@@ -74,7 +76,9 @@ function App() {
 
           <Route path="/animals" element={<Animal />}>
             <Route index element={<AnimalListUser />} />
-            <Route path="animals-detail-user/:animalId" element={<AnimalDetailUser />}
+            <Route
+              path="animals-detail-user/:animalId"
+              element={<AnimalDetailUser />}
             />
           </Route>
 
@@ -84,7 +88,10 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/user-history" element={<History />} />
 
-          <Route path="/products-detail/:productId" element={<ProductDetailUser />} />
+          <Route
+            path="/products-detail/:productId"
+            element={<ProductDetailUser />}
+          />
           <Route path="/training" element={<Training />} />
           <Route path="/admins" element={<Admin />}>
             <Route index element={<DashBoard />} />
