@@ -14,6 +14,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
+import dayjs from 'dayjs';
 
 export default function AnimalCageHistory(animalId) {
     const [cageData, setCageData] = useState([]);
@@ -35,7 +36,7 @@ export default function AnimalCageHistory(animalId) {
                 const cageWithDateObject = response.data.data.map((data) => ({
                     ...data,
                     dateStart: new Date(data.dateStart),
-                    dateEnd: new Date(data.dateEnd),
+                    dateEnd: data.dateEnd ? new Date(data.dateEnd) : null,
                 }));
                 setCageData(cageWithDateObject);
                 setRefresh(false)
@@ -46,6 +47,14 @@ export default function AnimalCageHistory(animalId) {
             .then(response => setCages(response.data.data))
             .catch(error => console.error(error));
     }, [refresh, animalId]);
+
+    const dateTemplate = (rowData, column) => {
+        const dateValue = rowData[column.field];
+        if (!dateValue) {
+            return "Now...";
+        }
+        return dayjs(dateValue).format("MM/DD/YYYY");
+    };
 
     const handleClose = () => {
         setIsModalOpen(false)
@@ -86,7 +95,8 @@ export default function AnimalCageHistory(animalId) {
     const handleUpdateTraining = () => {
         axios
             .put(`http://localhost:8080/zoo-server/api/v1/AnimalCageDetail/updateAnimalCageDetail/${animalCageId}`, cageUpdate, { headers: authHeader() })
-            .then(() => {
+            .then((response) => {
+                show(response.data.message, 'green');
                 setRefresh(true)
                 setIsUpdateModalOpen(false)
             })
@@ -114,8 +124,8 @@ export default function AnimalCageHistory(animalId) {
                     currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorRight={paginatorRight}>
                     <Column field="animalCageName" header="Cage Name" />
                     <Column field="animalName" header="Animal" />
-                    <Column field="dateStart" header="Date Start" body={(rowData) => rowData.dateStart.toLocaleDateString()} />
-                    <Column field="dateEnd" header="Date End" body={(rowData) => rowData.dateEnd.toLocaleDateString()} />
+                    <Column field="dateStart" header="Date Start" body={dateTemplate} />
+                    <Column field="dateEnd" header="Date End" body={dateTemplate} />
                     <Column field="animalCageDetailName" header="Description" />
                     <Column header="Action" body={(rowData) => (
                         <div>
@@ -190,7 +200,7 @@ export default function AnimalCageHistory(animalId) {
                         />
                     </div>
                     <Button
-                        label="Update Training"
+                        label="Update Cage Management"
                         icon="pi pi-pencil"
                         onClick={handleUpdateTraining}
                         className="p-button-primary mt-5"

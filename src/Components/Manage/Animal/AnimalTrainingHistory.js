@@ -10,6 +10,8 @@ import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
 import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
+import dayjs from 'dayjs';
+import { InputTextarea } from 'primereact/inputtextarea';
 
 export default function AnimalTrainingHistory(animalId) {
     const [trainingData, setTrainingData] = useState([]);
@@ -32,7 +34,7 @@ export default function AnimalTrainingHistory(animalId) {
                 const trainingWithDateObject = response.data.data.map((data) => ({
                     ...data,
                     dateStart: new Date(data.dateStart),
-                    dateEnd: new Date(data.dateEnd),
+                    dateEnd: data.dateEnd ? new Date(data.dateEnd) : null,
                 }));
                 setTrainingData(trainingWithDateObject);
                 setRefresh(false)
@@ -44,9 +46,14 @@ export default function AnimalTrainingHistory(animalId) {
             .catch(error => console.error(error));
     }, [refresh, animalId]);
 
-    useEffect(() => {
+    const dateTemplate = (rowData, column) => {
+        const dateValue = rowData[column.field];
+        if (!dateValue) {
+            return "Now...";
+        }
+        return dayjs(dateValue).format("MM/DD/YYYY");
+    };
 
-    })
     const handleClose = () => {
         setIsModalOpen(false)
         setRefresh(true)
@@ -87,11 +94,13 @@ export default function AnimalTrainingHistory(animalId) {
     const handleUpdateTraining = () => {
         axios
             .put(`http://localhost:8080/zoo-server/api/v1/animal-management/updateAnimalManagement/${animalTrainingId}`, trainingUpdate, { headers: authHeader() })
-            .then(() => {
+            .then((response) => {
+                show(response.data.message, 'green');
                 setRefresh(true)
                 setIsUpdateModalOpen(false)
             })
             .catch((error) => {
+                show(error.response.data.message, 'red');
                 console.error(error);
             });
     }
@@ -114,9 +123,8 @@ export default function AnimalTrainingHistory(animalId) {
                     currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}>
                     <Column field="fullName" header="Trainer" />
                     <Column field="animalName" header="Animal" />
-                    <Column field="dateStart" header="Date Start" body={(rowData) => rowData.dateStart.toLocaleDateString()} />
-                    {/* {trainingData.dateEnd ? (<Column field="dateEnd" header="Date End" style={{ width: '16%' }}></Column>) : ("Now")} */}
-                    <Column field="dateEnd" header="Date End" body={(rowData) => rowData.dateEnd.toLocaleDateString()} />
+                    <Column field="dateStart" header="Date Start" body={dateTemplate} />
+                    <Column field="dateEnd" header="Date End" body={dateTemplate} />
                     <Column field="description" header="Description" />
                     <Column header="Action" body={(rowData) => (
                         <div>
@@ -137,7 +145,7 @@ export default function AnimalTrainingHistory(animalId) {
             <Dialog
                 header="Update Training History"
                 visible={isUpdateModalOpen}
-                style={{ width: '500px' }}
+                style={{ width: '800px' }}
                 modal
                 onHide={() => setIsUpdateModalOpen(false)}
             >
@@ -181,9 +189,9 @@ export default function AnimalTrainingHistory(animalId) {
                 <div className="field col-12">
                     <label htmlFor="description">Description</label>
                     <br />
-                    <InputText
+                    <InputTextarea
                         id="description"
-                        className='w-full'
+                        className='w-full min-h-full'
                         name="description"
                         value={trainingUpdate.description}
                         onChange={handleUpdateInputChange}
