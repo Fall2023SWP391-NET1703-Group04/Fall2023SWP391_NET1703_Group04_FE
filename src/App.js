@@ -92,10 +92,9 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/user-history" element={<History />} />
 
-          <Route
-            path="/products-detail/:productId"
-            element={<ProductDetailUser />}
-          />
+
+          <Route path="/products-detail/:productId" element={<ProductDetailUser />} />
+
           <Route path="/training-animal" element={<Training />} />
           <Route path="/admins" element={<Admin />}>
             <Route index element={<DashBoard />} />

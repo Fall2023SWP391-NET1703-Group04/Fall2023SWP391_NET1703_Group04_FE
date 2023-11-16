@@ -24,18 +24,30 @@ export default function AnimalDetailUser() {
   console.log(animal);
   return (
     <>
-      <div class="container">
-        <div class="row">
-          <div class="col">
-            <img src={`http://localhost:3000/img/${animal.image}`} />
+      <div className="container-xl px-4 mt-2">
+        <div className='cart container mt-1'>
+          <div className='mt-4'>
+            <img
+              src={`http://localhost:3000/img/${animal.image}`}
+              onError={(e) => (e.target.src = 'https://cdn4.iconfinder.com/data/icons/solid-part-6/128/image_icon-512.png')}
+              alt={animal.image}
+              style={{ width: '100%', height: '500px', objectFit: 'cover' }}
+            />
           </div>
-          <div class="col">
+          <div className="col mt-4">
             <h1>{animal.animalName}</h1>
-            <p>{animal?.catalogueDTO?.catalogueName}</p>
-            <p>{animal?.rale ? "Rare animal" : "Normal animal"}</p>
+            <p style={{ fontSize: '1.5rem' }}>Species: {animal?.catalogueDTO?.catalogueName}</p>
+
+            {animal.rare && <p style={{ fontSize: '1.5rem' }} >Động vật quý hiếm</p>}
+
+            <p style={{ fontSize: '1.5rem' }}>Gender: {animal?.gender}</p>
+            <p style={{ fontSize: '1.5rem' }}>From: {animal?.country}</p>
           </div>
         </div>
       </div>
+
+
+
     </>
   );
 }
