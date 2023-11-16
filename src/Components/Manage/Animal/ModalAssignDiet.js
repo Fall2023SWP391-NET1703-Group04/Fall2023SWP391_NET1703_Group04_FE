@@ -242,7 +242,7 @@ export default function ModalAssignDiet(animalId, isModalOpen, handleClose, data
                         />
                         <Button
                             className="justify-content-center field col-2 h-3rem"
-                            onClick={() => setDisplayDialog(true)}
+                            onClick={() => window.location.href = `http://localhost:3000/admins/add-diet`}
                         >
                             Create new
                         </Button>
