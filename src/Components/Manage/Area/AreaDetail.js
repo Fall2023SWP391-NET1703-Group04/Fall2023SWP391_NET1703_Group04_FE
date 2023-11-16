@@ -59,12 +59,9 @@ export default function CageDetail() {
 
     }, [areaId, refresh]);
 
-
-    const show = (message, color) => {
-        toast.current.show({
-            summary: 'Notifications', detail: message, life: 3000,
-            style: { backgroundColor: color, color: 'white', border: '2px solid yellow' },
-        });
+    const statusTemplate = (rowData, column) => {
+        const status = rowData[column.field];
+        return status ? "Managing" : "Not Manage";
     };
 
     const header = () => {
@@ -147,7 +144,7 @@ export default function CageDetail() {
                             <Column field="fullName" header="Staff" />
                             <Column field="dateStart" header="Start Date" />
                             <Column field="dateEnd" header="End Date" />
-                            <Column field="managing" header="Managing" />
+                            <Column field="managing" header="Managing" body={statusTemplate} />
                         </DataTable>
                     </Fieldset>
                 </div>

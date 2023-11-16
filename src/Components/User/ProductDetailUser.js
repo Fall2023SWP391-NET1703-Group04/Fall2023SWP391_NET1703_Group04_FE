@@ -105,7 +105,7 @@ export default function ProductDetailUser() {
                     ...NewFeedback,
                     title: response.data.data.productName
                 });
-                setRefresh(true)
+                setRefresh(false)
             })
             .catch((error) => {
                 console.error('Error fetching product data:', error);

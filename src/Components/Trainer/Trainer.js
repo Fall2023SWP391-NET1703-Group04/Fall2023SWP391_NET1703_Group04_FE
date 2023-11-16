@@ -12,6 +12,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Sidebar } from 'primereact/sidebar';
 import { Tree } from 'primereact/tree';
 import Header from "../Header/Header";
+import Training from "./Training";
 
 
 
@@ -250,24 +251,6 @@ export default function Trainer() {
 
     <div>
       <Header />
-      <Sidebar visible={visibleLeft} onHide={() => setVisibleLeft(false)}>
-        <Tree
-
-          value={treeData}
-          expandedKeys={expandedKeys}
-          onToggle={(e) => setExpandedKeys(e.value)}
-          selectionMode="single"
-          selectionKeys={selectedNodeKey}
-          onSelectionChange={(e) => setSelectedNodeKey(e.value)}
-          contextMenuSelectionKey={selectedNodeKey}
-          onContextMenuSelectionChange={(e) => setSelectedNodeKey(e.value)}
-          onContextMenu={menu}
-        />
-
-      </Sidebar>
-      <div className="flex justify-content-start flex-wrap">
-        <Button icon="pi pi-arrow-right" onClick={() => setVisibleLeft(true)} className="mr-2 border-round m-2 bg-primary" />
-      </div>
       <div className="container-xl px-4 mt-4">
 
         <hr className="mt-0 mb-4" />
@@ -302,19 +285,7 @@ export default function Trainer() {
                 </div>
               </div>
             </div>
-            {/* <div className="mt-2">
-              <Tree
-                value={treeData}
-                expandedKeys={expandedKeys}
-                onToggle={(e) => setExpandedKeys(e.value)}
-                selectionMode="single"
-                selectionKeys={selectedNodeKey}
-                onSelectionChange={(e) => setSelectedNodeKey(e.value)}
-                contextMenuSelectionKey={selectedNodeKey}
-                onContextMenuSelectionChange={(e) => setSelectedNodeKey(e.value)}
-                onContextMenu={menu}
-              />
-            </div> */}
+
           </div>
           <div className="col-6">
 
@@ -441,6 +412,7 @@ export default function Trainer() {
 
           </div>
         </div>
+        <Training />
       </div>
     </div >
 
