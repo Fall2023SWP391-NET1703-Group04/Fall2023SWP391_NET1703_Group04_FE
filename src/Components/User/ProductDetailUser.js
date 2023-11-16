@@ -178,10 +178,34 @@ export default function ProductDetailUser() {
             <div className="container-xl px-4 mt-4">
 
                 <Toast ref={toastBC} position="bottom-center" />
-                <div className="grid">
-                    <div className='mt-3'>
-                        <Link to="/cart">Go to Cart</Link>
+                <div className="mt-2">
+                    <div className="row">
+                        <div className="col-6">
+                            <div class="flex flex-row flex-wrap">
+                                <Button
+
+                                    icon="pi pi-arrow-left"
+                                    label="Back to Shop"
+                                    onClick={() => navigate('/product')}
+                                    className="p-button-success p-button-sm"
+
+                                />
+                            </div>
+                        </div>
+                        <div className="col-6">
+                            <div className="d-flex justify-content-end">
+                                <Button
+                                    icon="pi pi-shopping-cart"
+                                    label="View Cart"
+                                    onClick={() => navigate('/cart')}
+                                    className="p-button-info p-button-sm"
+                                />
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div className="grid">
+
                     <div className="col-12">
 
                         <div className="row">
@@ -189,7 +213,8 @@ export default function ProductDetailUser() {
                                 <div className="card-header">Product Image</div>
                                 <div className="card-body text-center">
                                     <div>
-                                        <img alt="Card" style={{ width: '200px', height: '200px' }} src={`http://localhost:3000/img/${editedProduct.image}`} />
+
+                                        <img alt="Card" style={{ width: '200px', height: '200px' }} src={`http://localhost:3000/img/${editedProduct.image}`} onError={(e) => e.target.src = 'https://thumbs.dreamstime.com/z/flat-isolated-vector-eps-illustration-icon-minimal-design-long-shadow-find-product-web-store-118523703.jpg'} />
                                     </div>
                                 </div>
 
@@ -236,50 +261,7 @@ export default function ProductDetailUser() {
                                         onChange={handleInputQuantityChange}
                                     />
 
-                                    {/* <Button
-                                        icon="pi pi-shopping-cart"
-                                        label="Add to Cart"
-                                        onClick={() => {
-                                            if (JSON.parse(localStorage.getItem("user"))) {
-                                                const currentUserId = JSON.parse(localStorage.getItem("user")).data.userId;
-                                                let cart = localStorage.getItem(`CART_${currentUserId}`) ? JSON.parse(localStorage.getItem(`CART_${currentUserId}`)) : [];
 
-                                                const existingItemIndex = cart.findIndex(item => item.productId === productId);
-
-                                                if (existingItemIndex !== -1) {
-                                                    const newQuantity = cart[existingItemIndex].quantity + value3;
-
-                                                    if (newQuantity <= editedProduct.quantity) {
-                                                        cart[existingItemIndex].quantity = newQuantity;
-                                                        show('Added to cart successfully!', 'green'); // Hiển thị thông báo thành công
-                                                    } else {
-                                                        show('Quantity exceeds the maximum limit!', 'red'); // Hiển thị thông báo vượt quá giới hạn
-                                                    }
-                                                } else {
-                                                    if (value3 <= editedProduct.quantity) {
-                                                        cart.push({
-                                                            productId: productId,
-                                                            productName: editedProduct.productName,
-                                                            image: editedProduct.image,
-                                                            price: editedProduct.price,
-                                                            maxQuantity: editedProduct.quantity,
-                                                            quantity: value3
-                                                        });
-                                                        show('Added to cart successfully!', 'green');
-                                                    } else {
-                                                        show('Quantity exceeds the maximum limit!', 'red');
-                                                    }
-                                                }
-
-                                                localStorage.setItem(`CART_${currentUserId}`, JSON.stringify(cart));
-                                                setRefresh(true);
-                                            } else {
-                                                showConfirm();
-                                            }
-
-
-                                        }}
-                                    ></Button> */}
                                     <Button
                                         icon="pi pi-shopping-cart"
                                         label="Add to Cart"
@@ -401,7 +383,7 @@ export default function ProductDetailUser() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
             <Footer />
 
         </>

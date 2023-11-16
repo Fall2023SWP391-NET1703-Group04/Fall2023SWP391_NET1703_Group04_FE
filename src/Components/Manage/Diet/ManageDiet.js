@@ -13,8 +13,20 @@ import 'primeicons/primeicons.css';
 import '/node_modules/primeflex/primeflex.css';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import ModalUpdateDiet from './ModalUpdateDiet';
+import { useNavigate } from 'react-router-dom';
 
 const ManageDiet = () => {
+    const navigate = useNavigate();
+
+    if (
+        !JSON.parse(localStorage.getItem("user")) ||
+        (
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
+        )
+    ) {
+        navigate("/notfound");
+    }
     const [diets, setDiets] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [foodDTOS, setFoodDTOS] = useState([]);

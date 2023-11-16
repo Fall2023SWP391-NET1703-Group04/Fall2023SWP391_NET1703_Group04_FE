@@ -45,7 +45,7 @@ import CageDetail from "./Components/Manage/Area/AreaDetail";
 import Product from "./Components/User/Product";
 
 import PageNotFound from "./PageNotFound/PageNotFound";
-
+import NewsDetail from "./Components/NewsUser/NewsDetail";
 import AddDiet from "./Components/Manage/Diet/AddDiet";
 
 function App() {
@@ -67,6 +67,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/news-user" element={<NewUser />} />
+          <Route path="/news-detail/:newsId" element={<NewsDetail />} />
           <Route path="/register" element={<Register />} />
           <Route path="/notfound" element={<PageNotFound />} />
           <Route path="managediet" element={<ManageDiet />} />

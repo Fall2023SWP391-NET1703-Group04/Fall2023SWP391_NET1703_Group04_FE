@@ -10,8 +10,20 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import ModalUpdateManageArea from './ModalUpdateManageArea';
 import ModalAddManageArea from './ModalAddManageArea';
+import { useNavigate } from 'react-router-dom';
 
 export default function CageDetail() {
+    const navigate = useNavigate();
+
+    if (
+        !JSON.parse(localStorage.getItem("user")) ||
+        (
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
+            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
+        )
+    ) {
+        navigate("/notfound");
+    }
     const { areaId } = useParams();
     const [areaData, setAreaData] = useState([]);
     const [cageData, setCageData] = useState([]);
@@ -33,16 +45,7 @@ export default function CageDetail() {
             })
             .catch((error) => console.error(error));
 
-        // axios.get(`http://localhost:8080/zoo-server/api/v1/area-management/getAreaManagementResponse/${areaId}`, { headers: authHeader() })
-        //     .then(response => {
-        //         setAreaManageData(response.data.data)
-        //     })
-        //     .catch(error => {
-        //         show(error.response.data.message, 'red');
-        //         console.error(error);
-        //     });
 
-        //get area history data
         axios
             .get(`http://localhost:8080/zoo-server/api/v1/area-management/getAllByArea/${areaId}`, { headers: authHeader() })
             .then((response) => {

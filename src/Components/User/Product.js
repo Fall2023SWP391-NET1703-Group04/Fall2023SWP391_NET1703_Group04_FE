@@ -168,7 +168,7 @@ export default function Product() {
 
                 <div className="product-list-item">
                     <Link to={`/products-detail/${data.productId}`}>
-                        <img src={`http://localhost:3000/img/${data.image}`} onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={data.name} />
+                        <img src={`http://localhost:3000/img/${data.image}`} onError={(e) => e.target.src = 'https://thumbs.dreamstime.com/z/flat-isolated-vector-eps-illustration-icon-minimal-design-long-shadow-find-product-web-store-118523703.jpg'} alt={data.name} />
                     </Link>
                     <div className="product-list-detail">
                         <div className="product-name">{data.productName}</div>
@@ -206,7 +206,7 @@ export default function Product() {
                         <Link to={`/products-detail/${data.productId}`}>
                             <img src={`http://localhost:3000/img/${data.image}`}
                                 style={{ height: "100px" }}
-                                onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'}
+                                onError={(e) => e.target.src = 'https://thumbs.dreamstime.com/z/flat-isolated-vector-eps-illustration-icon-minimal-design-long-shadow-find-product-web-store-118523703.jpg'}
                                 alt={data.name} />
                         </Link>
                         {/* <div className="text-2xl font-bold"> aa</div> */}
