@@ -61,13 +61,20 @@ function Header() {
                   >
                     <NavDropdown.Item>
                       {user.data.role === "ROLE_TRAINER" ? (
-                        <Link to="/trainer" className="nav-link">
-                          Profile
-                        </Link>
+                        <>
+                          <Link to="/trainer" className="nav-link">
+                            Profile
+                          </Link>
+                        </>
                       ) : (
-                        <Link to="/update-profile-user" className="nav-link">
-                          Update Profile
-                        </Link>
+                        <>
+                          <Link to="/update-profile-user" className="nav-link">
+                            Update Profile
+                          </Link>
+                          <Link to="/changepassword" className="nav-link">
+                            Change Password
+                          </Link>
+                        </>
                       )}
                     </NavDropdown.Item>
                     <NavDropdown.Item

@@ -14,7 +14,7 @@ const ChangePassword = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const userId = user.data.userId;
-  console.log(newPassword);
+  console.log(userId);
   useEffect(() => {
     // You can add any additional logic or side effects here
   }, []);
@@ -101,7 +101,7 @@ const ChangePassword = () => {
                 onclick="validateSignupForm()"
                 class="submitButton pure-button pure-button-primary"
               >
-                <span>Continue</span>
+                <span>Change password</span>
                 <span id="loader">
                   {loading && <span id="loader">Loading...</span>}
                 </span>
