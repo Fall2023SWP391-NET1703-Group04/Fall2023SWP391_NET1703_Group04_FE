@@ -22,15 +22,15 @@ import { useNavigate } from 'react-router-dom';
 export default function AnimalDetail() {
     const navigate = useNavigate();
 
-    if (
-        !JSON.parse(localStorage.getItem("user")) ||
-        (
-            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
-            JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
-        )
-    ) {
-        navigate("/notfound");
-    }
+    // if (
+    //     !JSON.parse(localStorage.getItem("user")) ||
+    //     (
+    //         JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_ADMIN' &&
+    //         JSON.parse(localStorage.getItem("user"))?.data?.role !== 'ROLE_STAFF'
+    //     )
+    // ) {
+    //     navigate("/notfound");
+    // }
     const { animalId } = useParams();
     const [animalData, setAnimalData] = useState({});
     const [updateAnimal, setUpdateAnimal] = useState({});
@@ -69,7 +69,7 @@ export default function AnimalDetail() {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/zoo-server/api/v1/animal/getAnimalById/${animalId}`, { headers: authHeader() })
+            .get(`http://localhost:8080/api/v1/Animal/deleteAnimal/${animalId}`, { headers: authHeader() })
             .then((response) => {
                 setAnimalData(response.data.data);
                 setUpdateAnimal(response.data.data);
@@ -81,7 +81,7 @@ export default function AnimalDetail() {
             .catch((error) => console.error(error));
 
         //catalogues
-        axios.get('http://localhost:8080/zoo-server/api/v1/catalogue/getAllCatalogues', { headers: authHeader() })
+        axios.get('http://localhost:8080/api/v1/catalogue/getAllCatalogues', { headers: authHeader() })
             .then(response => {
                 setCatalogues(response.data)
             })
@@ -173,7 +173,7 @@ export default function AnimalDetail() {
 
     const handleUpdateAnimal = async () => {
         await axios
-            .put(`http://localhost:8080/zoo-server/api/v1/animal/updateAnimal/${animalId}`, updateAnimal, { headers: authHeader() })
+            .put(`http://localhost:8080/api/v1/Animal/updateAnimal/${animalId}`, updateAnimal, { headers: authHeader() })
             .then((response) => {
                 setRefresh(true)
                 setIsUpdateModalOpen(false);

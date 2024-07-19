@@ -36,74 +36,74 @@ const DashBoard = () => {
             })
             .catch();
         // Fetch the list of User from your API endpoint
-        axios
-            .get(`http://localhost:8080/zoo-server/api/v1/user/getAllUsers`, {
-                headers: authHeader(),
-            })
-            .then((response) => setUserList(response.data.data))
-            .catch();
-        // Fetch the list of Trainer from your API endpoint
-        axios
-            .get(`http://localhost:8080/zoo-server/api/v1/user/getAllTrainers`, {
-                headers: authHeader(),
-            })
-            .then((response) => setTrainerList(response.data.data))
-            .catch();
+        // axios
+        //     .get(`http://localhost:8080/zoo-server/api/v1/user/getAllUsers`, {
+        //         headers: authHeader(),
+        //     })
+        //     .then((response) => setUserList(response.data.data))
+        //     .catch();
+        // // Fetch the list of Trainer from your API endpoint
+        // axios
+        //     .get(`http://localhost:8080/zoo-server/api/v1/user/getAllTrainers`, {
+        //         headers: authHeader(),
+        //     })
+        //     .then((response) => setTrainerList(response.data.data))
+        //     .catch();
 
-        // Fetch the list of Diet from your API endpoint
-        axios
-            .get(`http://localhost:8080/zoo-server/api/v1/diet/getAllDiets`, {
-                headers: authHeader(),
-            })
-            .then((response) => setDietList(response.data.data))
-            .catch();
+        // // Fetch the list of Diet from your API endpoint
+        // axios
+        //     .get(`http://localhost:8080/zoo-server/api/v1/diet/getAllDiets`, {
+        //         headers: authHeader(),
+        //     })
+        //     .then((response) => setDietList(response.data.data))
+        //     .catch();
 
-        // Fetch the list of Food from your API endpoint
-        axios
-            .get(`http://localhost:8080/zoo-server/api/v1/food/getAllFoods`, {
-                headers: authHeader(),
-            })
-            .then((response) => setFoodList(response.data.data))
-            .catch();
-        // Fetch the list of FoodIsNotExpired from your API endpoint
-        axios
-            .get(`http://localhost:8080/zoo-server/api/v1/food/getAllFoodNotExpired`, {
-                headers: authHeader(),
-            })
-            .then((response) => setFoodIsNotExpiredList(response.data.data))
-            .catch();
-        // Fetch the list of Diet from your API endpoint
-        axios
-            .get(`http://localhost:8080/zoo-server/api/v1/diet/getAllDiets`, {
-                headers: authHeader(),
-            })
-            .then((response) => setDietList(response.data.data))
-            .catch();
+        // // Fetch the list of Food from your API endpoint
+        // axios
+        //     .get(`http://localhost:8080/zoo-server/api/v1/food/getAllFoods`, {
+        //         headers: authHeader(),
+        //     })
+        //     .then((response) => setFoodList(response.data.data))
+        //     .catch();
+        // // Fetch the list of FoodIsNotExpired from your API endpoint
+        // axios
+        //     .get(`http://localhost:8080/zoo-server/api/v1/food/getAllFoodNotExpired`, {
+        //         headers: authHeader(),
+        //     })
+        //     .then((response) => setFoodIsNotExpiredList(response.data.data))
+        //     .catch();
+        // // Fetch the list of Diet from your API endpoint
+        // axios
+        //     .get(`http://localhost:8080/zoo-server/api/v1/diet/getAllDiets`, {
+        //         headers: authHeader(),
+        //     })
+        //     .then((response) => setDietList(response.data.data))
+        //     .catch();
 
-        // Fetch the list of product from your API endpoint
-        axios
-            .get(`http://localhost:8080/zoo-server/api/v1/product/getAllProduct`, {
-                headers: authHeader(),
-            })
-            .then((response) => setProductList(response.data.data))
-            .catch();
-        // Fetch the list of AnimalCage from your API endpoint
-        axios
-            .get(
-                `http://localhost:8080/zoo-server/api/v1/animalCage/getAllAnimalCage`,
-                { headers: authHeader() }
-            )
-            .then((response) => setAnimalCageList(response.data.data))
-            .catch();
+        // // Fetch the list of product from your API endpoint
+        // axios
+        //     .get(`http://localhost:8080/zoo-server/api/v1/product/getAllProduct`, {
+        //         headers: authHeader(),
+        //     })
+        //     .then((response) => setProductList(response.data.data))
+        //     .catch();
+        // // Fetch the list of AnimalCage from your API endpoint
+        // axios
+        //     .get(
+        //         `http://localhost:8080/zoo-server/api/v1/animalCage/getAllAnimalCage`,
+        //         { headers: authHeader() }
+        //     )
+        //     .then((response) => setAnimalCageList(response.data.data))
+        //     .catch();
 
-        // Fetch the list of AnimalCageIsNotUser from your API endpoint
-        axios
-            .get(
-                `http://localhost:8080/zoo-server/api/v1/animalCage/getAllAnimalCagesNotUse`,
-                { headers: authHeader() }
-            )
-            .then((response) => setAnimalCageIsNotUseList(response.data.data))
-            .catch();
+        // // Fetch the list of AnimalCageIsNotUser from your API endpoint
+        // axios
+        //     .get(
+        //         `http://localhost:8080/zoo-server/api/v1/animalCage/getAllAnimalCagesNotUse`,
+        //         { headers: authHeader() }
+        //     )
+        //     .then((response) => setAnimalCageIsNotUseList(response.data.data))
+        //     .catch();
 
         // Chart Animal Cage
         const documentStyle = getComputedStyle(document.documentElement);
@@ -224,7 +224,7 @@ const DashBoard = () => {
                             </Card>
                         </div>
                         <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
-                            <Card title="Total Food" className="h-20rem w-12rem">
+                            {/* <Card title="Total Food" className="h-20rem w-12rem">
                                 <h2 className="m-0 text-black-alpha-90">{foodList.length}</h2>
                                 <img
                                     src="http://localhost:3000/img/food.png"
@@ -232,10 +232,10 @@ const DashBoard = () => {
                                     style={{ width: "70px", height: "100px" }}
                                     className="mt-5"
                                 />
-                            </Card>
+                            </Card> */}
                         </div>
                         <div class="border-round w-12rem  h-20rem  font-bold flex align-items-center justify-content-center">
-                            <Card title="Products" className="h-20rem w-12rem">
+                            {/* <Card title="Products" className="h-20rem w-12rem">
                                 <h2 className="m-0 text-black-alpha-90">{productList.length}</h2>
                                 <img
                                     src="http://localhost:3000/img/zoo_gift.jpg"
@@ -243,10 +243,10 @@ const DashBoard = () => {
                                     style={{ width: "70px", height: "100px" }}
                                     className="mt-5"
                                 />
-                            </Card>
+                            </Card> */}
                         </div>
                         <div class="border-round w-12rem h-20rem  font-bold flex align-items-center justify-content-center">
-                            <Card title="Total Cage" className="h-20rem w-12rem">
+                            {/* <Card title="Total Cage" className="h-20rem w-12rem">
                                 <h2 className="m-0 text-black-alpha-90">{animalCageList.length}</h2>
                                 <img
                                     src="http://localhost:3000/img/animal_cage_icon.png"
@@ -254,12 +254,12 @@ const DashBoard = () => {
                                     style={{ width: "70px", height: "100px" }}
                                     className="mt-5"
                                 />
-                            </Card>
+                            </Card> */}
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
-                    <div class="text-center p-3 border-round-sm  font-bold">
+                    {/* <div class="text-center p-3 border-round-sm  font-bold">
                         <div className="card flex justify-content-center">
                             <Chart
                                 type="pie"
@@ -268,18 +268,18 @@ const DashBoard = () => {
                                 className="w-full"
                             />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div class="col-6">
                     <div class="text-center p-3 border-round-sm  font-bold">
-                        <div className="card flex justify-content-center">
+                        {/* <div className="card flex justify-content-center">
                             <Chart
                                 type="pie"
                                 data={chartPieFoodData}
                                 options={chartPieFoodOptions}
                                 className="w-full"
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

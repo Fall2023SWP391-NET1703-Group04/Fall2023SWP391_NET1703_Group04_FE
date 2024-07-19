@@ -41,7 +41,7 @@ export default function AnimalCageHistory(animalId) {
             })
             .catch(error => console.error(error));
 
-        axios.get(`http://localhost:8080/zoo-server/api/v1/animalCage/getAllAnimalCage`, { headers: authHeader() })
+        axios.get(`http://localhost:8080/api/v1/animalCage/getAllAnimalCage`, { headers: authHeader() })
             .then(response => setCages(response.data.data))
             .catch(error => console.error(error));
     }, [refresh, animalId]);
@@ -94,7 +94,7 @@ export default function AnimalCageHistory(animalId) {
 
     const handleUpdateTraining = () => {
         axios
-            .put(`http://localhost:8080/zoo-server/api/v1/AnimalCageDetail/updateAnimalCageDetail/${animalCageId}`, cageUpdate, { headers: authHeader() })
+            .put(`http://localhost:8080/api/v1/animalCage/updateAnimalCage/${animalCageId}`, cageUpdate, { headers: authHeader() })
             .then((response) => {
                 show(response.data.message, 'green');
                 setRefresh(true)

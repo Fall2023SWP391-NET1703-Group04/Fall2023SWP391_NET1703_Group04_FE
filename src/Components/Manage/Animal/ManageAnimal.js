@@ -134,7 +134,7 @@ export default function ManageAnimal() {
 
     const handleAddAnimal = () => {
         axios
-            .post("http://localhost:8080/zoo-server/api/v1/animal/createAnimal", newAnimal, { headers: authHeader() })
+            .post("http://localhost:8080/api/v1/Animal/createAnimal", newAnimal, { headers: authHeader() })
             .then((response) => {
                 show(response.data.message, 'green');
                 setNewAnimal([])
@@ -164,15 +164,17 @@ export default function ManageAnimal() {
     //Get data
     useEffect(() => {
         // Fetch the list of diets from your API endpoint
-        axios.get('http://localhost:8080/zoo-server/api/v1/animal/getAllAnimal', { headers: authHeader() })
+        axios.get('http://localhost:8080/api/v1/Animal/all')
             .then(response => {
-                setAnimals(response.data.data)
+                console.log("con lay cu",response.data.animal)
+                setAnimals(response.data.animal)
                 setRefresh(false)
             })
             .catch(error => console.error(error));
 
-        axios.get(`http://localhost:8080/zoo-server/api/v1/catalogue/getAllCatalogues`, { headers: authHeader() })
-            .then(response => setCatalogues(response.data))
+        axios.get(`http://localhost:8080/api/v1/catalogue/getAllCatalogues`)
+
+            .then(response => setCatalogues(response.data.catalogues))           
             .catch(error => console.error(error));
     }, [refresh]);
 
@@ -197,7 +199,7 @@ export default function ManageAnimal() {
     //delete
     const handleDeleteAnimal = (animalId) => {
         axios
-            .delete(`http://localhost:8080/zoo-server/api/v1/animal/deleteAnimal/${animalId}`, { headers: authHeader() })
+            .delete(`http://localhost:8080/api/v1/Animal/deleteAnimal/${animalId}`, { headers: authHeader() })
             .then((response) => {
                 show(response.data.message, 'green');
                 setRefresh(true)
@@ -225,7 +227,7 @@ export default function ManageAnimal() {
                     currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft}
                     filters={filters} onFilter={(e) => setFilters(e.filters)}>
                     <Column field="animalName" header="Name" style={{ width: '15%' }}></Column>
-                    <Column field="catalogueDTO.catalogueName" header="Catalogue" style={{ width: '15%' }}></Column>
+                    {/* <Column field="catalogueDTO.catalogueName" header="Catalogue" style={{ width: '15%' }}></Column> */}
                     <Column field="image" header="Image" style={{ width: '15%' }} body={imageBody}></Column>
                     <Column field="country" header="Country" style={{ width: '15%' }}></Column>
                     <Column field="gender" header="Gender" style={{ width: '15%' }}></Column>
